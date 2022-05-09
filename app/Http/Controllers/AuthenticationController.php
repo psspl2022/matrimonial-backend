@@ -37,8 +37,6 @@ class AuthenticationController extends Controller
         $responseArray['msg'] = "Registered Succesfully";
 
         return response()->json($responseArray,200);   
-       
-        }
         
     }
 
