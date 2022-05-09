@@ -8,6 +8,7 @@ use Validator;
 use App\Models\BasicDetail;
 use App\Models\CareerDetail;
 use App\Models\FamilyDetail;
+use App\Models\Register;
 
 class ProfileController extends Controller
 {
@@ -52,6 +53,11 @@ class ProfileController extends Controller
         // $data->description = $req->description;
         // $data->added_by = Auth::user()->id;
         if($data->save()){
+
+            $data1 = new Register();
+            $data1->stage_no = 2;
+            $data1->save();
+            
             return response()->json( ['msg'=>'Basic Details updated Succesfully']);
         }else{
             return response()->json( ['msg'=>'Error while uploading basic details!']);
@@ -144,6 +150,11 @@ class ProfileController extends Controller
         // $data->express_yourself = $req->express_yourself;
          // $data->added_by = Auth::user()->id;
          if($data->save()){
+
+            $data1 = new Register();
+            $data1->stage_no = 3;
+            $data1->save();
+
             return response()->json( ['msg'=>'Career Details updated Succesfully']);
         }else{
             return response()->json( ['msg'=>'Error while uploading career details!']);
@@ -197,6 +208,11 @@ class ProfileController extends Controller
         // $data->about_family = $req->about_family;
         // $data->added_by = Auth::user()->id;
          if($data->save()){
+
+            $data1 = new Register();
+            $data1->stage_no = 4;
+            $data1->save();
+
             return response()->json( ['msg'=>'Family Details updated Succesfully']);
         }else{
             return response()->json( ['msg'=>'Error while uploading family details!']);

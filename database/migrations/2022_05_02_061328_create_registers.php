@@ -17,7 +17,7 @@ class CreateRegisters extends Migration
             $table->increments('id'); 
             $table->string('matrimony_id',50);
             $table->string('profile_for',50);
-            $table->string('email',50);
+            $table->string('email',50)->nullable();
             $table->string('alter_email',50)->nullable();
             $table->bigInteger('contact'); 
             $table->bigInteger('alter_contact')->nullable();
