@@ -14,7 +14,7 @@ class AuthenticationController extends Controller
     public function register(Request $req)
     {
         $validator = Validator::make($req->all(),[
-            'name' => 'required',
+            // 'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
             'confirm-password' => 'required|same:password'
@@ -29,11 +29,15 @@ class AuthenticationController extends Controller
 
         $user = User::create($input);
 
+        $Register = new RegisterController();
+        $Register->createRegister($req);
+
         $responseArray = [];
         $responseArray['token'] = $user->createToken('MyToken')->accessToken;
         $responseArray['name'] = $user->name;
 
         return response()->json($responseArray,200);
+        
     }
 
     public function login(Request $req)

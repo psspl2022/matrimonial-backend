@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Validator;
 use App\Models\Register;
 
 class RegisterController extends Controller
@@ -11,7 +12,7 @@ class RegisterController extends Controller
         $validator = Validator::make($req->all(),[
             'for' => 'required',
             'email'=>'required',
-            // 'contact'=>'required',
+            'contact'=>'required',
                  
         ]);
 

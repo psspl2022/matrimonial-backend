@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableTrait;
 
-class RegisterDetail extends Model
+class Register extends Model implements Auditable
 {
     use AuditableTrait;
     use HasFactory;
 
-    protected $table = 'career_details';
+    protected $table = 'registers';
     public $timestamps = false;
 }
