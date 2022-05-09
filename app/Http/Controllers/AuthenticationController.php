@@ -34,9 +34,11 @@ class AuthenticationController extends Controller
 
         $responseArray = [];
         $responseArray['token'] = $user->createToken('MyToken')->accessToken;
-        $responseArray['name'] = $user->name;
+        $responseArray['msg'] = "Registered Succesfully";
 
-        return response()->json($responseArray,200);
+        return response()->json($responseArray,200);   
+       
+        }
         
     }
 
