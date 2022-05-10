@@ -30,11 +30,11 @@ class AuthenticationController extends Controller
         $user = User::create($input);
 
         $Register = new RegisterController();
-        $Register->createRegister($req);
+        $reg_msg = $Register->createRegister($req);
 
         $responseArray = [];
         $responseArray['token'] = $user->createToken('MyToken')->accessToken;
-        $responseArray['name'] = $user->name;
+        $responseArray['msg'] = $reg_msg;
 
         return response()->json($responseArray,200);
         

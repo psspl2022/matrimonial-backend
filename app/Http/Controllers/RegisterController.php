@@ -36,13 +36,16 @@ class RegisterController extends Controller
 
         // $data->added_by = Auth::user()->id;
          if($data->save()){
-            return response()->json( ['msg'=>'Registered Succesfully']);
+            // return response()->json( ['msg'=>'Registered Succesfully']);
+            return 'Registered Succesfully';
         }else{
-            return response()->json( ['msg'=>'Error while registering!']);
+            // return response()->json( ['msg'=>'Error while registering!']);
+            return 'Error while registering!';
         }
 
         if($validator->fails()){
-            return response()->json($validator->errors(),202);
+            // return response()->json($validator->errors(),202);
+            return $validator->errors();
         }  
-    }
+    }  
 }
