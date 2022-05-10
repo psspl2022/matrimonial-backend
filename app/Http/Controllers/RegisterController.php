@@ -16,6 +16,13 @@ class RegisterController extends Controller
                  
         ]);
 
+        if($validator->fails()){
+            // return response()->json($validator->errors(),202);
+            $errors = $validator->errors();
+            return response()->json(["errors" => $errors]);
+            // return ['errors'=>$validator->errors()];
+        }  
+
         //Matrimony Id
         $total_rows = Register::orderBy('id', 'desc')->count();
         $matrimony_id = "NM/";
@@ -36,16 +43,15 @@ class RegisterController extends Controller
 
         // $data->added_by = Auth::user()->id;
          if($data->save()){
-            // return response()->json( ['msg'=>'Registered Succesfully']);
-            return 'Registered Succesfully';
+            return response()->json( ['msg'=>'Registered Succesfully']);
+            // return 'Registered Succesfully';
+            // return ['msg'=>'Registered Succesfully'];
         }else{
-            // return response()->json( ['msg'=>'Error while registering!']);
-            return 'Error while registering!';
+            return response()->json( ['msg'=>'Error while registering!']);
+            // return 'Error while registering!';
+            // return ['msg'=>'Error while registering!'];
+
         }
 
-        if($validator->fails()){
-            // return response()->json($validator->errors(),202);
-            return $validator->errors();
-        }  
     }  
 }
