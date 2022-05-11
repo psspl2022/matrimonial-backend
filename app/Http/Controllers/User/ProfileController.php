@@ -56,7 +56,7 @@ class ProfileController extends Controller
         // $data->added_by = Auth::user()->id;
         if($data->save()){
 
-            $data1 = new Register();
+            $data1 = Register::find(Auth::user()->reg_id);
             $data1->stage_no = 2;
             $data1->save();
             
@@ -121,7 +121,7 @@ class ProfileController extends Controller
 
     public function showBasicById($id){     
         $data = BasicDetail::find($id);       
-        return response()->json( $data);
+        return response()->json( $data, 200);
     }
 
     public function createCareer(Request $req){
@@ -153,7 +153,7 @@ class ProfileController extends Controller
          // $data->added_by = Auth::user()->id;
          if($data->save()){
 
-            $data1 = new Register();
+            $data1 = Register::find(Auth::user()->reg_id);
             $data1->stage_no = 3;
             $data1->save();
 
@@ -169,7 +169,7 @@ class ProfileController extends Controller
 
     public function showCareerById($id){     
         $data = CareerDetail::find($id);   
-        return response()->json( $data);  
+        return response()->json( $data, 200);  
     }  
 
     public function createFamily(Request $req){
@@ -211,7 +211,7 @@ class ProfileController extends Controller
         // $data->added_by = Auth::user()->id;
          if($data->save()){
 
-            $data1 = new Register();
+            $data1 = Register::find(Auth::user()->reg_id);
             $data1->stage_no = 4;
             $data1->save();
 
@@ -227,8 +227,20 @@ class ProfileController extends Controller
 
     public function showFamilyById($id){     
         $data = FamilyDetail::find($id);   
-        return response()->json( $data);  
+        return response()->json( $data, 200);  
     } 
+
+
+
+    //
+    public function showAboutById($id){     
+        $data['yourself'] = BasicDetail::select('description')->where('reg_id', $id);   
+        $data['family'] = FamilyDetail::select('about_family')->where('reg_id', $id);
+        $data['education'] = Education::select('express_yourself')->where('reg_id', $id);
+        return response()->json( $data,200);  
+    } 
+
+
 }
 
 
