@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
+
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -58,9 +60,9 @@ class ProfileController extends Controller
             $data1->stage_no = 2;
             $data1->save();
             
-            return response()->json( ['msg'=>'Basic Details updated Succesfully']);
+            return response()->json( 'msg','Basic Details updated Succesfully');
         }else{
-            return response()->json( ['msg'=>'Error while uploading basic details!']);
+            return response()->json( 'msg','Error while uploading basic details!');
         }
        
         if($validator->fails()){
@@ -155,9 +157,9 @@ class ProfileController extends Controller
             $data1->stage_no = 3;
             $data1->save();
 
-            return response()->json( ['msg'=>'Career Details updated Succesfully']);
+            return response()->json('msg','Career Details updated Succesfully');
         }else{
-            return response()->json( ['msg'=>'Error while uploading career details!']);
+            return response()->json('msg','Error while uploading career details!');
         }
 
         if($validator->fails()){
@@ -213,9 +215,9 @@ class ProfileController extends Controller
             $data1->stage_no = 4;
             $data1->save();
 
-            return response()->json( ['msg'=>'Family Details updated Succesfully']);
+            return response()->json('msg','Family Details updated Succesfully');
         }else{
-            return response()->json( ['msg'=>'Error while uploading family details!']);
+            return response()->json('msg','Error while uploading family details!');
         }
 
         if($validator->fails()){

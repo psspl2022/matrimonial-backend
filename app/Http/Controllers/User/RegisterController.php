@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
+
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Validator;
@@ -10,9 +12,9 @@ class RegisterController extends Controller
 {
     public function createRegister(Request $req){
         $validator = Validator::make($req->all(),[
-            'for' => 'required',
-            'email'=>'required',
-            'contact'=>'required',
+            // 'for' => 'required',
+            // 'email'=>'required',
+            // 'contact'=>'required',
                  
         ]);
 
@@ -33,14 +35,9 @@ class RegisterController extends Controller
         $data->email = $req->email;
         $data->contact = $req->contact;
         $data->stage_no = 1;
-
         // $data->added_by = Auth::user()->id;
-         if($data->save()){
-            return response()->json( ['msg'=>'Registered Succesfully']);
-        }else{
-            return response()->json( ['msg'=>'Error while registering!']);
-        }
-
+        $data->save();
+              
         if($validator->fails()){
             return response()->json($validator->errors(),202);
         }  
