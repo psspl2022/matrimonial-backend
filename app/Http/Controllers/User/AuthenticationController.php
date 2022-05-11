@@ -16,7 +16,7 @@ class AuthenticationController extends Controller
     public function register(Request $req)
     {
         $validator = Validator::make($req->all(),[
-            'name' => 'required',
+            // 'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
             'confirm-password' => 'required|same:password',
@@ -73,7 +73,7 @@ class AuthenticationController extends Controller
             $user = Auth::user();
             $responseArray = [];
             $responseArray['token'] = $user->createToken('MyToken')->accessToken;
-            $responseArray['name'] = $user->name;
+            $responseArray['msg'] = "Login Successfully";
        
             return response()->json($responseArray,200);
         } else{
