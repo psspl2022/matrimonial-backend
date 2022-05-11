@@ -16,7 +16,7 @@ class AuthenticationController extends Controller
     public function register(Request $req)
     {
         $validator = Validator::make($req->all(),[
-            // 'name' => 'required',
+            'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
             'confirm-password' => 'required|same:password',
@@ -25,7 +25,8 @@ class AuthenticationController extends Controller
         ]);
        
         if($validator->fails()){
-            return response()->json($validator->errors(),202);
+            // return response()->json($validator->errors(),202);
+            return response()->json(['errors' => $validator->errors()]);
         }
 
         $input = $req->all();
