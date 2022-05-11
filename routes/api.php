@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\AuthenticationController;
 use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\User\DropdownController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,12 +27,17 @@ Route::get('/login',[AuthenticationController::class,'login'])->name('login');
 
 Route::middleware('auth:api')->group(function () {
     Route::post('/logout',[AuthenticationController::class,'logout']);
+
+    Route::get('/showAbout/{id}',[ProfileController::class, 'showAboutById']);
+
     Route::post('/createBasic',[ProfileController::class, 'createBasic']);
     Route::get('/showBasic/{id}',[ProfileController::class, 'showBasicById']);
     Route::post('/createCareer',[ProfileController::class, 'createCareer']);
     Route::get('/showCareer/{id}',[ProfileController::class, 'showCareerById']);
     Route::post('/createFamily',[ProfileController::class, 'createFamily']);
     Route::get('/showFamily/{id}',[ProfileController::class, 'showFamilyById']);
+
+    Route::get('/basicDropdown',[DropdownController::class, 'basicDropdown']);
 });
 
 

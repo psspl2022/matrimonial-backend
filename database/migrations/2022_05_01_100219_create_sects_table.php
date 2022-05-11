@@ -14,8 +14,10 @@ class CreateSectsTable extends Migration
     public function up()
     {
         Schema::create('sects', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->increments('id'); 
+            $table->string('name',50);
+            $table->enum('status', ['0', '1'])->default('1')->comment('0=Inactive, 1=Active');
+            $table->softDeletes();
         });
     }
 

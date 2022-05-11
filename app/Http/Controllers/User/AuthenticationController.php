@@ -81,4 +81,11 @@ class AuthenticationController extends Controller
         }
     }
 
+    public function logout (Request $req) {
+        $token = $req->user()->token();
+        $token->revoke();
+        $response = ['message' => 'You have been successfully logged out!'];
+        return response($response, 200);
+    }
+
 }
