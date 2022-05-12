@@ -73,7 +73,7 @@ class AuthenticationController extends Controller
             $user = Auth::user();
             $responseArray = [];
             $responseArray['token'] = $user->createToken('MyToken')->accessToken;
-            $responseArray['name'] = $user->name;
+            $responseArray['msg'] = "Login Successfully";
        
             return response()->json($responseArray,200);
         } else{
