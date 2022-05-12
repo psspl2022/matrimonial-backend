@@ -119,11 +119,6 @@ class ProfileController extends Controller
     // }
 
 
-    public function showBasicById($id){     
-        $data = BasicDetail::find($id);       
-        return response()->json( $data, 200);
-    }
-
     public function createCareer(Request $req){
         $validator = Validator::make($req->all(),[
             'highest_qualification' => 'required',
@@ -233,6 +228,11 @@ class ProfileController extends Controller
 
 
     //
+
+    public function showBasicById($id){     
+        $data = BasicDetail::find($id);       
+        return response()->json( $data, 200);
+    }
 
     public function editbasic(Request $req){
         $validator = Validator::make($req->all(),[

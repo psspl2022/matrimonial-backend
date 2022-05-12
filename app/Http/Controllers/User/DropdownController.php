@@ -24,13 +24,12 @@ class DropdownController extends Controller
 
     public function cityDropdown($s_id){
       
-        $response['state'] = State::select('id','name', 'country_id','state_id')->where('state_id',$s_id)->get();
+        $response['city'] = City::select('id','name', 'state_id', 'country_id')->where('state_id',$s_id)->get();
         return response($response, 200);
     }
 
     public function basicDropdown(){
         $response['caste'] = Caste::select('id','caste')->get();
-        $response['city'] = City::select('id','name', 'state_id', 'country_id')->get();
         $response['country'] = Country::select('id','name')->get();
         $response['height'] = Height::select('id','height')->get();
         $response['mother_tongue'] = MotherTongue::select('id','type','mother_tongue')->get();
