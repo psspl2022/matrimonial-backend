@@ -23,7 +23,9 @@ class CreateRegisters extends Migration
             $table->bigInteger('alter_contact')->nullable();
             $table->bigInteger('landline')->nullable();
             $table->text('contact_address')->nullable();
+            $table->integer('contact_pincode')->unsigned()->nullable();
             $table->text('parent_address')->nullable();
+            $table->integer('parent_pincode')->unsigned()->nullable();
             $table->string('time_for_call',50)->nullable();
             $table->integer('stage_no')->unsigned()->nullable();          
             $table->enum('gender', ['1', '2', '3'])->default('1')->comment('1=Male, 2=Female, 3=Others');;

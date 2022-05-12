@@ -29,6 +29,7 @@ class CreateFamilyDetails extends Migration
             $table->string('native_city',50)->nullable();
             $table->string('family_live_in',50)->nullable();
             $table->integer('family_income')->unsigned()->nullable(); 
+            $table->string('gotra_maternal',50)->nullable();
             $table->string('gotra',50)->nullable();
             $table->text('about_family')->nullable();
             $table->integer('added_by')->unsigned()->nullable();

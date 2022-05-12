@@ -38,6 +38,9 @@ Route::get('/login',[AuthenticationController::class,'login'])->name('login');
     Route::get('/showFamily/{id}',[ProfileController::class, 'showFamilyById']);
 
     Route::get('/basicDropdown',[DropdownController::class, 'basicDropdown']);
+    Route::get('/stateDropdown/{c_id}',[DropdownController::class, 'stateDropdown']);
+    Route::get('/cityDropdown/{s_id}',[DropdownController::class, 'cityDropdown']);
+    
 // });
 
 

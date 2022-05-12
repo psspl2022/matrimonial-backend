@@ -60,7 +60,7 @@ class ProfileController extends Controller
             $data1->stage_no = 2;
             $data1->save();
             
-            return response()->json( 'msg','Basic Details updated Succesfully');
+            return response()->json( 'msg','Basic Details added Succesfully');
         }else{
             return response()->json( 'msg','Error while uploading basic details!');
         }
@@ -157,7 +157,7 @@ class ProfileController extends Controller
             $data1->stage_no = 3;
             $data1->save();
 
-            return response()->json('msg','Career Details updated Succesfully');
+            return response()->json('msg','Career Details added Succesfully');
         }else{
             return response()->json('msg','Error while uploading career details!');
         }
@@ -215,7 +215,7 @@ class ProfileController extends Controller
             $data1->stage_no = 4;
             $data1->save();
 
-            return response()->json('msg','Family Details updated Succesfully');
+            return response()->json('msg','Family Details added Succesfully', 200);
         }else{
             return response()->json('msg','Error while uploading family details!');
         }
@@ -233,14 +233,109 @@ class ProfileController extends Controller
 
 
     //
-    public function showAboutById($id){     
-        $data['yourself'] = BasicDetail::select('description')->where('reg_id', $id);   
-        $data['family'] = FamilyDetail::select('about_family')->where('reg_id', $id);
-        $data['education'] = Education::select('express_yourself')->where('reg_id', $id);
+
+    public function editbasic(Request $req){
+        $validator = Validator::make($req->all(),[
+               'name' => 'required',
+            // 'dob' => 'required',
+            // 'maritial_status' => 'required',
+            // 'religion' => 'required',
+            // 'caste' => 'required',
+            // 'sub_caste' => 'required',
+            // 'mother_tongue' => 'required',
+            // 'horrorscope_match_required' => 'required',
+            // 'height' => 'required',
+            // 'manglik' => 'required',
+            // 'country' => 'required',
+            // 'state' => 'required',
+            // 'city' => 'required',
+            // 'city_live_in' => 'required',
+            // 'sect' => 'required',
+            // 'live_with_family' => 'required',
+            // 'desc' => 'required'
+        ]);
+        // return response()->json($req->name);
+        // $data = BasicDetail::find(Auth::user()->reg_id);
+
+        $data = BasicDetail::find(1);
+        $data->name = $req->name;
+        // $data->dob = $req->dob;
+        // $data->maritial_status = $req->maritial_status;
+        // $data->religion = $req->religion;
+        // $data->caste = $req->caste;
+        // $data->sub_caste = $req->sub_caste;
+        // $data->mother_tongue = $req->mother_tongue;
+        // $data->horrorscope_match_required = $req->horrorscope_match_required;
+        // $data->height = $req->height;
+        // $data->manglik = $req->manglik;
+        // $data->country = $req->country;
+        // $data->state = $req->state;
+        // $data->city = $req->city;
+        // $data->sect = $req->sect;
+        // $data->live_with_family = $req->live_with_family;
+        if($data->save()){
+            return response()->json( 'msg','Basic Details updated Succesfully' , 200);
+        }else{
+            return response()->json( 'msg','Error while uploading basic details!');
+        }
+       
+        if($validator->fails()){
+            return response()->json($validator->errors(),202);
+        }        
+    }
+
+
+    public function showAboutById($id){ 
+        
+        // $id = Auth::user()->reg_id;
+        $id = 1;
+        $data['yourself'] = BasicDetail::select('description')->where('reg_id',$id)->get();   
+        $data['family'] = FamilyDetail::select('about_family')->where('reg_id', $id)->get();
+        $data['career'] = CareerDetail::select('express_yourself')->where('reg_id', $id)->get();
         return response()->json( $data,200);  
     } 
 
 
+    public function EditAbout(Request $req){ 
+        
+        // $id = Auth::user()->reg_id;
+        $id = 1;
+        $data = BasicDetail::find($id);
+        $data->description = $req->yourself;
+        $data->save();
+
+        $data1 = FamilyDetail::fund($id);
+        $data1->about_family = $req->family;
+        $data1->save();
+
+
+        $data2 = FamilyDetail::fund($id);
+        $data2->express_yourself = $req->career;
+        $data2->save();
+        
+        return response()->json( 'msg','Data has been updated successfully!',200);  
+    } 
+
+
+    public function EditCareer(Request $req){ 
+        
+        // $id = Auth::user()->reg_id;
+        $id = 1;
+        $data = BasicDetail::find($id);
+        $data->description = $req->yourself;
+        $data->save();
+
+        $data1 = FamilyDetail::fund($id);
+        $data1->about_family = $req->family;
+        $data1->save();
+
+
+        $data2 = FamilyDetail::fund($id);
+        $data2->express_yourself = $req->career;
+        $data2->save();
+        
+        return response()->json( 'msg','Data has been updated successfully!',200);  
+    } 
 }
 
 
