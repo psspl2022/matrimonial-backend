@@ -16,6 +16,18 @@ use App\Models\State;
 
 class DropdownController extends Controller
 {
+    public function stateDropdown($c_id){
+      
+        $response['state'] = State::select('id','name', 'country_id')->where('country_id',$c_id)->get();
+        return response($response, 200);
+    }
+
+    public function cityDropdown($s_id){
+      
+        $response['state'] = State::select('id','name', 'country_id','state_id')->where('state_id',$s_id)->get();
+        return response($response, 200);
+    }
+
     public function basicDropdown(){
         $response['caste'] = Caste::select('id','caste')->get();
         $response['city'] = City::select('id','name', 'state_id', 'country_id')->get();
@@ -24,7 +36,6 @@ class DropdownController extends Controller
         $response['mother_tongue'] = MotherTongue::select('id','type','mother_tongue')->get();
         $response['religion'] = Religion::select('id','religion')->get();
         $response['sect'] = Sect::select('id','name')->get();
-        $response['state'] = State::select('id','name', 'country_id')->get();
 
         return response($response, 200);
     }
