@@ -59,7 +59,7 @@ class DropdownController extends Controller
     public function careerDropdown(){
         $response['highest'] = Education::select('id','education')->get();
         $response['ug'] = Education::select('id','education')->where('type','UG')->get();
-        $response['pg'] = Education::select('id','height')->where('type','PG')->get();
+        $response['pg'] = Education::select('id','education')->where('type','PG')->get();
         $response['emp_sector'] = OccupationCategory::select('id','occupation_category')->get();
         $response['income'] = Income::select('id','income');
         return response($response, 200);
