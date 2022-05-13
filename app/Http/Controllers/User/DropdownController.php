@@ -55,8 +55,6 @@ class DropdownController extends Controller
     }
 
     public function familyDropdown(){
-        $response['family_type'] = FamilyType::select('id','type')->get();
-        // $response['family_value'] = FamilyValue::select('id','value')->get();
         $response['occupation'] = Occupation::select('id','occupation_category','occupation')->get();
         $response['state'] = State::select('id','name', 'country_id')->get();
         $response['city'] = City::select('id','name', 'state_id', 'country_id')->get();
