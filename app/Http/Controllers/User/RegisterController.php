@@ -18,12 +18,7 @@ class RegisterController extends Controller
                  
         ]);
 
-        if($validator->fails()){
-            // return response()->json($validator->errors(),202);
-            $errors = $validator->errors();
-            return response()->json(["errors" => $errors]);
-            // return ['errors'=>$validator->errors()];
-        }  
+    
 
         //Matrimony Id
         $total_rows = Register::orderBy('id', 'desc')->count();
