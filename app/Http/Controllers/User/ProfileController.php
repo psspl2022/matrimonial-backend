@@ -125,28 +125,28 @@ class ProfileController extends Controller
         $validator = Validator::make($req->all(),[
             'highest_qualification' => 'required',
             'schooling'=>'required',
-            // 'ug_qualification'=>'required',
+            'ug_qualification'=>'required',
             // 'ug_clg'=>'required',
-            // 'pg_qualification'=>'required',
+            'pg_qualification'=>'required',
             // 'pg_clg'=>'required',
-            // 'employement_sector'=>'required',
-            // 'occupation'=>'required',
-            // 'income'=>'required',
-            // 'express_yourself'=>'required'
+            'employement_sector'=>'required',
+            'occupation'=>'required',
+            'income'=>'required',
+            'express_yourself'=>'required'
         ]);
 
         $data = new CareerDetail();
         // $data->reg_id = $reg_id;
         $data->highest_qualification = $req->highest_qualification;
         $data->schooling = $req->schooling;
-        // $data->ug_qualification = $req->ug_qualification;
+        $data->ug_qualification = $req->ug_qualification;
         // $data->ug_clg = $req->ug_clg;
-        // $data->pg_qualification = $req->pg_qualification;
+        $data->pg_qualification = $req->pg_qualification;
         // $data->pg_clg = $req->pg_clg;
-        // $data->employement_sector = $req->employement_sector;
-        // $data->occupation = $req->occupation;
-        // $data->income = $req->income;
-        // $data->express_yourself = $req->express_yourself;
+        $data->employement_sector = $req->employement_sector;
+        $data->occupation = $req->occupation;
+        $data->income = $req->income;
+        $data->express_yourself = $req->express_yourself;
          // $data->added_by = Auth::user()->id;
          if($data->save()){
 
@@ -154,9 +154,9 @@ class ProfileController extends Controller
             $data1->stage_no = 3;
             $data1->save();
 
-            return response()->json('msg','Career Details added Succesfully',200);
+            return response()->json(['msg'=>'Career Details Added Succesfully']);
         }else{
-            return response()->json('msg','Error while uploading career details!');
+            return response()->json(['error_msg'=>'Error while uploading career details!']);
         }
 
         if($validator->fails()){
@@ -475,7 +475,7 @@ class ProfileController extends Controller
         $data->email = $req->email;
         if(empty($req->a_email) ? NULL : $req->a_email)
         $product = Product::updateOrCreate(
-            [ 'reg_id' =>  ],
+            // [ 'reg_id' =>  ],
             [ 'price' => 130, 'price_update_date' => date('Y-m-d') ]
         );
   
