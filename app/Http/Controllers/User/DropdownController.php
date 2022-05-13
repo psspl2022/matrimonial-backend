@@ -33,12 +33,6 @@ class DropdownController extends Controller
         return response($response, 200);
     }
 
-    public function occupationDropdown($e_id){
-      
-        $response['occupation'] = Occupation::select('id','occupation')->where('cat_id', $e_id)->get();
-        return response($response, 200);
-    }
-
     public function basicDropdown(){
         $response['caste'] = Caste::select('id','caste')->get();
         $response['country'] = Country::select('id','name')->get();
@@ -54,6 +48,8 @@ class DropdownController extends Controller
         $response['highest'] = Education::select('id','education')->get();
         $response['ug'] = Education::select('id','education')->where('type','UG')->get();
         $response['pg'] = Education::select('id','education')->where('type','PG')->get();
+        $response['occupation'] = Occupation::select('id','occupation_category','occupation')->where('cat_id', $e_id)->get();
+        return response($response, 200);
         $response['emp_sector'] = EmployementSector::select('id','sector_name')->get();
         $response['income'] = Income::select('id','income');
         return response($response, 200);
