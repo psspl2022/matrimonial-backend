@@ -25,6 +25,7 @@ class CreateCareerDetails extends Migration
             $table->string('pg_clg',100)->nullable();
             $table->string('employement_sector', 50)->nullable();
             $table->string('occupation', 50)->nullable();
+            $table->string('organization_name', 100)->nullable();
             $table->string('income', 50)->nullable();
             $table->text('express_yourself')->nullable();
             $table->integer('added_by')->unsigned()->nullable();

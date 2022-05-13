@@ -19,6 +19,7 @@ class CreateFamilyDetails extends Migration
             $table->enum('family_type', ['0','1', '2','3'])->default('0')->comment('0=NULL, 1=Nuclear, 2=Joint, 3=Others,');
             $table->enum('family_values', ['0','1', '2','3','4'])->default('0')->comment('0=NULL, 1=Liberal, 2=Orthodox, 3=Conservative, 4=Moderate,');
             $table->enum('family_status', ['0','1', '2','3'])->default('0')->comment('0=NULL, 1=Rich, 2=Upper-Class, 3=Middle-Class');
+            $table->string('profile_handler_name',50)->nullable();
             $table->string('father_occupation',50)->nullable();
             $table->string('mother_occupation',50)->nullable();
             $table->integer('brother_count')->unsigned()->nullable(); 
@@ -26,7 +27,7 @@ class CreateFamilyDetails extends Migration
             $table->integer('sister_count')->unsigned()->nullable(); 
             $table->integer('married_sister_count')->unsigned()->nullable(); 
             $table->text('family_address')->nullable();           
-            $table->string('native_city',50)->nullable();
+            $table->string('native_state',50)->nullable();
             $table->string('family_live_in',50)->nullable();
             $table->integer('family_income')->unsigned()->nullable(); 
             $table->string('gotra_maternal',50)->nullable();

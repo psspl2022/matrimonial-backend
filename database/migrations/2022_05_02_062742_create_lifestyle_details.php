@@ -27,10 +27,6 @@ class CreateLifestyleDetails extends Migration
             $table->enum('challenged', ['0','1', '2'])->default('0')->comment('0=NULL, 1=Physically, 2=Mentally');
             $table->enum('thalessemia', ['1', '2','3'])->default('1')->comment('1=No, 2=Minor, 3=Major');
             $table->enum('hiv_pos', ['0', '1'])->default('0')->comment('0=NO, 1=Yes');
-            $table->string('movie',100)->nullable();
-            $table->string('sport',50)->nullable();
-            $table->string('dish',50)->nullable();
-            $table->string('vacation_destination',100)->nullable();
             $table->integer('added_by')->unsigned()->nullable();
             $table->enum('status', ['0', '1'])->default('1')->comment('0=Inactive, 1=Active');
             $table->timestamp('created_on')->useCurrent();

@@ -13,6 +13,11 @@ use App\Models\MotherTongue;
 use App\Models\Religion;
 use App\Models\Sect;
 use App\Models\State;
+use App\Models\Education;
+use App\Models\Income;
+use App\Models\Occupation;
+use App\Models\OccupationCategory;
+
 
 class DropdownController extends Controller
 {
@@ -28,6 +33,18 @@ class DropdownController extends Controller
         return response($response, 200);
     }
 
+    public function empSectorDropdown(){
+      
+        $response['emp_sector'] = OccupationCategory::select('id','occupation_category')->get();
+        return response($response, 200);
+    }
+
+    public function occupationDropdown($e_id){
+      
+        $response['occupation'] = Occupation::select('id','occupation')->where('cat_id', $e_id)->get();
+        return response($response, 200);
+    }
+
     public function basicDropdown(){
         $response['caste'] = Caste::select('id','caste')->get();
         $response['country'] = Country::select('id','name')->get();
@@ -36,6 +53,15 @@ class DropdownController extends Controller
         $response['religion'] = Religion::select('id','religion')->get();
         $response['sect'] = Sect::select('id','name')->get();
 
+        return response($response, 200);
+    }
+
+    public function careerDropdown(){
+        $response['highest'] = Education::select('id','education')->get();
+        $response['ug'] = Country::select('id','education')->where('type','UG')->get();
+        $response['pg'] = Height::select('id','height')->where('type','PG')->get();
+        $response['emp_sector'] = OccupationCategory::select('id','occupation_category')->get();
+        $response['income'] = Income::select('id','income');
         return response($response, 200);
     }
 }
