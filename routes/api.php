@@ -39,6 +39,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/basicDropdown',[DropdownController::class, 'basicDropdown']);
     Route::get('/careerDropdown',[DropdownController::class, 'careerDropdown']);
+    Route::get('/familyDropdown',[DropdownController::class, 'familyDropdown']);
     
     Route::get('/stateDropdown/{c_id}',[DropdownController::class, 'stateDropdown']);
     Route::get('/cityDropdown/{s_id}',[DropdownController::class, 'cityDropdown']);
