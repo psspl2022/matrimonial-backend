@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
-class OccupationCategory extends Model implements Auditable
+class EmployementSector extends Model implements Auditable
 {
     use AuditableTrait;
     use HasFactory;
 
-    protected $table = 'occupation_categories';
+    protected $table = 'employement_categories';
     public $timestamps = false;
 }

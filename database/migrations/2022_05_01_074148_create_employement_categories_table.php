@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOccupationCategoriesTable extends Migration
+class CreateEmployementCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateOccupationCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('occupation_categories', function (Blueprint $table) {
+        Schema::create('employement_categories', function (Blueprint $table) {
             $table->increments('id'); 
-            $table->string('occupation_category',50);
+            $table->string('sector_name',50); 
+            $table->string('occupation',50);
             $table->enum('status', ['0', '1'])->default('1')->comment('0=Inactive, 1=Active');
             $table->softDeletes();
         });
@@ -28,6 +29,6 @@ class CreateOccupationCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('occupation_categories');
+        Schema::dropIfExists('employement_categories');
     }
 }

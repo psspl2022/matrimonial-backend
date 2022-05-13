@@ -62,7 +62,7 @@ class ProfileController extends Controller
             $data1->stage_no = 2;
             $data1->save();
             
-            return response()->json( ['msg'=>'Basic Details added Succesfully'],200);
+            return response()->json( ['msg'=>'Basic Details added Succesfully']);
         }else{
             return response()->json( ['error_msg'=>'Error while uploading basic details!']);
         }

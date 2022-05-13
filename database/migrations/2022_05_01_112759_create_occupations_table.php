@@ -15,7 +15,7 @@ class CreateOccupationsTable extends Migration
     {
         Schema::create('occupations', function (Blueprint $table) {
             $table->increments('id'); 
-            $table->integer('cat_id')->unsigned()->nullable(); 
+            $table->string('occupation_category',50); 
             $table->string('occupation',50);
             $table->enum('status', ['0', '1'])->default('1')->comment('0=Inactive, 1=Active');
             $table->softDeletes();

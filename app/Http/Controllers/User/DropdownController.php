@@ -16,7 +16,7 @@ use App\Models\State;
 use App\Models\Education;
 use App\Models\Income;
 use App\Models\Occupation;
-use App\Models\OccupationCategory;
+use App\Models\EmployementSector;
 
 
 class DropdownController extends Controller
@@ -30,12 +30,6 @@ class DropdownController extends Controller
     public function cityDropdown($s_id){
       
         $response['city'] = City::select('id','name', 'state_id', 'country_id')->where('state_id',$s_id)->get();
-        return response($response, 200);
-    }
-
-    public function empSectorDropdown(){
-      
-        $response['emp_sector'] = OccupationCategory::select('id','occupation_category')->get();
         return response($response, 200);
     }
 
@@ -60,7 +54,7 @@ class DropdownController extends Controller
         $response['highest'] = Education::select('id','education')->get();
         $response['ug'] = Education::select('id','education')->where('type','UG')->get();
         $response['pg'] = Education::select('id','education')->where('type','PG')->get();
-        $response['emp_sector'] = OccupationCategory::select('id','occupation_category')->get();
+        $response['emp_sector'] = EmployementSector::select('id','sector_name')->get();
         $response['income'] = Income::select('id','income');
         return response($response, 200);
     }
