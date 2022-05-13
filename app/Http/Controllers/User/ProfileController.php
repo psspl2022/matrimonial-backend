@@ -17,18 +17,19 @@ class ProfileController extends Controller
     public function createBasic(Request $req){
         $validator = Validator::make($req->all(),[
             'name' => 'required',
-            // 'dob' => 'required',
-            // 'maritial_status' => 'required',
-            // 'religion' => 'required',
-            // 'caste' => 'required',
+            'dob' => 'required',
+            'maritial_status' => 'required',
+            'religion' => 'required',
+            'caste' => 'required',
             // 'sub_caste' => 'required',
-            // 'mother_tongue' => 'required',
-            // 'horrorscope_match_required' => 'required',
-            // 'height' => 'required',
-            // 'manglik' => 'required',
-            // 'country' => 'required',
-            // 'state' => 'required',
-            // 'city' => 'required',
+            'mother_tongue' => 'required',
+            'horrorscope_match_required' => 'required',
+            'height' => 'required',
+            'manglik' => 'required',
+            'country' => 'required',
+            'state' => 'required',
+            'city' => 'required',
+            'pincode' => 'required'
             // 'city_live_in' => 'required',
             // 'sect' => 'required',
             // 'live_with_family' => 'required',
@@ -38,18 +39,19 @@ class ProfileController extends Controller
         $data = new BasicDetail();
         // $data->reg_id = $reg_id;
         $data->name = $req->name;
-        // $data->dob = $req->dob;
-        // $data->maritial_status = $req->maritial_status;
-        // $data->religion = $req->religion;
-        // $data->caste = $req->caste;
+        $data->dob = $req->dob;
+        $data->maritial_status = $req->maritial_status;
+        $data->religion = $req->religion;
+        $data->caste = $req->caste;
         // $data->sub_caste = $req->sub_caste;
-        // $data->mother_tongue = $req->mother_tongue;
-        // $data->horrorscope_match_required = $req->horrorscope_match_required;
-        // $data->height = $req->height;
-        // $data->manglik = $req->manglik;
-        // $data->country = $req->country;
-        // $data->state = $req->state;
-        // $data->city = $req->city;
+        $data->mother_tongue = $req->mother_tongue;
+        $data->horrorscope_match_required = $req->horrorscope_match_required;
+        $data->height = $req->height;
+        $data->manglik = $req->manglik;
+        $data->country = $req->country;
+        $data->state = $req->state;
+        $data->city = $req->city;
+        $data->pincode = $req->pincode;
         // $data->sect = $req->sect;
         // $data->live_with_family = $req->live_with_family;
         // $data->description = $req->description;
@@ -60,9 +62,9 @@ class ProfileController extends Controller
             $data1->stage_no = 2;
             $data1->save();
             
-            return response()->json( 'msg','Basic Details added Succesfully');
+            return response()->json( ['msg'=>'Basic Details added Succesfully']);
         }else{
-            return response()->json( 'msg','Error while uploading basic details!');
+            return response()->json( ['error_msg'=>'Error while uploading basic details!']);
         }
        
         if($validator->fails()){

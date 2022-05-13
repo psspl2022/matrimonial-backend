@@ -25,7 +25,7 @@ Route::get('/login',[AuthenticationController::class,'login'])->name('login');
 // // });
 
 
-// Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:api')->group(function () {
     Route::post('/logout',[AuthenticationController::class,'logout']);
 
     Route::get('/showAbout/{id}',[ProfileController::class, 'showAboutById']);
@@ -41,6 +41,6 @@ Route::get('/login',[AuthenticationController::class,'login'])->name('login');
     Route::get('/stateDropdown/{c_id}',[DropdownController::class, 'stateDropdown']);
     Route::get('/cityDropdown/{s_id}',[DropdownController::class, 'cityDropdown']);
     
-// });
+});
 
 
