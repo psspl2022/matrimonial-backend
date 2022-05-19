@@ -34,9 +34,7 @@ class AuthenticationController extends Controller
         
         $Register = new RegisterController();
         $Register->createRegister($req);
-        
-        
-        $id = Register::all()->last()->first('id');
+        $id = Register::orderBy('id', 'DESC')->first();
         
         // $user = User::create([
         //     'reg_id' => 1,
@@ -50,13 +48,13 @@ class AuthenticationController extends Controller
         $user->email = $input['email'];
         $user->password = $input['password'];
         $user->save();
-        
 
-        
+        $user_data = User::select('reg_id','name','email')->where('reg_id',$id->id)->first();
 
         $responseArray = [];
         $responseArray['token'] = $user->createToken('MyToken')->accessToken;
         $responseArray['msg'] = "Registered Succesfully";
+        $responseArray['user'] = $user;
        
         return response()->json($responseArray,200);   
         
@@ -70,11 +68,13 @@ class AuthenticationController extends Controller
         ]);
 
         if(Auth::attempt(['email'=>$req->email, 'password'=>$req->password])){
-            $user = Auth::user();
+            $user = Auth::user(); 
+            $user_data = User::select('reg_id','name','email')->where('id',Auth::user()->id)->first();
             $responseArray = [];
             $responseArray['token'] = $user->createToken('MyToken')->accessToken;
             $responseArray['msg'] = "Login Successfully";
-       
+            $responseArray['user'] = $user_data;
+            
             return response()->json($responseArray,200);
         } else{
             return response()->json(['error'=>'Unauthenticated'],203);
@@ -82,10 +82,11 @@ class AuthenticationController extends Controller
     }
 
     public function logout (Request $req) {
+        // auth()->logout();
         $token = $req->user()->token();
         $token->revoke();
         $response = ['message' => 'You have been successfully logged out!'];
-        return response($response, 200);
+        return response()->json($response, 200);
     }
 
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\Register;
+use Auth;
 
 class RegisterController extends Controller
 {
@@ -43,5 +44,15 @@ class RegisterController extends Controller
         if($validator->fails()){
             return response()->json($validator->errors(),202);
         }  
+    }
+
+    public function getLoginUserDetails(){
+        if(Auth::check()){
+            $user = User::all(); 
+            return response()->json(['user'=>$user]);
+        }
+        else{
+            return response()->json(['error'=>'Not Logged In']);
+        }
     }
 }

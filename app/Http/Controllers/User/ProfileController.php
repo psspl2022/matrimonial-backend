@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +13,9 @@ use App\Models\BasicDetail;
 use App\Models\CareerDetail;
 use App\Models\FamilyDetail;
 use App\Models\Register;
+use App\Models\User;
+use App\Models\VerifyUser;
+use Mail;
 
 class ProfileController extends Controller
 {
@@ -37,7 +42,7 @@ class ProfileController extends Controller
         ]);
         // return response()->json($req->name);
         $data = new BasicDetail();
-        // $data->reg_id = $reg_id;
+        $data->reg_id = Auth::user()->reg_id;
         $data->name = $req->name;
         $data->dob = $req->dob;
         $data->maritial_status = $req->maritial_status;
@@ -59,7 +64,7 @@ class ProfileController extends Controller
         if($data->save()){
 
             $data1 = Register::find(Auth::user()->reg_id);
-            $data1->stage_no = 2;
+            $data1->stage_no = 3;
             $data1->save();
             
             return response()->json( ['msg'=>'Basic Details added Succesfully']);
@@ -136,7 +141,7 @@ class ProfileController extends Controller
         ]);
 
         $data = new CareerDetail();
-        // $data->reg_id = $reg_id;
+        $data->reg_id = Auth::user()->reg_id;
         $data->highest_qualification = $req->highest_qualification;
         $data->schooling = $req->schooling;
         $data->ug_qualification = $req->ug_qualification;
@@ -151,7 +156,7 @@ class ProfileController extends Controller
          if($data->save()){
 
             $data1 = Register::find(Auth::user()->reg_id);
-            $data1->stage_no = 3;
+            $data1->stage_no = 4;
             $data1->save();
 
             return response()->json(['msg'=>'Career Details Added Succesfully']);
@@ -184,32 +189,32 @@ class ProfileController extends Controller
         ]);
 
         $data = new FamilyDetail();
-        // $data->reg_id = $reg_id;
+        $data->reg_id = Auth::user()->reg_id;
         $data->family_type = $req->family_type;
-        $data->family_values = $req->family_values;
+        // $data->family_values = $req->family_values;
         // $data->family_status = $req->family_status;
-        // $data->father_occupation = $req->father_occupation;
-        // $data->mother_occupation = $req->mother_occupation;
-        // $data->brother_count = $req->brother_count;
+        $data->father_occupation = $req->father_occupation;
+        $data->mother_occupation = $req->mother_occupation;
+        $data->brother_count = $req->brother_count;
         // $data->married_brother_count = $req->married_brother_count;
-        // $data->sister_count = $req->sister_count;
+        $data->sister_count = $req->sister_count;
         // $data->married_sister_count = $req->married_sister_count;
         // $data->family_address = $req->family_address;
-        // $data->native_state = $req->native_city;
-        // $data->family_live_in = $req->family_live_in;
+        $data->native_city = $req->native_city;
+        $data->family_live_in = $req->family_live_in;
         // $data->family_income = $req->family_income;
         // $data->gotra = $req->gotra;
-        // $data->about_family = $req->about_family;
+        $data->about_family = $req->about_family;
         // $data->added_by = Auth::user()->id;
          if($data->save()){
 
             $data1 = Register::find(Auth::user()->reg_id);
-            $data1->stage_no = 4;
+            $data1->stage_no = 5;
             $data1->save();
 
-            return response()->json('msg','Family Details added Succesfully', 200);
+            return response()->json(['msg'=>'Family Details added Succesfully']);
         }else{
-            return response()->json('msg','Error while uploading family details!');
+            return response()->json(['error_msg'=>'Error while uploading family details!']);
         }
 
         if($validator->fails()){
@@ -491,5 +496,84 @@ class ProfileController extends Controller
         }    
 
     } 
+
+    public function getRegisterFormStatus(){
+        $stage_no = Register::select('stage_no')->where('id',Auth::user()->reg_id)->get();
+        return response($stage_no,200);
+    }
+
+    public function sendOtpToMail(){
+        // $random_password =  Str::random(0,999999); 
+        $random_password = random_int(0, 999999);
+        $random_password = str_pad($random_password, 6, 0, STR_PAD_LEFT);   
+
+        $user_data = User::find(Auth::user()->id);
+        if(empty($user_data->otp)){
+            
+        // $user_name = BasicDetail::where('reg_id',Auth::user()->reg_id)->first();
+        $toEmail = 'ankit.bisht@prakharsoftwares.com';
+        // $toEmail = 'dishabhandari0309@gmail.com';
+        $from=env('MAIL_FROM_ADDRESS'); 
+        $subject = "Gmail Verification by Namdeo Matrimonial";
+        $data= 
+        [  
+            'otp'=>$random_password,
+            'email'=>$user_data->email
+        ];                
+        
+        $mail_send = Mail::send('mail.sendmail', $data, function ($message) use ($toEmail) {
+        $message->to($toEmail)
+        ->subject('Gmail Verification by Namdeo Matrimonial');
+        $message->from(env('MAIL_FROM_ADDRESS'),env('APP_NAME'));
+        });
+        if($mail_send){
+            return response()->json(['error_msg'=>'Error while Sending Otp!']);
+        }
+        $user_data->otp = $random_password;
+        $user_data->save();
+        return response()->json(['msg'=>'Otp Sent to Gmail Succesfully']);
+    }
+    else{
+        return response()->json(['msg'=>'Otp Already Sent Succesfully']);
+    }
+    }
+
+    public function checkOtpToMail(Request $req){
+        $user_data = User::find(Auth::user()->id);
+        if($user_data->otp == $req->otp){
+            $save_stage = Register::find(Auth::user()->reg_id);
+            $save_stage->stage_no = 2;
+            $save_stage->save();
+            return response()->json(['msg'=>'Otp Verified Succesfully']);
+        }
+        else{
+            return response()->json(['error_msg'=>'Otp did not match']);
+        }
+    }
+
+    public function storeProfileImage(Request $req){
+        $validator = Validator::make($req->all(),
+            [
+                'image' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+            ]
+        );
+        if($validator->fails()) {
+            return response()->json(["status" => "failed", "message" => "Validation error", "errors" => $validator->errors()]);
+        }
+        if($req->has('image')) {
+            $image = $req->image;
+                $filename = time().rand(2,3). '.'.$image->getClientOriginalExtension();
+                $image->move(public_path("Documents/Image_Documents/"), $filename);
+
+                $verify_user = new VerifyUser();
+                $verify_user->by_reg_id = Auth::user()->reg_id;
+                $verify_user->identity_card_doc = $filename;
+                $verify_user->save();
+            return response()->json(['msg'=>'Image Uploaded Succesfully']);
+        }
+        else {
+            return response()->json(['error_msg'=>'Image Upload Failed!']);
+        }
+    }
     
 }
