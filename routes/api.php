@@ -2,10 +2,27 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\User\AuthenticationController;
+use App\Http\Controllers\Authentication\AuthenticationController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\DropdownController;
+<<<<<<< Updated upstream
 use App\Http\Controllers\User\RegisterController;
+=======
+use App\Http\Controllers\Admin\Master\PackageController;
+use App\Http\Controllers\Admin\Master\CasteController;
+use App\Http\Controllers\Admin\Master\EducationController;
+use App\Http\Controllers\Admin\Master\FamilyTypeController;
+use App\Http\Controllers\Admin\Master\FamilyValueController;
+use App\Http\Controllers\Admin\Master\HeightController;
+use App\Http\Controllers\Admin\Master\getHobbiesList;
+use App\Http\Controllers\Admin\Master\IncomeController;
+use App\Http\Controllers\Admin\Master\IntrestsController;
+use App\Http\Controllers\Admin\Master\MotherTongueController;
+use App\Http\Controllers\Admin\Master\OccupationController;
+use App\Http\Controllers\Admin\Master\ReligionController;
+use App\Http\Controllers\Admin\Master\ResidenceController;
+use App\Http\Controllers\Admin\Master\SectController;
+>>>>>>> Stashed changes
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +45,31 @@ Route::get('/getLoginUserDetails', [RegisterController::class, 'getLoginUserDeta
 //     return $request->user();
 // // });
 
+
+//Admin Route
+
+
+Route::get('/getPackageList',[PackageController::class,'getPackageList']);
+
+Route::get('/getCasteList',[CasteController::class,'getCasteList']);
+
+Route::get('/getEducationList',[EducationController::class,'getEducationList']);
+
+Route::get('/getFamilyTypeList',[FamilyTypeController::class,'getFamilyTypeList']);
+
+Route::get('/getFamilyValueList',[FamilyValueController::class,'getFamilyValueList']);
+
+Route::get('/getHeightList',[HeightController::class,'getHeightList']);
+
+Route::get('/getHobbiesList',[getHobbiesList::class,'getHobbiesList']);
+
+Route::get('/getIncomeList',[IncomeController::class,'getIncomeList']);
+Route::get('/getIntrestsList',[IntrestsController::class,'getPackageList']);
+Route::get('/getMotherTongueList',[MotherTongueController::class,'getMotherTongueList']);
+Route::get('/getOccupationList',[OccupationController::class,'getOccupationList']);
+Route::get('/getReligionList',[ReligionController::class,'getReligionList']);
+Route::get('/getResidenceList',[ResidenceController::class,'getResidenceList']);
+Route::get('/getSectList',[SectController::class,'getSectList']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/logout',[AuthenticationController::class,'logout']);
@@ -57,5 +99,6 @@ Route::middleware('auth:api')->group(function () {
 
    
 });
+
 
 
