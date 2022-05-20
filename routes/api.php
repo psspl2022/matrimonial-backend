@@ -48,6 +48,11 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/stateDropdown/{c_id}',[DropdownController::class, 'stateDropdown']);
     Route::get('/cityDropdown/{s_id}',[DropdownController::class, 'cityDropdown']);
 
+    //Masters
+    Route::get('/allStateDropdown',[DropdownController::class, 'allStateDropdown']);
+    Route::get('/allCityDropdown',[DropdownController::class, 'allCityDropdown']);
+    Route::get('/sectDropdown',[DropdownController::class, 'sectDropdown']);
+
     Route::get('/getRegisterFormStatus', [ProfileController::class, 'getRegisterFormStatus']);
 
     Route::get('/sendOtp', [ProfileController::class, 'sendOtpToMail']);

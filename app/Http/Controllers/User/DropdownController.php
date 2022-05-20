@@ -33,6 +33,24 @@ class DropdownController extends Controller
         return response($response, 200);
     }
 
+    public function allStateDropdown(){
+      
+        $response['state'] = State::select('id','name', 'country_id')->get();
+        return response($response, 200);
+    }
+
+    public function sectDropdown(){
+      
+        $response['sect'] = Sect::select('id','name')->where('status','1')->get();
+        return response($response, 200);
+    }
+
+    public function allCityDropdown(){
+      
+        $response['city'] = City::select('id','name', 'state_id', 'country_id')->get();
+        return response($response, 200);
+    }
+
     public function basicDropdown(){
         $response['caste'] = Caste::select('id','caste')->get();
         $response['country'] = Country::select('id','name')->get();
