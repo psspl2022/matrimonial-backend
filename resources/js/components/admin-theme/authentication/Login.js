@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from "react-router-dom";
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import axios from "axios";
 function Login() {
 
@@ -9,12 +9,17 @@ function Login() {
         // const[email, setEmail] = useState('');
         // const[password, setPassword] = useState('');
 
+        const history = useHistory();
         const[user, setUser] =  useState({
             email: "",
             password: ""
         });
 
-        let history = useHistory();
+        useEffect(() => {
+            if(sessionStorage.hasOwnProperty("access_token")){
+            history.replace('/dashboard');
+            }
+        },[]);
 
         const {email,password} = user;
         const onInputChange = (e) => {
@@ -23,16 +28,16 @@ function Login() {
     
     const signIn = () =>
     {
-        const users = {email};
-
-        axios.post("http://127.0.0.1:8000/login",user)
+        
+        axios.post("http://127.0.0.1:8000/api/login",user)
         .then(response => {
             if (response.data.hasOwnProperty("msg")) {
                 Swal.fire({
                   icon: "success",
                   title: response.data.msg,
                 });
-                window.localStorage.setItem('access_token', response.data.token);
+                window.sessionStorage.setItem('access_token', response.data.token);
+                window.sessionStorage.setItem('user_data',JSON.stringify(response.data.user))
                 history.replace("/dashboard");
               } else {
                 Swal.fire({

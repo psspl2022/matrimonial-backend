@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRegisters extends Migration
+class CreateUserRegisters extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateRegisters extends Migration
      */
     public function up()
     {
-        Schema::create('registers', function (Blueprint $table) {
+        Schema::create('user_registers', function (Blueprint $table) {
             $table->increments('id'); 
             $table->string('matrimony_id',50);
             $table->string('profile_for',50);
@@ -44,6 +44,6 @@ class CreateRegisters extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('registers');
+        Schema::dropIfExists('user_registers');
     }
 }

@@ -3,13 +3,9 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { Link } from 'react-router-dom';
 
-function AddPackage(){
+function AddReligion(){
     const[data, setData] =  useState({
-        name: "",
-        credit: "",
-        view_count: "",
-        shortlist_count: "",
-        price: ""
+        religion: ""
     });
 
     let history = useHistory();
@@ -22,21 +18,21 @@ function AddPackage(){
         }
     }
 
-    const {name,credit,view_count,shortlist_count,price} = data;
+    const {religion} = data;
     const onInputChange = (e) => {
     setData({ ...data, [e.target.name]:e.target.value});
     }
 
-    const addPackage = () => {
+    const addReligion = () => {
         axios
-        .post(`${window.Url}api/addPackage`,data, headers_data)
+        .post(`${window.Url}api/addReligion`,data, headers_data)
         .then(response => {
             if (response.data.hasOwnProperty("msg")) {
                 Swal.fire({
                   icon: "success",
                   title: response.data.msg,
                 });
-                history.replace("/listPackage");
+                history.replace("/listReligion");
               } else {
                 Swal.fire({
                   icon: "error",
@@ -58,10 +54,10 @@ function AddPackage(){
                 <div className="page-title-box">
                     <div className="row">
                         <div className="col">
-                            <h4 className="page-title">Add Package</h4>
+                            <h4 className="page-title">Add Religion</h4>
                             <ol className="breadcrumb">
                                 <li className="breadcrumb-item"><Link>Home</Link></li>
-                                <li className="breadcrumb-item active">Package</li>
+                                <li className="breadcrumb-item active">Religion</li>
                             </ol>
                         </div>
                         <div className="col-auto align-self-center">
@@ -82,28 +78,10 @@ function AddPackage(){
         <div className="col-10 mx-auto">
         <form>
             <div className="form-group">
-                <label >Package Name</label>
-                <input type="text" name="name" value={name} onChange={e => onInputChange(e)} className="form-control"  placeholder="Enter package name" />
+                <label >Religion Name</label>
+                <input type="text" name="religion" value={religion} onChange={e => onInputChange(e)} className="form-control"  placeholder="Enter Religion name" />
             </div>
-            <div className="form-group">
-                <label >Package Price</label>
-                <input type="text" name="price" value={price} onChange={e => onInputChange(e)} className="form-control"  placeholder="Enter package price" />
-            </div>
-            <div className="row form-group">
-                <div className="col-4">
-                    <label >Credit</label>
-                    <input type="text" name="credit" value={credit} onChange={e => onInputChange(e)} className="form-control"  placeholder="Enter Package credit" />
-                </div>
-                <div className="col-4">
-                    <label >View Count</label>
-                    <input type="text" name="view_count" value={view_count} onChange={e => onInputChange(e)} className="form-control"  placeholder="Enter view count" />
-                </div>
-                <div className="col-4">
-                    <label >Shortlist Count</label>
-                    <input type="text" name="shortlist_count" value={shortlist_count} onChange={e => onInputChange(e)} className="form-control"  placeholder="Enter shorlist count" />
-                </div>
-            </div>
-            <button type="button" onClick={addPackage} className="btn btn-primary mr-2">Submit</button>
+            <button type="button" onClick={addReligion} className="btn btn-primary mr-2">Submit</button>
             <button type="button" className="btn btn-danger">Cancel</button>
         </form>
         </div>
@@ -114,4 +92,4 @@ function AddPackage(){
     );
 }
 
-export default AddPackage;
+export default AddReligion;

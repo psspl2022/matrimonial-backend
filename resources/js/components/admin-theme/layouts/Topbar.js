@@ -1,5 +1,56 @@
+import React from 'react';
+import { useHistory } from "react-router-dom";
+import {useState, useEffect} from 'react'
+import axios from "axios";
 import { Link } from 'react-router-dom';
+
 function Topbar(){
+    
+    const history = new useHistory();
+    const [userData, setUserData] = useState({});
+
+    useEffect(() => {
+		if(!sessionStorage.hasOwnProperty("access_token")){
+		history.replace('/');
+		}
+        if(sessionStorage.hasOwnProperty("user_data")){
+			const user_data = window.sessionStorage.getItem('user_data');
+			setUserData(JSON.parse(user_data));
+		}	
+	},[]);
+
+    const logout = async (e) => {
+		e.preventDefault();
+		
+		const token = window.sessionStorage.getItem("access_token");
+		const headers_param = {
+		  headers: {
+			authorization: "Bearer " + token,
+			Accept: "application/json",
+			"Content-Type": "application/json"
+		  },
+		};
+	
+		await axios
+		  .get(`${window.Url}api/logout`, headers_param)
+		  .then(({ data }) => {
+			if (data.hasOwnProperty("message")) {
+			  Swal.fire({
+				icon: "success",
+				text: data.message,
+			  });
+			  window.sessionStorage.removeItem('access_token');
+          	  window.sessionStorage.removeItem('user_data');
+			  history.go(0);
+			} else {
+			  Swal.fire({
+				icon: "error",
+				text: data.message,
+			  });
+			}
+		  });
+	  };
+
     return(  
         <>
        
@@ -111,14 +162,14 @@ function Topbar(){
                         <li className="dropdown">
                             <Link className="nav-link dropdown-toggle waves-effect waves-light nav-user" data-toggle="dropdown" to="#" role="button"
                                 aria-haspopup="false" aria-expanded="false">
-                                <span className="ml-1 nav-user-name hidden-sm">Nick</span>
-                                <img src="assets/images/users/user-5.jpg" alt="profile-user" className="rounded-circle thumb-xs" />                                 
+                                <span className="ml-1 mr-2 nav-user-name hidden-sm">Hi! {userData.name}</span>
+                                {/* <img src="assets/images/users/user-5.jpg" alt="profile-user" className="rounded-circle thumb-xs" />                                  */}
                             </Link>
                             <div className="dropdown-menu dropdown-menu-right">
-                                <Link className="dropdown-item" to="#"><i data-feather="user" className="align-self-center icon-xs icon-dual mr-1"></i> Profile</Link>
-                                <Link className="dropdown-item" to="#"><i data-feather="settings" className="align-self-center icon-xs icon-dual mr-1"></i> Settings</Link>
+                                {/* <Link className="dropdown-item" to="#"><i data-feather="user" className="align-self-center icon-xs icon-dual mr-1"></i> Profile</Link>
+                                <Link className="dropdown-item" to="#"><i data-feather="settings" className="align-self-center icon-xs icon-dual mr-1"></i> Settings</Link> */}
                                 <div className="dropdown-divider mb-0"></div>
-                                <Link className="dropdown-item" to="#"><i data-feather="power" className="align-self-center icon-xs icon-dual mr-1"></i> Logout</Link>
+                                <Link className="dropdown-item" onClick={logout}><i data-feather="power" className="align-self-center icon-xs icon-dual mr-1"></i> Logout</Link>
                             </div>
                         </li>
                     </ul>
