@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Validator;
-use App\Models\Register;
-use Auth;
+use App\Models\UserRegister;
+
 
 class RegisterController extends Controller
 {
@@ -22,17 +22,17 @@ class RegisterController extends Controller
     
 
         //Matrimony Id
-        $total_rows = Register::orderBy('id', 'desc')->count();
+        $total_rows = UserRegister::orderBy('id', 'desc')->count();
         $matrimony_id = "NM/";
         if($total_rows==0){
             $matrimony_id .= '00001';
         }else{
-            $last_id = Register::orderBy('id', 'desc')->first()->id;
+            $last_id = UserRegister::orderBy('id', 'desc')->first()->id;
             $matrimony_id .= sprintf("%'05d",$last_id + 1);
         }
         
 
-        $data = new Register();
+        $data = new UserRegister();
         $data->matrimony_id = $matrimony_id;
         $data->profile_for = $req->for;
         $data->email = $req->email;
@@ -44,15 +44,5 @@ class RegisterController extends Controller
         if($validator->fails()){
             return response()->json($validator->errors(),202);
         }  
-    }
-
-    public function getLoginUserDetails(){
-        if(Auth::check()){
-            $user = User::all(); 
-            return response()->json(['user'=>$user]);
-        }
-        else{
-            return response()->json(['error'=>'Not Logged In']);
-        }
     }
 }

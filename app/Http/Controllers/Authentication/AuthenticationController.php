@@ -7,8 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Validator;
+use App\Http\Controllers\User\RegisterController;
+use App\Http\Controllers\Admin\AdminRegisterController;
 use App\Models\User;
-use App\Models\Register;
+use App\Models\AdminRegister;
+use App\Models\UserRegister;
 
 
 class AuthenticationController extends Controller
@@ -34,7 +37,7 @@ class AuthenticationController extends Controller
         
         $Register = new RegisterController();
         $Register->createRegister($req);
-        $id = Register::orderBy('id', 'DESC')->first();
+        $id = UserRegister::orderBy('id', 'DESC')->first();
         
         // $user = User::create([
         //     'reg_id' => 1,
@@ -45,12 +48,61 @@ class AuthenticationController extends Controller
 
         $user = new User();
         $user->user_type = 1;
-        $user->reg_id = $id->id;
+        $user->admin_reg_id = NULL;
+        $user->user_reg_id = $id->id;
         $user->email = $input['email'];
         $user->password = $input['password'];
         $user->save();
 
-        $user_data = User::select('reg_id','name','email')->where('reg_id',$id->id)->first();
+        $user_data = User::select('user_reg_id','name','email')->where('user_reg_id',$id->id)->first();
+
+        $responseArray = [];
+        $responseArray['token'] = $user->createToken('MyToken')->accessToken;
+        $responseArray['msg'] = "Registered Succesfully";
+        $responseArray['user'] = $user;
+       
+        return response()->json($responseArray,200);   
+        
+    }
+
+
+    public function adminRegister(Request $req)
+    {
+        $validator = Validator::make($req->all(),[
+            // 'name' => 'required',
+            'email' => 'required|email|unique:users,email|unique:admin_registers,email',
+            'contact'=>'required|max:10|min:10'
+        ]);
+       
+        if($validator->fails()){
+            // return response()->json($validator->errors(),202);
+            return response()->json(['errors' => $validator->errors()]);
+        }
+
+        $input = $req->all();
+        $password = Hash::make($input['name'].'@123');
+        
+        $Register = new AdminRegisterController();
+        $Register->createRegister($req);
+        $id = AdminRegister::orderBy('id', 'DESC')->first();
+        
+        // $user = User::create([
+        //     'reg_id' => 1,
+        //     // 'name' => $input['name'],
+        //     'email' => $input['email'],
+        //     'password' => $input['password']
+        // ]);
+
+        $user = new User();
+        $user->user_type = $input['user_type'];
+        $user->admin_reg_id = $id->id;
+        $user->user_reg_id = NULL;
+        $user->name = $input['name'];
+        $user->email = $input['email'];
+        $user->password = $password;
+        $user->save();
+
+        $user_data = User::select('admin_reg_id','user_type','name','email')->where('admin_reg_id',$id->id)->first();
 
         $responseArray = [];
         $responseArray['token'] = $user->createToken('MyToken')->accessToken;
@@ -70,11 +122,9 @@ class AuthenticationController extends Controller
 
         if(Auth::attempt(['email'=>$req->email, 'password'=>$req->password])){
             $user = Auth::user(); 
-            $user_data = User::select('reg_id','name','email')->where('id',Auth::user()->id)->first();
-            $responseArray = [];
             $responseArray['token'] = $user->createToken('MyToken')->accessToken;
             $responseArray['msg'] = "Login Successfully";
-            $responseArray['user'] = $user_data;
+            $responseArray['user'] = $user;
             
             return response()->json($responseArray,200);
         } else{
@@ -87,6 +137,16 @@ class AuthenticationController extends Controller
         $token = $req->user()->token();
         $token->revoke();
         $response = ['message' => 'You have been successfully logged out!'];
+        return response()->json($response, 200);
+    }
+
+    public function getAdminList () {
+        $response = User::select('id', 'user_type','admin_reg_id','status')->with('getAdmin:id,user_id,name,email,gender,contact,address,created_on,status as r_status','getCountry:countries.name as cname', 'getState:states.name as sname', 'getCity:cities.name as ciname')->whereIn('user_type',['2','3'])->get();
+        return response()->json($response, 200);
+    }
+
+    public function getUserList () {
+        $response = User::select('id','user_type','user_reg_id','name', 'status')->with('getUser')->where('user_type','1')->get();
         return response()->json($response, 200);
     }
 

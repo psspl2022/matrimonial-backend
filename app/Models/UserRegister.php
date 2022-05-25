@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
-class Intrests extends Model implements Auditable
+class UserRegister extends Model implements Auditable
 {
     use AuditableTrait;
     use HasFactory;
 
-    protected $table = 'intrests';
+    protected $table = 'user_registers';
     public $timestamps = false;
+
+   
 }

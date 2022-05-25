@@ -21,6 +21,7 @@
         <link href="/admin-theme/plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" /> 
 
         <!-- App css -->
+        <link href="/admin-theme/plugins/select2/select2.min.css" rel="stylesheet" type="text/css" />
         <link href="/admin-theme/plugins/sweet-alert2/sweetalert2.min.css" rel="stylesheet" type="text/css">
         <link href="/admin-theme/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="/admin-theme/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
@@ -44,7 +45,7 @@
         <script src="/admin-theme/assets/js/feather.min.js"></script>
         <script src="/admin-theme/assets/js/simplebar.min.js"></script>
         <script src="/admin-theme/assets/js/metismenu.min.js"></script>
-
+        <script src="/admin-theme/plugins/select2/select2.min.js"></script>
         <script src="/admin-theme/assets/js/moment.js"></script>
         <script src="/admin-theme/plugins/daterangepicker/daterangepicker.js"></script>
         <script src="/admin-theme/plugins/sweet-alert2/sweetalert2.min.js"></script>

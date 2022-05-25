@@ -10,7 +10,7 @@ function ListMotherTongue(){
    
     console.warn(data);
 
-    const token = window.localStorage.getItem('access_token');
+    const token = window.sessionStorage.getItem('access_token');
     const headers_data = {
       headers: {
         'authorization': 'Bearer ' + token,
@@ -19,18 +19,46 @@ function ListMotherTongue(){
       }
     }
 
-      useEffect(() => {
-        axios.get("http://127.0.0.1:8000/api/getMotherTongueList", headers_data)
-          .then(({ data }) => {
-            $('#datatable').DataTable().destroy();
-            setData(data);
-            
-});
+    useEffect(() => {
+        listData();
     }, []);
+
     useEffect(() => {
         $('#datatable').DataTable();
     },[data]);
   
+    function listData(){
+        axios.get("http://127.0.0.1:8000/api/getMotherTongueList", headers_data)
+          .then(({ data }) => {
+            $('#datatable').DataTable().destroy();
+            setData(data);            
+        });
+    }
+
+    const updateStatus = (id, status) => {
+        const update={
+            id : id,
+            status : status,
+            model : "MotherTongue"
+        }
+        axios
+        .post(`${window.Url}api/updateStatus`,update, headers_data)
+        .then(response => {
+            if (response.data.hasOwnProperty("msg")) {
+                Swal.fire({
+                  icon: "success",
+                  title: response.data.msg,
+                });
+                listData();
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: response.data.errors,
+                });
+              }
+            }
+        )
+    }
 
     return(
         <>
@@ -99,9 +127,7 @@ function ListMotherTongue(){
                                                 <td name="buttons">
                                                 <div className=" pull-right"><button  type="button" className="btn btn btn-soft-success btn-circle mr-2" ><i className="dripicons-pencil"></i></button><button type="button" className="btn btn btn-soft-danger btn-circle mr-2" ><i className="dripicons-trash" aria-hidden="true"></i></button><button type="button" className="btn btn-sm btn-soft-purple mr-2 btn-circle" style={{ display:"none" }} ><i className="dripicons-checkmark"></i></button><button type="button" className="btn btn-sm btn-soft-info btn-circle" style={{ display:"none" }} ><i className="dripicons-cross" aria-hidden="true"></i></button>
                                                 
-                                                <button  type="button" className="btn  btn-sm btn-success btn-circle mr-2" >Active</button>
-                                                
-                                                <button  type="button" className="btn btn-sm btn-danger btn-circle mr-2" >Deactive</button>
+                                                { item.status == 0 ?   <button  type="button"  onClick={e => updateStatus(item.id, 0)} className="btn  btn-sm btn-success btn-circle mr-2" >Active</button> : <button  type="button"  onClick={e => updateStatus(item.id, 1)} className="btn btn-sm btn-danger btn-circle mr-2" >Deactive</button> }                                             
 
                                                 </div></td>
                                             </tr>

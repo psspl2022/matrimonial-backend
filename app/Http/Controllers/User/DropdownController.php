@@ -21,6 +21,11 @@ use App\Models\EmployementSector;
 
 class DropdownController extends Controller
 {
+    public function countryDropdown(){      
+        $response['country'] = Country::select('id','name')->get();
+        return response($response, 200);
+    }
+    
     public function stateDropdown($c_id){
       
         $response['state'] = State::select('id','name', 'country_id')->where('country_id',$c_id)->get();
@@ -79,4 +84,8 @@ class DropdownController extends Controller
         $response['city'] = City::select('id','name', 'state_id', 'country_id')->where('country_id','101')->get();
         return response($response, 200);
     }
+
+    //ADMIN
+
+   
 }

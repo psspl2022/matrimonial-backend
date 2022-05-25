@@ -19,7 +19,7 @@ function Dashboard() {
                         <div className="col-auto align-self-center">
                             <Link  className="btn btn-sm btn-outline-primary" id="Dash_Date">
                                 <span className="ay-name" id="Day_Name">Today:</span>&nbsp;
-                                <span className="" id="Select_date">Jan 11</span>
+                                <span className="" id="Select_date"></span>
                                 <i data-feather="calendar" className="align-self-center icon-xs ml-1"></i>
                             </Link>
                             <Link  className="btn btn-sm btn-outline-primary">
