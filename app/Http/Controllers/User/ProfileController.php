@@ -223,14 +223,17 @@ class ProfileController extends Controller
     }
 
    
+    public function show(){
 
+    }
 
 
     //
 
     public function showBasicById($id){     
-        $data = BasicDetail::find($id);       
-        return response()->json( $data, 200);
+        $data['basic'] = BasicDetail::where('reg_id',$id)->first();   
+        $data['gender'] = Register::where('id', $id)->first();    
+        return response()->json($data, 200);
     }
 
     public function editbasic(Request $req){
