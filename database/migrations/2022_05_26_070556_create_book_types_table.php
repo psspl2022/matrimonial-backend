@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateIntrestsTable extends Migration
+class CreateBookTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateIntrestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('intrests', function (Blueprint $table) {
+        Schema::create('book_types', function (Blueprint $table) {
             $table->increments('id'); 
-            $table->string('intrest',50);
+            $table->string('book_type',50);
             $table->enum('status', ['0', '1'])->default('1')->comment('0=Inactive, 1=Active');
             $table->softDeletes();
         });
@@ -28,6 +28,6 @@ class CreateIntrestsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('intrests');
+        Schema::dropIfExists('book_types');
     }
 }

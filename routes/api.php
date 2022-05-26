@@ -61,6 +61,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/EditCareer',[ProfileController::class, 'EditCareer']);
     Route::post('/createFamily',[ProfileController::class, 'createFamily']);
     Route::get('/showFamily',[ProfileController::class, 'showFamilyById']);
+    Route::post('/editFamily',[ProfileController::class, 'editFamily']);
     Route::get('/showContact',[ProfileController::class, 'showContactById']);
     Route::post('/editContact',[ProfileController::class, 'editContact']);
     Route::get('/showLifeStyle',[ProfileController::class, 'showLifeStyleById']);
@@ -69,6 +70,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/basicDropdown',[DropdownController::class, 'basicDropdown']);
     Route::get('/careerDropdown',[DropdownController::class, 'careerDropdown']);
     Route::get('/familyDropdown',[DropdownController::class, 'familyDropdown']);
+    Route::get('/likesDropdown',[DropdownController::class, 'likesDropdown']);
     Route::get('/desiredDropdown',[DropdownController::class, 'desiredDropdown']);
     
     Route::get('/countryDropdown',[DropdownController::class, 'countryDropdown']);

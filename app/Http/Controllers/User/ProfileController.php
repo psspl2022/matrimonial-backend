@@ -368,8 +368,8 @@ class ProfileController extends Controller
 
     public function editFamily(Request $req){     
         $validator = Validator::make($req->all(),[
-            'family_type' => 'required',
-            'family_values'=>'required',
+            // 'family_type' => 'required',
+            // 'family_values'=>'required',
             // 'family_status'=>'required',
             //'profile_handler_name' => 'required',
             // 'father_occupation'=>'required',
@@ -386,29 +386,28 @@ class ProfileController extends Controller
             // 'gotra_maternal'=>'required',
             // 'about_family'=>'required'            
         ]);
-
-        $data = new FamilyDetail();
-        $data->family_type = $req->family_type;
-        $data->family_values = $req->family_values;
-        // $data->family_status = $req->family_status;
-        // $data->profile_handler_name = $req->handler_name
-        // $data->father_occupation = $req->father_occupation;
-        // $data->mother_occupation = $req->mother_occupation;
-        // $data->brother_count = $req->brother_count;
-        // $data->married_brother_count = $req->married_brother_count;
-        // $data->sister_count = $req->sister_count;
-        // $data->married_sister_count = $req->married_sister_count;
-        // $data->family_address = $req->family_address;
-        // $data->native_state = $req->native_city;
-        // $data->family_live_in = $req->family_live_in;
-        // $data->family_income = $req->family_income;
-        // $data->gotra = $req->gotra;
-        // $data->gotra_maternal = $req->gotra_maternal;
-        // $data->about_family = $req->about_family;
-         if($data->save()){
-            return response()->json('msg','Family Details updated Succesfully', 200);
+  
+        $id = Auth::user()->reg_id;
+        $data = FamilyDetail::where('reg_id',$id)->update([
+        'profile_handler_name' => $req->profile_handler_name,
+        'father_occupation' => $req->father_occupation, 
+        'mother_occupation' => $req->mother_occupation,
+        'brother_count' => $req->brother_count,
+        'sister_count' => $req->sister_count,
+        'gotra' => $req->gotra,
+        'gotra_maternal' => $req->gotra_maternal,
+        'family_status' => $req->family_status,
+        'family_values' => $req->family_values,
+        'family_type' => $req->family_type,
+        'family_income' => $req->family_income,
+        'family_live_in' => $req->family_live_in,
+        'native_city' => $req->native_city,
+        'living_with_parent' => $req->living_with_parent
+    ]);
+         if($data){
+            return response()->json(['msg' => 'Family Details updated Succesfully']);
         }else{
-            return response()->json('msg','Error while uploading family details!');
+            return response()->json(['error_msg' => 'Error while uploading family details!']);
         }
 
         if($validator->fails()){
