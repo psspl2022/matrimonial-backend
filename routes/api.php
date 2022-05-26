@@ -47,7 +47,6 @@ Route::get('/getLoginUserDetails', [RegisterController::class, 'getLoginUserDeta
 
 Route::get('/getFamilyTypeList',[FamilyTypeController::class,'getFamilyTypeList']);
 
-Route::get('/likesDropdown',[DropdownController::class, 'likesDropdown']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/logout',[AuthenticationController::class,'logout']);
@@ -71,7 +70,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/basicDropdown',[DropdownController::class, 'basicDropdown']);
     Route::get('/careerDropdown',[DropdownController::class, 'careerDropdown']);
     Route::get('/familyDropdown',[DropdownController::class, 'familyDropdown']);
-    // Route::get('/likesDropdown',[DropdownController::class, 'likesDropdown']);
+    Route::get('/likesDropdown',[DropdownController::class, 'likesDropdown']);
+    Route::get('/desiredDropdown',[DropdownController::class, 'desiredDropdown']);
     
     Route::get('/countryDropdown',[DropdownController::class, 'countryDropdown']);
     Route::get('/stateDropdown/{c_id}',[DropdownController::class, 'stateDropdown']);

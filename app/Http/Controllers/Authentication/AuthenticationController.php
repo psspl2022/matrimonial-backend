@@ -102,12 +102,12 @@ class AuthenticationController extends Controller
         $user->password = $password;
         $user->save();
 
-        $user_data = User::select('admin_reg_id','user_type','name','email')->where('admin_reg_id',$id->id)->first();
+        // $user_data = User::select('admin_reg_id','user_type','name','email')->where('admin_reg_id',$id->id)->first();
 
         $responseArray = [];
         $responseArray['token'] = $user->createToken('MyToken')->accessToken;
         $responseArray['msg'] = "Registered Succesfully";
-        $responseArray['user'] = $user;
+        // $responseArray['user'] = $user;
        
         return response()->json($responseArray,200);   
         

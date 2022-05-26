@@ -25,6 +25,7 @@ use App\Models\DressStyles;
 use App\Models\Movietypes;
 use App\Models\Sports;
 use App\Models\Cuisines;
+use App\Models\Residence;
 
 
 class DropdownController extends Controller
@@ -102,6 +103,17 @@ class DropdownController extends Controller
         $response['moviesTypes'] = Movietypes::select('id','movietype')->where('status','1')->get();
         $response['sports'] = Sports::select('id','sport_name')->where('status','1')->get();
         $response['cuisines'] = Cuisines::select('id','name')->where('status','1')->get();
+    }
+    
+    public function desiredDropdown(){
+        $response['country'] = Country::select('id','name')->get();
+        $response['height'] = Height::select('id','height')->get();        
+        $response['mother_tongue'] = MotherTongue::select('id','type','mother_tongue')->get();
+        $response['religion'] = Religion::select('id','religion')->get();
+        $response['highest'] = Education::select('id','education')->get();
+        $response['occupation'] = Occupation::select('id','occupation_category','occupation')->get();
+        $response['income'] = Income::select('id','income')->get();
+        $response['residence'] = Residence::select('id','residence')->get();
         return response($response, 200);
     }
 
