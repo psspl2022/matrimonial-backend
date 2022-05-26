@@ -31,7 +31,7 @@ class CreateBasicDetails extends Migration
             $table->integer('city')->unsigned()->nullable();
             $table->integer('pincode')->unsigned()->nullable();
             $table->integer('sect')->unsigned()->nullable();
-            $table->enum('live_with_family', ['0', '1', '2'])->default('0')->comment('0=NULL, 1=No, 2=Yes');
+            $table->enum('live_with_family', ['0', '1', '2'])->default('0')->comment('0=NULL, 1=Non-Manglik, 2=Anshik Manglik, 3=Manglik');
             $table->text('description')->nullable();
             $table->integer('added_by')->unsigned()->nullable();
             $table->enum('status', ['0', '1'])->default('1')->comment('0=Inactive, 1=Active');

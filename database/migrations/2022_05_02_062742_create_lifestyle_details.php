@@ -18,7 +18,7 @@ class CreateLifestyleDetails extends Migration
             $table->integer('reg_id')->unsigned()->nullable();
             $table->enum('diet_habit', ['1', '2','3','4'])->default('1')->comment('1=Vegetarain, 2=Non-Veg, 3=Jain, 4=Eggetarain');
             $table->enum('drink_habit', ['1', '2','3','4'])->default('1')->comment('1=No, 2=Non-Yes, 3=Occasionally');
-            $table->enum('smoking_habit', ['0', '1'])->default('0')->comment('0=No, 1=Yes');
+            $table->enum('smoking_habit', ['0', '1'])->default('0')->comment('0=No, 1=Yes, , 3=Occasionally');
             $table->enum('open_to_pets', ['0', '1','2'])->default('0')->comment('0=NO, 1=Yes, 2=Occasionally');
             $table->enum('own_a_house', ['0', '1'])->default('0')->comment('0=NO, 1=Yes');
             $table->enum('own_a_car', ['0', '1'])->default('0')->comment('0=NO, 1=Yes');

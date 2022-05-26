@@ -17,6 +17,7 @@ use App\Models\Education;
 use App\Models\Income;
 use App\Models\Occupation;
 use App\Models\EmployementSector;
+use App\Models\Residence;
 
 
 class DropdownController extends Controller
@@ -81,6 +82,18 @@ class DropdownController extends Controller
         $response['occupation'] = Occupation::select('id','occupation_category','occupation')->get();
         $response['state'] = State::select('id','name', 'country_id')->where('country_id','101')->get();
         $response['city'] = City::select('id','name', 'state_id', 'country_id')->where('country_id','101')->get();
+        return response($response, 200);
+    }
+
+    public function desiredDropdown(){
+        $response['country'] = Country::select('id','name')->get();
+        $response['height'] = Height::select('id','height')->get();        
+        $response['mother_tongue'] = MotherTongue::select('id','type','mother_tongue')->get();
+        $response['religion'] = Religion::select('id','religion')->get();
+        $response['highest'] = Education::select('id','education')->get();
+        $response['occupation'] = Occupation::select('id','occupation_category','occupation')->get();
+        $response['income'] = Income::select('id','income')->get();
+        $response['residence'] = Residence::select('id','residence')->get();
         return response($response, 200);
     }
 

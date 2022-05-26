@@ -34,4 +34,9 @@ import ListFamilyType from './admin-theme/ListFamilyType';
 import AddResidence from './admin-theme/AddResidence';
 import ListResidence from './admin-theme/ListResidence';
 
+function Route() {
 
+   
+}
+
+export default Route;

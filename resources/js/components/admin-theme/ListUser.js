@@ -127,6 +127,7 @@ function ListUser() {
                                                     <table id="datatable1" className="table table-bordered dt-responsive nowrap" style={{ borderCollapse: "collapse", borderSpacing: "0", width: "100%" }}>
                                                     <thead>
                                                         <tr>
+                                                            <th></th>
                                                             <th>Sno</th>
                                                             <th>User Type</th>
                                                             <th>Matrimonial ID</th>
@@ -151,6 +152,7 @@ function ListUser() {
                                                             data1.map((item1) => {
                                                                 return (
                                                                     <tr>
+                                                                        <td></td>
                                                                         <td>{item1.id}</td>
                                                                         <td>{item1.user_type == 1 ? 'User' : ''}</td>     
                                                                         <td>{item1.get_user.matrimony_id}</td>
@@ -196,9 +198,10 @@ function ListUser() {
                                                     <h4 className="card-title">Admin List</h4>
                                                 </div>
                                                 <div className="card-body">
-                                                <table id="datatable2" className="table table-bordered dt-responsive nowrap no-footer dtr-inline "  style={{ borderCollapse: "collapse", borderSpacing: "0", width: "100%" }}>
+                                                <table id="datatable2" className="table table-striped table-bordered dt-responsive nowrap "  style={{ borderCollapse: "collapse", borderSpacing: "0", width: "100%" }}>
                                                         <thead>
                                                             <tr>
+                                                                <th></th>
                                                                 <th>Sno</th>
                                                                 <th>User Type</th>
                                                                 <th>Name</th>
@@ -218,6 +221,7 @@ function ListUser() {
                                                                 data2.map((item) => {
                                                                     return (
                                                                         <tr>
+                                                                            <td></td>
                                                                             <td>{item.id}</td>
                                                                             <td>{item.user_type == 2 ? 'Admin' : 'R M'}</td>
                                                                             <td>{item.get_admin.name}</td>
