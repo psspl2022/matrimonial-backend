@@ -17,6 +17,14 @@ use App\Models\Education;
 use App\Models\Income;
 use App\Models\Occupation;
 use App\Models\EmployementSector;
+use App\Models\Hobbies;
+use App\Models\Interest;
+use App\Models\MusicTypes;
+use App\Models\BookTypes;
+use App\Models\DressStyles;
+use App\Models\Movietypes;
+use App\Models\Sports;
+use App\Models\Cuisines;
 
 
 class DropdownController extends Controller
@@ -82,6 +90,18 @@ class DropdownController extends Controller
         $response['occupation'] = Occupation::select('id','occupation_category','occupation')->get();
         $response['state'] = State::select('id','name', 'country_id')->where('country_id','101')->get();
         $response['city'] = City::select('id','name', 'state_id', 'country_id')->where('country_id','101')->get();
+        return response($response, 200);
+    }
+
+    public function likesDropdown(){
+        $response['hobbies'] = Hobbies::select('id','hobby')->where('status','1')->get();
+        $response['interests'] = Interest::select('id','interest')->where('status','1')->get();
+        $response['musicTypes'] = MusicTypes::select('id','music_type')->where('status','1')->get();
+        $response['books'] = BookTypes::select('id','book_type')->where('status','1')->get();
+        $response['dressStyles'] = DressStyles::select('id','dress_style')->where('status','1')->get();
+        $response['moviesTypes'] = Movietypes::select('id','movietype')->where('status','1')->get();
+        $response['sports'] = Sports::select('id','sport_name')->where('status','1')->get();
+        $response['cuisines'] = Cuisines::select('id','name')->where('status','1')->get();
         return response($response, 200);
     }
 

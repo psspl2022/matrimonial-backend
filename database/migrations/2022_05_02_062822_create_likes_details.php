@@ -25,6 +25,7 @@ class CreateLikesDetails extends Migration
             $table->string('tv_show',255)->nullable();
             $table->string('movie',255)->nullable();
             $table->string('sport',255)->nullable();
+            $table->string('cuisine',255)->nullable();
             $table->string('dish',255)->nullable();
             $table->string('vacation_destination',255)->nullable();
             $table->integer('added_by')->unsigned()->nullable();
