@@ -51,14 +51,20 @@ Route::get('/getFamilyTypeList',[FamilyTypeController::class,'getFamilyTypeList'
 Route::middleware('auth:api')->group(function () {
     Route::get('/logout',[AuthenticationController::class,'logout']);
 
-    Route::get('/showAbout/{id}',[ProfileController::class, 'showAboutById']);
+    Route::get('/showAbout',[ProfileController::class, 'showAboutById']);
+    Route::post('/EditAbout',[ProfileController::class, 'EditAbout']);
 
     Route::post('/createBasic',[ProfileController::class, 'createBasic']);
     Route::get('/showBasic/{id}',[ProfileController::class, 'showBasicById']);
     Route::post('/createCareer',[ProfileController::class, 'createCareer']);
-    Route::get('/showCareer/{id}',[ProfileController::class, 'showCareerById']);
+    Route::get('/showCareer',[ProfileController::class, 'showCareerById']);
+    Route::post('/EditCareer',[ProfileController::class, 'EditCareer']);
     Route::post('/createFamily',[ProfileController::class, 'createFamily']);
-    Route::get('/showFamily/{id}',[ProfileController::class, 'showFamilyById']);
+    Route::get('/showFamily',[ProfileController::class, 'showFamilyById']);
+    Route::get('/showContact',[ProfileController::class, 'showContactById']);
+    Route::post('/editContact',[ProfileController::class, 'editContact']);
+    Route::get('/showLifeStyle',[ProfileController::class, 'showLifeStyleById']);
+    Route::post('/editLifeStyle',[ProfileController::class, 'editLifestyle']);
 
     Route::get('/basicDropdown',[DropdownController::class, 'basicDropdown']);
     Route::get('/careerDropdown',[DropdownController::class, 'careerDropdown']);
@@ -80,6 +86,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/checkOtp', [ProfileController::class, 'checkOtpToMail']);
 
     Route::post('/storeProfileImage', [ProfileController::class, 'storeProfileImage']);
+    Route::get('/getProfileImage', [ProfileController::class, 'getProfileImage']);
 
 
 

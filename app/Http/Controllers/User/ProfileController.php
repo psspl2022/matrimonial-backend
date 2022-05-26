@@ -14,6 +14,9 @@ use App\Models\CareerDetail;
 use App\Models\FamilyDetail;
 use App\Models\Register;
 use App\Models\User;
+use App\Models\LifeStyle;
+use App\Models\Occupation;
+use App\Models\Income;
 use App\Models\VerifyUser;
 use Mail;
 
@@ -232,7 +235,7 @@ class ProfileController extends Controller
 
     public function showBasicById($id){     
         $data['basic'] = BasicDetail::where('reg_id',$id)->first();   
-        $data['gender'] = Register::where('id', $id)->first();    
+        $data['gender'] = Register::select('gender')->where('id', $id)->first();    
         return response()->json($data, 200);
     }
 
@@ -287,42 +290,34 @@ class ProfileController extends Controller
     }
 
 
-    public function showAboutById($id){ 
+    public function showAboutById(){ 
         
-        // $id = Auth::user()->reg_id;
-        $id = 1;
-        $data['yourself'] = BasicDetail::select('description')->where('reg_id',$id)->get();   
-        $data['family'] = FamilyDetail::select('about_family')->where('reg_id', $id)->get();
-        $data['career'] = CareerDetail::select('express_yourself')->where('reg_id', $id)->get();
+        $id = Auth::user()->reg_id;
+        // $id = 1;
+        $data['yourself'] = BasicDetail::select('description')->where('reg_id',$id)->first();   
+        $data['family'] = FamilyDetail::select('about_family')->where('reg_id', $id)->first();
+        $data['career'] = CareerDetail::select('express_yourself')->where('reg_id', $id)->first();
         return response()->json( $data,200);  
     } 
 
 
     public function EditAbout(Request $req){ 
         
-        // $id = Auth::user()->reg_id;
-        $id = 1;
-        $data = BasicDetail::find($id);
-        $data->description = $req->yourself;
-        $data->save();
+        $id = Auth::user()->reg_id;
+        // $id = 1;
+        $data = BasicDetail::where('reg_id',$id)->update(['description' => $req->yourself]);
 
-        $data1 = FamilyDetail::fund($id);
-        $data1->about_family = $req->family;
-        $data1->save();
+        $data1 = FamilyDetail::where('reg_id',$id)->update(['about_family' => $req->family]);
 
-
-        $data2 = FamilyDetail::fund($id);
-        $data2->express_yourself = $req->career;
-        $data2->save();
+        $data2 = CareerDetail::where('reg_id',$id)->update(['express_yourself' => $req->career]);
         
-        return response()->json( 'msg','Data has been updated successfully!',200);  
+        return response()->json(['msg'=>'About Me Data has been updated successfully!']);  
     } 
 
     public function showCareerById(){  
-         // $id = Auth::user()->reg_id;
-         $id = 1;
+         $id = Auth::user()->reg_id;
 
-        $data = CareerDetail::find($id);   
+        $data = CareerDetail::where('reg_id',$id)->first();   
         return response()->json( $data, 200);  
     } 
 
@@ -340,25 +335,24 @@ class ProfileController extends Controller
             // 'express_yourself'=>'required'
         ]);
 
-         // $id = Auth::user()->reg_id;
-         $id = 1;
+         $id = Auth::user()->reg_id;
+        //  $id = 1;
 
-        $data = CareerDetail::find($id);
-        $data->highest_qualification = $req->highest_qualification;
-        $data->schooling = $req->schooling;
-        // $data->ug_qualification = $req->ug_qualification;
-        // $data->ug_clg = $req->ug_clg;
-        // $data->pg_qualification = $req->pg_qualification;
-        // $data->pg_clg = $req->pg_clg;
-        // $data->employement_sector = $req->employement_sector;
-        // $data->occupation = $req->occupation;
-        // $data->organization_name = $req->organization;
-        // $data->income = $req->income;
-        // $data->express_yourself = $req->express_yourself;
-         if($data->save()){
-            return response()->json('msg','Career Details updated Succesfully');
+        $data = CareerDetail::where('reg_id',$id)->update(['highest_qualification' => $req->highest_qualification,
+        'schooling' => $req->schooling, 
+        'ug_qualification' => $req->ug_qualification,
+        'ug_clg' => $req->ug_clg,
+        'pg_qualification' => $req->pg_qualification,
+        'pg_clg' => $req->pg_clg,
+        'employement_sector' => $req->employement_sector,
+        'occupation' => $req->occupation,
+        'organization_name' => $req->organization_name,
+        'income' => $req->income
+    ]);
+         if($data){
+            return response()->json(['msg'=>'Career Details updated Succesfully']);
         }else{
-            return response()->json('msg','Error while uploading career details!');
+            return response()->json(['msg'=>'Error while uploading career details!']);
         }
 
         if($validator->fails()){
@@ -366,9 +360,10 @@ class ProfileController extends Controller
         }  
     }
      
-    public function showFamilyById($id){     
-        $data = FamilyDetail::find($id);   
-        return response()->json( $data, 200);  
+    public function showFamilyById(){     
+        $id = Auth::user()->reg_id;
+        $data = FamilyDetail::where('reg_id',$id)->first();   
+        return response()->json($data, 200);  
     } 
 
     public function editFamily(Request $req){     
@@ -421,12 +416,14 @@ class ProfileController extends Controller
         }          
     }   
 
-    public function showContactById($id){     
-        $data = Register::find($id);   
+    public function showContactById(){     
+        $id = Auth::user()->reg_id;
+        $data = Register::find($id);  
         return response()->json( $data, 200);  
     }  
     
     public function editContact(Request $req){
+        $id = Auth::user()->reg_id;
         $validator = Validator::make($req->all(),[
             'contact' => 'required',
             // 'email'=>'required',
@@ -438,22 +435,22 @@ class ProfileController extends Controller
             // 'time_for_call' =>'required'        
         ]);
 
-        $data = new FamilyDetail();
-        $data->contact = $req->contact;
-        if(empty($req->a_contact) ? NULL : $req->a_contact)
-        $data->email = $req->email;
-        if(empty($req->a_email) ? NULL : $req->a_email)
-        // $data->landline = $req->landline;
-        // $data->contact_address = $req->contact_address
-        // $data->contact_pincode = $req->contact_pincode;
-        // $data->parent_address = $req->parent_address;
-        // $data->parent_pincode = $req->parent_pincode;
-        // $data->time_for_call = $req->time_for_call;
+        $data = Register::where('id',$id)->update(['contact' => $req->contact,
+        'alter_contact' => $req->alter_contact, 
+        'email' => $req->email,
+        'alter_email' => $req->alter_email,
+        'landline' => $req->landline,
+        'time_for_call' => $req->time_for_call,
+        'contact_address' => $req->contact_address,
+        'contact_pincode' => $req->contact_pincode,
+        'parent_address' => $req->parent_address,
+        'parent_pincode' => $req->parent_pincode
+    ]);
       
-         if($data->save()){
-            return response()->json('msg','Family Details updated Succesfully', 200);
+         if($data){
+            return response()->json(['msg'=>'Contact Details updated Succesfully']);
         }else{
-            return response()->json('msg','Error while uploading family details!');
+            return response()->json(['msg'=>'Error while uploading Contact details!']);
         }
 
         if($validator->fails()){
@@ -462,36 +459,40 @@ class ProfileController extends Controller
 
     } 
 
+
+    public function showLifeStyleById(){     
+        $id = Auth::user()->reg_id;
+        $data = LifeStyle::where('reg_id',$id)->first();   
+        return response()->json( $data, 200);  
+    }  
+
     public function editLifestyle(Request $req){
         $validator = Validator::make($req->all(),[
             // 'diet' => 'required',
-            // 'drinking'=>'required',
-            // 'smoking' => 'required',
-            // 'pet'=>'required',
-            // 'house'=>'required',
-            // 'car'=>'required',
-            // 'language'=>'required',  
-            // 'blood_group' =>'required', 
-            // 'hiv' =>'required',
-            // 'challenged' =>'required',
-            // 'thalemsemia' =>'required'            
+            // 'drinking'=>'required',          
         ]);
-
-        $data = new FamilyDetail();
-        $data->contact = $req->contact;
-        if(empty($req->a_contact) ? NULL : $req->a_contact)
-        $data->email = $req->email;
-        if(empty($req->a_email) ? NULL : $req->a_email)
-        $product = Product::updateOrCreate(
-            // [ 'reg_id' =>  ],
-            [ 'price' => 130, 'price_update_date' => date('Y-m-d') ]
-        );
-  
+        $id = Auth::user()->reg_id;
+        $data = LifeStyle::updateOrCreate(
+            ['reg_id'=>$id],
+            [
+                'reg_id'=>$id,
+                'diet_habit'=>$req->diet_habit,
+                'drink_habit'=>$req->drink_habit,
+                'smoking_habit'=>$req->smoking_habit,
+                'open_to_pets'=>$req->open_to_pets,
+                'own_a_house'=>$req->own_a_house,
+                'own_a_car'=>$req->own_a_car,
+                'blood_group'=>$req->blood_group,
+                'hiv_pos'=>$req->hiv_pos,
+                'thalessemia'=>$req->thalessemia,
+                'challenged'=>$req->challenged
+            ]
+    );
       
-         if($data->save()){
-            return response()->json('msg','Lifestyle Details updated Succesfully', 200);
+         if($data){
+            return response()->json(['msg'=>'Lifestyle Details updated Succesfully']);
         }else{
-            return response()->json('msg','Error while uploading family details!');
+            return response()->json(['msg' => 'Error while uploading LifeStyle details!']);
         }
 
         if($validator->fails()){
@@ -576,6 +577,39 @@ class ProfileController extends Controller
         }
         else {
             return response()->json(['error_msg'=>'Image Upload Failed!']);
+        }
+    }
+
+    public function updateProfileImage(Request $req){
+        $validator = Validator::make($req->all(),
+            [
+                'image' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+            ]
+        );
+        if($validator->fails()) {
+            return response()->json(["status" => "failed", "message" => "Validation error", "errors" => $validator->errors()]);
+        }
+        if($req->has('image')) {
+            $image = $req->image;
+                $filename = time().rand(2,3). '.'.$image->getClientOriginalExtension();
+                $image->move(public_path("Documents/Image_Documents/"), $filename);
+
+                VerifyUser::where('by_reg_id', Auth::user()->reg_id)->update(['identity_card_doc' => $filename]);
+               
+            return response()->json(['msg'=>'Image Uploaded Succesfully']);
+        }
+        else {
+            return response()->json(['error_msg'=>'Image Upload Failed!']);
+        }
+    }
+
+    public function getProfileImage(){
+        $img_file = VerifyUser::select('identity_card_doc')->where('by_reg_id', Auth::user()->reg_id)->first();
+        if($img_file){
+            return response()->json(['msg'=>$img_file]);
+        }
+        else{
+            return response()->json(['error_msg'=>'Image not uploaded yet']);
         }
     }
     
