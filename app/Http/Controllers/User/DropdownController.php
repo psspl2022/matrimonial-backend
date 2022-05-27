@@ -110,6 +110,7 @@ class DropdownController extends Controller
         $response['height'] = Height::select('id','height')->get();        
         $response['mother_tongue'] = MotherTongue::select('id','type','mother_tongue')->get();
         $response['religion'] = Religion::select('id','religion')->get();
+        $response['caste'] = Caste::select('id','caste')->get();
         $response['highest'] = Education::select('id','education')->get();
         $response['occupation'] = Occupation::select('id','occupation_category','occupation')->get();
         $response['income'] = Income::select('id','income')->get();
