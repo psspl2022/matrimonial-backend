@@ -12,7 +12,7 @@ use Validator;
 use App\Models\BasicDetail;
 use App\Models\CareerDetail;
 use App\Models\FamilyDetail;
-use App\Models\Register;
+use App\Models\UserRegister;
 use App\Models\User;
 use App\Models\LifeStyle;
 use App\Models\Occupation;
@@ -38,14 +38,14 @@ class ProfileController extends Controller
             'state' => 'required',
             'city' => 'required',
             'pincode' => 'required'
-            // 'city_live_in' => 'required',
+            // 'city_live_in' => 'required',user_reg_id
             // 'sect' => 'required',
             // 'live_with_family' => 'required',
             // 'desc' => 'required'
         ]);
         // return response()->json($req->name);
         $data = new BasicDetail();
-        $data->reg_id = Auth::user()->reg_id;
+        $data->reg_id = Auth::user()->user_reg_id;
         $data->name = $req->name;
         $data->dob = $req->dob;
         $data->maritial_status = $req->maritial_status;
@@ -66,7 +66,7 @@ class ProfileController extends Controller
         // $data->added_by = Auth::user()->id;
         if($data->save()){
 
-            $data1 = Register::find(Auth::user()->reg_id);
+            $data1 = UserRegister::find(Auth::user()->user_reg_id);
             $data1->stage_no = 3;
             $data1->save();
             
@@ -102,7 +102,7 @@ class ProfileController extends Controller
     //     ]);
     //     // return response()->json($req->name);
     //     $data = BasicDetail::find($id);
-    //     // $data->reg_id = $reg_id;
+    //     // $data->user_reg_id = $user_reg_id;
     //     $data->name = $req->name;
     //     $data->dob = $req->dob;
     //     $data->maritial_status = $req->maritial_status;
@@ -144,7 +144,7 @@ class ProfileController extends Controller
         ]);
 
         $data = new CareerDetail();
-        $data->reg_id = Auth::user()->reg_id;
+        $data->reg_id = Auth::user()->user_reg_id;
         $data->highest_qualification = $req->highest_qualification;
         $data->schooling = $req->schooling;
         $data->ug_qualification = $req->ug_qualification;
@@ -158,7 +158,7 @@ class ProfileController extends Controller
          // $data->added_by = Auth::user()->id;
          if($data->save()){
 
-            $data1 = Register::find(Auth::user()->reg_id);
+            $data1 = UserRegister::find(Auth::user()->user_reg_id);
             $data1->stage_no = 4;
             $data1->save();
 
@@ -192,7 +192,7 @@ class ProfileController extends Controller
         ]);
 
         $data = new FamilyDetail();
-        $data->reg_id = Auth::user()->reg_id;
+        $data->reg_id = Auth::user()->user_reg_id;
         $data->family_type = $req->family_type;
         // $data->family_values = $req->family_values;
         // $data->family_status = $req->family_status;
@@ -211,7 +211,7 @@ class ProfileController extends Controller
         // $data->added_by = Auth::user()->id;
          if($data->save()){
 
-            $data1 = Register::find(Auth::user()->reg_id);
+            $data1 = UserRegister::find(Auth::user()->user_reg_id);
             $data1->stage_no = 5;
             $data1->save();
 
@@ -235,7 +235,7 @@ class ProfileController extends Controller
 
     public function showBasicById($id){     
         $data['basic'] = BasicDetail::where('reg_id',$id)->first();   
-        $data['gender'] = Register::select('gender')->where('id', $id)->first();    
+        $data['gender'] = UserRegister::select('gender')->where('id', $id)->first();    
         return response()->json($data, 200);
     }
 
@@ -260,7 +260,7 @@ class ProfileController extends Controller
             // 'desc' => 'required'
         ]);
         // return response()->json($req->name);
-        // $data = BasicDetail::find(Auth::user()->reg_id);
+        // $data = BasicDetail::find(Auth::user()->user_reg_id);
 
         $data = BasicDetail::find(1);
         $data->name = $req->name;
@@ -292,7 +292,7 @@ class ProfileController extends Controller
 
     public function showAboutById(){ 
         
-        $id = Auth::user()->reg_id;
+        $id = Auth::user()->user_reg_id;
         // $id = 1;
         $data['yourself'] = BasicDetail::select('description')->where('reg_id',$id)->first();   
         $data['family'] = FamilyDetail::select('about_family')->where('reg_id', $id)->first();
@@ -303,7 +303,7 @@ class ProfileController extends Controller
 
     public function EditAbout(Request $req){ 
         
-        $id = Auth::user()->reg_id;
+        $id = Auth::user()->user_reg_id;
         // $id = 1;
         $data = BasicDetail::where('reg_id',$id)->update(['description' => $req->yourself]);
 
@@ -315,7 +315,7 @@ class ProfileController extends Controller
     } 
 
     public function showCareerById(){  
-         $id = Auth::user()->reg_id;
+         $id = Auth::user()->user_reg_id;
 
         $data = CareerDetail::where('reg_id',$id)->first();   
         return response()->json( $data, 200);  
@@ -335,7 +335,7 @@ class ProfileController extends Controller
             // 'express_yourself'=>'required'
         ]);
 
-         $id = Auth::user()->reg_id;
+         $id = Auth::user()->user_reg_id;
         //  $id = 1;
 
         $data = CareerDetail::where('reg_id',$id)->update(['highest_qualification' => $req->highest_qualification,
@@ -361,7 +361,7 @@ class ProfileController extends Controller
     }
      
     public function showFamilyById(){     
-        $id = Auth::user()->reg_id;
+        $id = Auth::user()->user_reg_id;
         $data = FamilyDetail::where('reg_id',$id)->first();   
         return response()->json($data, 200);  
     } 
@@ -387,7 +387,7 @@ class ProfileController extends Controller
             // 'about_family'=>'required'            
         ]);
   
-        $id = Auth::user()->reg_id;
+        $id = Auth::user()->user_reg_id;
         $data = FamilyDetail::where('reg_id',$id)->update([
         'profile_handler_name' => $req->profile_handler_name,
         'father_occupation' => $req->father_occupation, 
@@ -416,13 +416,13 @@ class ProfileController extends Controller
     }   
 
     public function showContactById(){     
-        $id = Auth::user()->reg_id;
-        $data = Register::find($id);  
+        $id = Auth::user()->user_reg_id;
+        $data = UserRegister::find($id);  
         return response()->json( $data, 200);  
     }  
     
     public function editContact(Request $req){
-        $id = Auth::user()->reg_id;
+        $id = Auth::user()->user_reg_id;
         $validator = Validator::make($req->all(),[
             'contact' => 'required',
             // 'email'=>'required',
@@ -434,7 +434,7 @@ class ProfileController extends Controller
             // 'time_for_call' =>'required'        
         ]);
 
-        $data = Register::where('id',$id)->update(['contact' => $req->contact,
+        $data = UserRegister::where('id',$id)->update(['contact' => $req->contact,
         'alter_contact' => $req->alter_contact, 
         'email' => $req->email,
         'alter_email' => $req->alter_email,
@@ -460,7 +460,7 @@ class ProfileController extends Controller
 
 
     public function showLifeStyleById(){     
-        $id = Auth::user()->reg_id;
+        $id = Auth::user()->user_reg_id;
         $data = LifeStyle::where('reg_id',$id)->first();   
         return response()->json( $data, 200);  
     }  
@@ -470,7 +470,7 @@ class ProfileController extends Controller
             // 'diet' => 'required',
             // 'drinking'=>'required',          
         ]);
-        $id = Auth::user()->reg_id;
+        $id = Auth::user()->user_reg_id;
         $data = LifeStyle::updateOrCreate(
             ['reg_id'=>$id],
             [
@@ -501,7 +501,7 @@ class ProfileController extends Controller
     } 
 
     public function getRegisterFormStatus(){
-        $stage_no = Register::select('stage_no')->where('id',Auth::user()->reg_id)->get();
+        $stage_no = UserRegister::select('stage_no')->where('id',Auth::user()->user_reg_id)->get();
         return response($stage_no,200);
     }
 
@@ -513,9 +513,9 @@ class ProfileController extends Controller
         $user_data = User::find(Auth::user()->id);
         if(empty($user_data->otp)){
             
-        // $user_name = BasicDetail::where('reg_id',Auth::user()->reg_id)->first();
-        $toEmail = 'ankit.bisht@prakharsoftwares.com';
-        // $toEmail = 'dishabhandari0309@gmail.com';
+        // $user_name = BasicDetail::where('user_reg_id',Auth::user()->user_reg_id)->first();
+        // $toEmail = 'ankit.bisht@prakharsoftwares.com';
+        $toEmail = $user_data->email;
         $from=env('MAIL_FROM_ADDRESS'); 
         $subject = "Gmail Verification by Namdeo Matrimonial";
         $data= 
@@ -544,7 +544,7 @@ class ProfileController extends Controller
     public function checkOtpToMail(Request $req){
         $user_data = User::find(Auth::user()->id);
         if($user_data->otp == $req->otp){
-            $save_stage = Register::find(Auth::user()->reg_id);
+            $save_stage = UserRegister::find(Auth::user()->user_reg_id);
             $save_stage->stage_no = 2;
             $save_stage->save();
             return response()->json(['msg'=>'Otp Verified Succesfully']);
@@ -569,7 +569,7 @@ class ProfileController extends Controller
                 $image->move(public_path("Documents/Image_Documents/"), $filename);
 
                 $verify_user = new VerifyUser();
-                $verify_user->by_reg_id = Auth::user()->reg_id;
+                $verify_user->by_reg_id = Auth::user()->user_reg_id;
                 $verify_user->identity_card_doc = $filename;
                 $verify_user->save();
             return response()->json(['msg'=>'Image Uploaded Succesfully']);
@@ -593,7 +593,7 @@ class ProfileController extends Controller
                 $filename = time().rand(2,3). '.'.$image->getClientOriginalExtension();
                 $image->move(public_path("Documents/Image_Documents/"), $filename);
 
-                VerifyUser::where('by_reg_id', Auth::user()->reg_id)->update(['identity_card_doc' => $filename]);
+                VerifyUser::where('by_reg_id', Auth::user()->user_reg_id)->update(['identity_card_doc' => $filename]);
                
             return response()->json(['msg'=>'Image Uploaded Succesfully']);
         }
@@ -603,7 +603,7 @@ class ProfileController extends Controller
     }
 
     public function getProfileImage(){
-        $img_file = VerifyUser::select('identity_card_doc')->where('by_reg_id', Auth::user()->reg_id)->first();
+        $img_file = VerifyUser::select('identity_card_doc')->where('by_reg_id', Auth::user()->user_reg_id)->first();
         if($img_file){
             return response()->json(['msg'=>$img_file]);
         }
