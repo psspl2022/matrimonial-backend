@@ -521,7 +521,8 @@ class ProfileController extends Controller
         $data= 
         [  
             'otp'=>$random_password,
-            'email'=>$user_data->email
+            'email'=>$user_data->email,
+            'name'=>$user_data->name
         ];                
         
         $mail_send = Mail::send('mail.sendmail', $data, function ($message) use ($toEmail) {
