@@ -487,7 +487,7 @@ class ProfileController extends Controller
                 'thalessemia'=>$req->thalessemia,
                 'challenged'=>$req->challenged
             ]
-    );
+        );
       
          if($data){
             return response()->json(['msg'=>'Lifestyle Details updated Succesfully']);

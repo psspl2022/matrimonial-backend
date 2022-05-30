@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\Master\ReligionController;
 use App\Http\Controllers\Admin\Master\ResidenceController;
 use App\Http\Controllers\Admin\Master\SectController;
 use App\Http\Controllers\Admin\ActionController;
+use App\Http\Controllers\User\DesiredController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +69,18 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/editLifeStyle',[ProfileController::class, 'editLifestyle']);
     Route::get('/showLikesDetails',[ProfileController::class, 'showLikesDetails']);
     Route::post('/editLikesDetails',[ProfileController::class, 'editLikesDetails']);
+
+    //Desired Profile
+
+    Route::post('/desiredBasic',[DesiredController::class, 'createBasic']);
+    Route::post('/desiredReligion',[DesiredController::class, 'createReligion']);    
+    Route::post('/desiredCareer',[DesiredController::class, 'createCareer']);    
+    Route::post('/desiredLifestyle',[DesiredController::class, 'createLifestyle']);    
+    Route::post('/desiredAbout',[DesiredController::class, 'createAbout']);
+    Route::get('/showDesiredDetails',[DesiredController::class, 'showDesiredDetail']);
+
+
+    //Dropdown API
 
     Route::get('/basicDropdown',[DropdownController::class, 'basicDropdown']);
     Route::get('/careerDropdown',[DropdownController::class, 'careerDropdown']);
