@@ -103,6 +103,7 @@ class DropdownController extends Controller
         $response['moviesTypes'] = Movietypes::select('id','movietype')->where('status','1')->get();
         $response['sports'] = Sports::select('id','sport_name')->where('status','1')->get();
         $response['cuisines'] = Cuisines::select('id','name')->where('status','1')->get();
+        return response($response, 200);
     }
     
     public function desiredDropdown(){

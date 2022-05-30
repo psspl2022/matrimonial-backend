@@ -66,6 +66,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/editContact',[ProfileController::class, 'editContact']);
     Route::get('/showLifeStyle',[ProfileController::class, 'showLifeStyleById']);
     Route::post('/editLifeStyle',[ProfileController::class, 'editLifestyle']);
+    Route::get('/showLikesDetails',[ProfileController::class, 'showLikesDetails']);
+    Route::post('/editLikesDetails',[ProfileController::class, 'editLikesDetails']);
 
     Route::get('/basicDropdown',[DropdownController::class, 'basicDropdown']);
     Route::get('/careerDropdown',[DropdownController::class, 'careerDropdown']);
