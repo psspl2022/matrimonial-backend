@@ -120,7 +120,6 @@ class AuthenticationController extends Controller
             'email' => 'required',
             'password' => 'required'
         ]);
-
         if(Auth::attempt(['email'=>$req->email, 'password'=>$req->password])){
             $user = Auth::user(); 
             $responseArray['token'] = $user->createToken('MyToken')->accessToken;
@@ -129,7 +128,7 @@ class AuthenticationController extends Controller
             
             return response()->json($responseArray,200);
         } else{
-            return response()->json(['error'=>'Unauthenticated'],203);
+            return response()->json(['error'=>'Unauthenticated User'],203);
         }
     }
 
