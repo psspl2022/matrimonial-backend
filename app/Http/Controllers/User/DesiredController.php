@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Models\DesiredProfile;
+use App\Models\BasicDetail;
 
 class DesiredController extends Controller
 {
@@ -157,10 +158,37 @@ class DesiredController extends Controller
 
     public function showDesiredDetail(){
         $user_id = Auth::user()->id;
-        $data = DesiredProfile::where('user_id', $user_id)->get();
+        $data = DesiredProfile::where('user_id', $user_id)->first();
 
         return response()->json($data, 200);
-    }        
+    }    
+    
+    public function showDesiredProfiles(){
+        // $user_id = Auth::user()->id;
+        $data = DesiredProfile::where('user_id', 1)->first();
+        
+        $marital = explode(',', $data->marital);
+
+        $reg_id = BasicDetail::select('reg_id')->where([
+
+            ['status', '<>', 1 ],
+            ['height', '<=', $data->max_height],
+            ['height', '>=', $data->min_height]
+    
+        ])      
+        ->whereIn('maritial_status', $marital)
+        // ->whereIn('religion', $data->religion)
+        // ->whereIn('caste', $data->caste)
+        // ->whereIn('caste', $data->caste)
+        // ->whereIn('mother_tongue', $data->mother_tongue)
+        // ->whereIn('country', $data->country)
+        // ->whereIn('manglik', $data->manglik)
+        // ->whereIn('height', $data->mother_tongue)
+
+          ->get();
+
+        return response()->json($reg_id, 200);
+    }  
     
 }
 

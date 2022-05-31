@@ -48,7 +48,7 @@ Route::get('/getLoginUserDetails', [RegisterController::class, 'getLoginUserDeta
 
 Route::get('/getFamilyTypeList',[FamilyTypeController::class,'getFamilyTypeList']);
 
-
+Route::get('/showDesiredProfiles',[DesiredController::class,'showDesiredProfiles']);
 Route::middleware('auth:api')->group(function () {
     Route::get('/logout',[AuthenticationController::class,'logout']);
 

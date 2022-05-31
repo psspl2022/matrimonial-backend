@@ -42,6 +42,7 @@ import "../../css/app.css";
 window.AppName = "Namdeo Matrimonial";
 window.Url = "http://127.0.0.1:8000/";
 
+
 function Index() {
 
     return (
@@ -399,7 +400,7 @@ function Index() {
                 </Route>    
 
 
-                <Route exact path="/" >
+                <Route exact path="/admin" >
                       <Login />
                 </Route> 
                 </Switch>

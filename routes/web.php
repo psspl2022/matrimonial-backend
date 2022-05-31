@@ -24,12 +24,12 @@ Route::get('/{route?}',function(){
     return view('welcome');
 })->where('path','.*');
 
-Route::post('/login',[AuthenticationController::class,'login']);
-Route::get('/login',[AuthenticationController::class,'login'])->name('login');
+// Route::post('/login',[AuthenticationController::class,'login']);
+// Route::get('/login',[AuthenticationController::class,'login'])->name('login');
 
 
-Route::get('/getPackageList',[PackageController::class,'getPackageList']);
-Route::middleware('auth:api')->group(function () {
-    Route::post('/logout',[AuthenticationController::class,'logout']);
+// Route::get('/getPackageList',[PackageController::class,'getPackageList']);
+// Route::middleware('auth:api')->group(function () {
+//     Route::post('/logout',[AuthenticationController::class,'logout']);
     
-});
+// });
