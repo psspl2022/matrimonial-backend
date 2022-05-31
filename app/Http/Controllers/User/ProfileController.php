@@ -18,6 +18,7 @@ use App\Models\LifeStyle;
 use App\Models\Occupation;
 use App\Models\Income;
 use App\Models\VerifyUser;
+use App\Models\LikeDetails;
 use Mail;
 
 class ProfileController extends Controller
@@ -500,6 +501,49 @@ class ProfileController extends Controller
 
     } 
 
+    public function showLikesDetails(){     
+        $id = Auth::user()->user_reg_id;
+        $data = LikeDetails::where('reg_id',$id)->first();   
+        return response()->json( $data, 200);  
+    }  
+
+    public function editLikesDetails(Request $req){
+        $validator = Validator::make($req->all(),[
+                
+        ]);
+        $id = Auth::user()->user_reg_id;
+        $data = LikeDetails::updateOrCreate(
+            ['reg_id'=>$id],
+            [
+                'reg_id'=>$id,
+                'hobbies'=>$req->hobbies,
+                'interest'=>$req->interest,
+                'music'=>$req->music,
+                'book'=>$req->book,
+                'fav_read'=>$req->read,
+                'dress'=>$req->dress,
+                'tv_show'=>$req->tv_show,
+                'movie_type'=>$req->movie_type,
+                'movie'=>$req->movie,
+                'sport'=>$req->sport,
+                'cuisine'=>$req->cuisine,
+                'dish'=>$req->dish,
+                'vacation_destination'=>$req->vacation_destination
+            ]
+    );
+      
+         if($data){
+            return response()->json(['msg'=>'Likes Details updated Succesfully']);
+        }else{
+            return response()->json(['error_msg' => 'Error while uploading Likes Details!']);
+        }
+
+        if($validator->fails()){
+            return response()->json($validator->errors(),202);
+        }    
+
+    }
+
     public function getRegisterFormStatus(){
         $stage_no = UserRegister::select('stage_no')->where('id',Auth::user()->user_reg_id)->get();
         return response($stage_no,200);
@@ -521,7 +565,8 @@ class ProfileController extends Controller
         $data= 
         [  
             'otp'=>$random_password,
-            'email'=>$user_data->email
+            'email'=>$user_data->email,
+            'name'=>$user_data->name
         ];                
         
         $mail_send = Mail::send('mail.sendmail', $data, function ($message) use ($toEmail) {

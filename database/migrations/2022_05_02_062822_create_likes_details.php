@@ -21,8 +21,10 @@ class CreateLikesDetails extends Migration
             $table->string('interest',255)->nullable();
             $table->string('music',255)->nullable();
             $table->string('book',255)->nullable();
+            $table->string('fav_read',255)->nullable();
             $table->string('dress',255)->nullable();
             $table->string('tv_show',255)->nullable();
+            $table->string('movie_type',255)->nullable();
             $table->string('movie',255)->nullable();
             $table->string('sport',255)->nullable();
             $table->string('cuisine',255)->nullable();

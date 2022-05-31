@@ -50,6 +50,7 @@ class AuthenticationController extends Controller
         $user->user_type = 1;
         $user->admin_reg_id = NULL;
         $user->user_reg_id = $id->id;
+        $user->name = $input['name'];
         $user->email = $input['email'];
         $user->password = $input['password'];
         $user->save();
