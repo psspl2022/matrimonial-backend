@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Caste;
 use App\Models\City;
 use App\Models\Country;
+use App\Models\Age;
 use App\Models\Height;
 use App\Models\MotherTongue;
 use App\Models\Religion;
@@ -107,6 +108,7 @@ class DropdownController extends Controller
     
     public function desiredDropdown(){
         $response['country'] = Country::select('id','name')->get();
+        $response['age'] = Age::select('id','age')->get();  
         $response['height'] = Height::select('id','height')->get();        
         $response['mother_tongue'] = MotherTongue::select('id','type','mother_tongue')->get();
         $response['religion'] = Religion::select('id','religion')->get();

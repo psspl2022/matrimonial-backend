@@ -2483,7 +2483,7 @@ function Index() {
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_38__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_40__.Route, {
           exact: true,
-          path: "/",
+          path: "/admin",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_38__.jsx)(_admin_theme_authentication_Login__WEBPACK_IMPORTED_MODULE_2__["default"], {})
         })]
       })
