@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\Master\ResidenceController;
 use App\Http\Controllers\Admin\Master\SectController;
 use App\Http\Controllers\Admin\ActionController;
 use App\Http\Controllers\User\DesiredController;
+use App\Http\Controllers\User\MembershipController;
 
 /*
 |--------------------------------------------------------------------------
@@ -104,6 +105,9 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/storeProfileImage', [ProfileController::class, 'storeProfileImage']);
     Route::get('/getProfileImage', [ProfileController::class, 'getProfileImage']);
+
+    //Membership Plan
+    Route::get('/getMembershipDetail/{package_id}', [MembershipController::class, 'getMembershipDetail']);
 
 
 

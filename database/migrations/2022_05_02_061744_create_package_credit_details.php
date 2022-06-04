@@ -19,6 +19,7 @@ class CreatePackageCreditDetails extends Migration
             $table->integer('credit_count')->unsigned()->nullable();
             $table->integer('view_count')->unsigned()->nullable();
             $table->integer('shortlist_count')->unsigned()->nullable();
+            $table->date('expiry_date')->nullable();
             $table->integer('added_by')->unsigned()->nullable();
             $table->enum('status', ['0', '1'])->default('1')->comment('0=Inactive, 1=Active');
             $table->timestamp('created_on')->useCurrent();

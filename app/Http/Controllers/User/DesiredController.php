@@ -164,8 +164,8 @@ class DesiredController extends Controller
     }    
     
     public function showDesiredProfiles(){
-        // $user_id = Auth::user()->id;
-        $data = DesiredProfile::where('user_id', 1)->first();
+        $user_id = Auth::user()->id;
+        $data = DesiredProfile::where('user_id', $user_id)->first();
         
         $marital = explode(',', $data->marital);
 
