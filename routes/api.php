@@ -48,7 +48,7 @@ Route::get('/getLoginUserDetails', [RegisterController::class, 'getLoginUserDeta
 
 Route::get('/getFamilyTypeList',[FamilyTypeController::class,'getFamilyTypeList']);
 
-Route::get('/showDesiredProfiles',[DesiredController::class,'showDesiredProfiles']);
+
 Route::middleware('auth:api')->group(function () {
     Route::get('/logout',[AuthenticationController::class,'logout']);
 
@@ -78,6 +78,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/desiredLifestyle',[DesiredController::class, 'createLifestyle']);    
     Route::post('/desiredAbout',[DesiredController::class, 'createAbout']);
     Route::get('/showDesiredDetails',[DesiredController::class, 'showDesiredDetail']);
+    Route::get('/showDesiredProfiles',[DesiredController::class,'showDesiredProfiles']);
 
 
     //Dropdown API
