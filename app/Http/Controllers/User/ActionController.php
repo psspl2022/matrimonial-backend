@@ -10,7 +10,7 @@ use App\Models\ProfileVisit;
 
 class ActionController extends Controller
 {
-    public function sendInterest($id, Requqst $req){
+    public function sendInterest($id, Request $req){
         $validator = Validator::make($req->all(),[
             'intrest_id'=>'required',
         ]);

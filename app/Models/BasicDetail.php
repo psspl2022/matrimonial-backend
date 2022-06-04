@@ -12,11 +12,40 @@ class BasicDetail extends Model implements Auditable
     use AuditableTrait;
     use HasFactory;
 
+    
     protected $table = 'basic_details';
     public $timestamps = false;
 
-    // public function getBasic(){
-    //     return $this->hasOne(CentreDetails::class,'id','centre_id');
-    // }
+    public function getCareer(){
+        return $this->hasOne(CareerDetail::class,'reg_id','reg_id');
+    }
+
+    public function getLifeStyle(){
+        return $this->hasOne(LifeStyle::class,'reg_id','reg_id');
+    }
+
+    public function getHeight(){
+        return $this->hasOne(Height::class,'id','height');
+    }
+
+    public function getReligion(){
+        return $this->hasOne(Religion::class,'id','religion');
+    }
+
+    public function getCaste(){
+        return $this->hasOne(Caste::class,'id','caste');
+    }
+
+    public function getMotherTongue(){
+        return $this->hasOne(MotherTongue::class,'id','mother_tongue');
+    }
+
+    public function getCity(){
+        return $this->hasOne(City::class,'id','city');
+    }
+
+    public function getMarital(){
+        return $this->hasOne(Marital::class,'id','marital_status');
+    }
 
 }

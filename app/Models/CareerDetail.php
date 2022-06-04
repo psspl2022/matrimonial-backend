@@ -14,5 +14,17 @@ class CareerDetail extends Model implements Auditable
 
     protected $table = 'career_details';
     public $timestamps = false;
+
+    public function getIncome(){
+        return $this->hasOne(Income::class,'id','income');
+    }
+
+    public function getOccupation(){
+        return $this->hasOne(Occupation::class,'id','occupation');
+    }
+
+    public function getEducation(){
+        return $this->hasOne(Education::class,'id','highest_qualification');
+    }
     
 }

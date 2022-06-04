@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validator;
+use Illuminate\Support\Carbon;
 use App\Models\DesiredProfile;
 use App\Models\BasicDetail;
+use App\Models\CareerDetail;
+use App\Models\Age;
 
 class DesiredController extends Controller
 {
@@ -165,29 +168,162 @@ class DesiredController extends Controller
     
     public function showDesiredProfiles(){
         $user_id = Auth::user()->id;
-        $data = DesiredProfile::where('user_id', $user_id)->first();
-        
-        $marital = explode(',', $data->marital);
-
-        $reg_id = BasicDetail::select('reg_id')->where([
-
-            ['status', '<>', 1 ],
-            ['height', '<=', $data->max_height],
-            ['height', '>=', $data->min_height]
+        $data1 = DesiredProfile::where('user_id', $user_id)->first();
+        // $data2 = BasicDetail::join('career_details', 'career_details.reg_id','=','basic_details.reg_id')->get();
+        $data2 = BasicDetail::with('getCareer:career_details.reg_id,highest_qualification,occupation,income','getLifeStyle:lifestyle_details.reg_id,diet_habit,drink_habit,smoking_habit,challenged')->get();
     
-        ])      
-        ->whereIn('maritial_status', $marital)
-        // ->whereIn('religion', $data->religion)
-        // ->whereIn('caste', $data->caste)
-        // ->whereIn('caste', $data->caste)
-        // ->whereIn('mother_tongue', $data->mother_tongue)
-        // ->whereIn('country', $data->country)
-        // ->whereIn('manglik', $data->manglik)
-        // ->whereIn('height', $data->mother_tongue)
+        $count = count($data2);
+       
+        
+    
+                   
+              $marital_arr = explode(",", $data1->marital);
+              $country_arr = explode(",", $data1->country);
+              $religion_arr = explode(",", $data1->religion);
+              $caste_arr = explode(",", $data1->caste);
+              $mother_arr = explode(",", $data1->mother_tongue);
+              $manglik_arr = explode(",", $data1->manglik);
+              $residential_arr = explode(",", $data1->residential);
+              $education_arr = explode(",", $data1->highest_education);
+              $occupation_arr = explode(",", $data1->occupation);
+              $diet_arr = explode(",", $data1->diet);
+              $drinking_arr = explode(",", $data1->drinking);
+              $smoking_arr = explode(",", $data1->smoking);
+              $challenge_arr = explode(",", $data1->challenged);
 
-          ->get();
+              
+         
+              for($i= 0; $i<$count; $i++){   
+                $dob = date('Y-m-d',strtotime($data2[$i]->dob));
+                $age = (\Carbon\Carbon::parse($dob)->age);
+                $age_id = Age::select('id')->where('age', $age)->first();
+                       ;      
+                $desired_count =  0;        
+                $counter = 0;   
+                
+                if(($data1->min_height != NUll) && ($data1->max_height != NUll)){
+                    $desired_count++;
+                    if(($data1->min_height <= $data2[$i]->height) && ($data1->max_height >= $data2[$i]->height) ){
+                        $counter++;         
+                    }
+                }
+                
+                if(($data1->min_age != NULL) && ($data1->max_age != NULL) ){
+                    $desired_count++;
+                    if(($data1->min_age <= $age_id['id']) && ($data1->max_age >= $age_id['id']) ){
+                        $counter++;         
+                    }
+                }
+                
+                if(($data1->min_income != NULL) && ($data1->max_income != NULL )){
+                    $desired_count++;
+                    if(($data1->min_income <= (int)$data2[$i]->getCareer['income']) && ($data1->max_income >= (int)$data2[$i]->getCareer['income'] )){
+                        $counter++;         
+                    }
+                }
+                if(($data1->marital != NULL)){
+                    $desired_count++;
+                    if(in_array($data2[$i]->maritial_status, $marital_arr )){
+                        $counter++;         
+                    }
+                }
 
-        return response()->json($reg_id, 200);
+                if(($data1->country != NULL)){
+                    $desired_count++;
+                    if(in_array($data2[$i]->country, $country_arr )){
+                        $counter++;
+                    }
+                }
+                
+                if(($data1->religion != NULL)){
+                    $desired_count++;
+                    if(in_array($data2[$i]->religion, $religion_arr )){
+                        $counter++;
+                    }    
+                 }
+
+                 if(($data1->caste != NULL)){
+                    $desired_count++;
+                    if(in_array($data2[$i]->caste, $caste_arr )){
+                        $counter++;
+                    }
+                }
+                
+                if(($data1->mother_tongue != NULL)){
+                    $desired_count++;
+                    if(in_array($data2[$i]->mother_tongue, $mother_arr )){
+                        $counter++;
+                    }
+                }  
+                
+                if(($data1->manglik != NULL)){
+                    $desired_count++;
+                    if(in_array($data2[$i]->manglik, $manglik_arr )){
+                        $counter++;
+                    }
+                }    
+              
+                if(($data1->highest_education != NULL)){
+                    $desired_count++;
+                    if(in_array($data2[$i]->getCareer['highest_qualification'], $education_arr )){
+                        $counter++;
+                    }
+                }
+                
+                if(($data1->occupation != NULL)){
+                    $desired_count++;
+                    if(in_array($data2[$i]->getCareer['occupation'], $occupation_arr )){
+                        $counter++; 
+                    }
+                }  
+                
+                if(($data1->diet != NULL)){
+                    $desired_count++;
+                    if(in_array($data2[$i]->getLifeStyle['diet_habit'], $diet_arr )){
+                        $counter++;
+                    }
+                }
+                
+                if(($data1->drinking != NULL)){
+                    $desired_count++;
+                    if(in_array($data2[$i]->getLifeStyle['drink_habit'], $drinking_arr )){
+                        $counter++;
+                    }
+                }
+                
+                if(($data1->smoking != NULL)){
+                    $desired_count++;
+                    if(in_array($data2[$i]->getLifeStyle['smoking_habit'], $smoking_arr )){
+                        $counter++;
+                    }
+                }
+                
+                if(($data1->challenged != NULL)){
+                    $desired_count++;
+                    if(in_array($data2[$i]->getLifeStyle['challenged'], $challenge_arr )){
+                        $counter++;
+                    }
+                  
+                
+                $basicData = BasicDetail::with('getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('name','height','religion','caste','mother_tongue','city')->where('reg_id', $data2[$i]->reg_id)->first();
+                
+                $careerData = CareerDetail::with('getIncome:id,income','getOccupation:id,occupation','getEducation:id,education')->select('income','occupation','highest_qualification')->where('id', $data2[$i]->reg_id)->first();
+
+                }
+                $percentage =  round((($counter/$desired_count)*100),0);
+                if($counter>0){
+                    // $data[$i][0] = $age_id;
+                    $data[$i][0] = $basicData;
+                    $data[$i][1] = $careerData; 
+                    $data[$i][2] = $percentage; 
+                    $data[$i][3] = $age;
+                     
+                }         
+             
+        }        
+
+        return response()->json($data, 200);
+    
     }  
     
 }
