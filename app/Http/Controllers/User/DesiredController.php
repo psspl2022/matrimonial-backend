@@ -11,6 +11,8 @@ use App\Models\DesiredProfile;
 use App\Models\BasicDetail;
 use App\Models\CareerDetail;
 use App\Models\Age;
+use App\Models\SendInterest;
+use App\Models\Shortlist;
 
 class DesiredController extends Controller
 {
@@ -305,22 +307,30 @@ class DesiredController extends Controller
                     }
                   
                 
-                $basicData = BasicDetail::with('getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('name','height','religion','caste','mother_tongue','city')->where('reg_id', $data2[$i]->reg_id)->first();
+                $basicData = BasicDetail::with('getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','height','religion','caste','mother_tongue','city')->where('reg_id', $data2[$i]->reg_id)->first();
                 
                 $careerData = CareerDetail::with('getIncome:id,income','getOccupation:id,occupation','getEducation:id,education')->select('income','occupation','highest_qualification')->where('id', $data2[$i]->reg_id)->first();
 
-                }
+                $intrestData = SendInterest::where('by_reg_id', Auth::user()->user_reg_id)->pluck('reg_id')->toArray();
+                
+
+                $shortlistData = Shortlist::where('by_reg_id', Auth::user()->user_reg_id)->pluck('saved_reg_id')->toArray();
+            }
+                
                 $percentage =  round((($counter/$desired_count)*100),0);
                 if($counter>0){
                     // $data[$i][0] = $age_id;
-                    $data[$i][0] = $basicData;
-                    $data[$i][1] = $careerData; 
-                    $data[$i][2] = $percentage; 
-                    $data[$i][3] = $age;
+                    $data[$i][0] = $percentage; 
+                    $data[$i][1] = $age;
+                    $data[$i][2] = $basicData;
+                    $data[$i][3] = $careerData;
+                    $data[$i][4] = $intrestData;  
+                    $data[$i][5] = $shortlistData;
+                   
                      
                 }         
              
-        }        
+            }   
 
         return response()->json($data, 200);
     

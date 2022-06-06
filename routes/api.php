@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\Master\ReligionController;
 use App\Http\Controllers\Admin\Master\ResidenceController;
 use App\Http\Controllers\Admin\Master\SectController;
 use App\Http\Controllers\Admin\ActionController;
+use App\Http\Controllers\User\UserActionController;
 use App\Http\Controllers\User\DesiredController;
 
 /*
@@ -80,6 +81,11 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/showDesiredDetails',[DesiredController::class, 'showDesiredDetail']);
     Route::get('/showDesiredProfiles',[DesiredController::class,'showDesiredProfiles']);
 
+
+//Action Routes
+
+    Route::post('/sendIntrest',[UserActionController::class,'sendIntrest']);
+    Route::post('/shortlist',[UserActionController::class,'shortlist']);
 
     //Dropdown API
 
