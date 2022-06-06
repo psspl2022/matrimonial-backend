@@ -307,7 +307,7 @@ class DesiredController extends Controller
                 
                 $basicData = BasicDetail::with('getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('name','height','religion','caste','mother_tongue','city')->where('reg_id', $data2[$i]->reg_id)->first();
                 
-                $careerData = CareerDetail::with('getIncome:id,income','getOccupation:id,occupation','getEducation:id,education')->select('income','occupation','highest_qualification')->where('id', $data2[$i]->reg_id)->first();
+                $careerData = CareerDetail::with('getIncome:id,income','getOccupation:id,occupation','getEducation:id,education')->select('income','occupation','highest_qualification')->where('reg_id', $data2[$i]->reg_id)->first();
 
                 }
                 $percentage =  round((($counter/$desired_count)*100),0);
