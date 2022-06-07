@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\ActionController;
 use App\Http\Controllers\User\UserActionController;
 use App\Http\Controllers\User\DesiredController;
 use App\Http\Controllers\User\MembershipController;
+use App\Http\Controllers\User\CheckoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -116,6 +117,8 @@ Route::middleware('auth:api')->group(function () {
     //Membership Plan
     Route::get('/getMembershipDetail/{package_id}', [MembershipController::class, 'getMembershipDetail']);
 
+    //Payment Gateway
+    Route::post('/checkoutMembership', [CheckoutController::class, 'checkoutMembership']);
 
 
     //ADMIN ROUTES
