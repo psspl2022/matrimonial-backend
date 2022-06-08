@@ -24,7 +24,11 @@ use App\Http\Controllers\Admin\ActionController;
 use App\Http\Controllers\User\UserActionController;
 use App\Http\Controllers\User\DesiredController;
 use App\Http\Controllers\User\MembershipController;
+<<<<<<< HEAD
 use App\Http\Controllers\User\BrowseController;
+=======
+use App\Http\Controllers\User\CheckoutController;
+>>>>>>> 44d0ebc214213b7dadbb5e86fcb713db33a3cb67
 
 /*
 |--------------------------------------------------------------------------
@@ -124,6 +128,8 @@ Route::middleware('auth:api')->group(function () {
     //Membership Plan
     Route::get('/getMembershipDetail/{package_id}', [MembershipController::class, 'getMembershipDetail']);
 
+    //Payment Gateway
+    Route::post('/checkoutMembership', [CheckoutController::class, 'checkoutMembership']);
 
 
     //ADMIN ROUTES
