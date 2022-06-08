@@ -3,26 +3,46 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\Auth;
+use Validator;
 use Illuminate\Http\Request;
-use App\Models\SendInterest;
-use App\Models\Shortlist;
+use App\Models\BasicDetail;
 use App\Models\ProfileVisit;
 
 class BrowseController extends Controller
 {
-  public function interestReceived($id){
 
-    $data = SendInterest::where('reg_id', $id)->get();
+  public function acceptByMe(){
 
-    return response()->json('msg','Interested List');
+    $reg_id = Auth::user()->user_reg_id;        
+        
+    $basicData = BasicDetail::whereRelation('getInterestSent','revert','=', "1")->whereRelation('getInterestSent','by_reg_id','=', $reg_id)->with('getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
+                          
+    $data = $basicData;    
+    
+    return response()->json($data,200);
   }
 
-  public function shorlistProfile($id){
+  public function acceptMe(){
 
-    $data = Shortlist::where('by_reg_id', $id)->get();
+    $reg_id = Auth::user()->user_reg_id;        
+        
+    $basicData = BasicDetail::whereRelation('getInterestReceived','revert','=', "1")->whereRelation('getInterestReceived','reg_id','=', $reg_id)->with('getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
+                          
+    $data = $basicData;    
+    
+    return response()->json($data,200);
+  }
 
-    return response()->json('msg','List of shortlisted candidate');
+   public function getShortlist(){
+
+    $reg_id = Auth::user()->user_reg_id;        
+        
+    $basicData = BasicDetail::whereRelation('getShortlist','by_reg_id','=', $reg_id)->with('getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
+                          
+    $data = $basicData;    
+    
+    return response()->json($data,200);
   }
 
   public function visitProfile($id){

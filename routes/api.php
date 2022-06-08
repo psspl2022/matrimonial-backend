@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\ActionController;
 use App\Http\Controllers\User\UserActionController;
 use App\Http\Controllers\User\DesiredController;
 use App\Http\Controllers\User\MembershipController;
+use App\Http\Controllers\User\BrowseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,7 +87,14 @@ Route::middleware('auth:api')->group(function () {
 //Action Routes
 
     Route::post('/sendIntrest',[UserActionController::class,'sendIntrest']);
+    Route::get('/interestReceived',[UserActionController::class,'interestReceived']);
+    Route::post('/interestRevert',[UserActionController::class,'sendInterestRevert']);
+    Route::get('/interestSent',[UserActionController::class,'interestSent']);
     Route::post('/shortlist',[UserActionController::class,'shortlist']);
+
+    Route::get('/acceptMe',[BrowseController::class,'acceptMe']);
+    Route::get('/acceptByMe',[BrowseController::class,'acceptByMe']);
+    Route::get('/getShortlist',[BrowseController::class,'getShortlist']);
 
     //Dropdown API
 
