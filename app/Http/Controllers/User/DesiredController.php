@@ -172,7 +172,7 @@ class DesiredController extends Controller
         $user_id = Auth::user()->id;
         $data1 = DesiredProfile::where('user_id', $user_id)->first();
         // $data2 = BasicDetail::join('career_details', 'career_details.reg_id','=','basic_details.reg_id')->get();
-        $data2 = BasicDetail::with('getCareer:career_details.reg_id,highest_qualification,occupation,income','getLifeStyle:lifestyle_details.reg_id,diet_habit,drink_habit,smoking_habit,challenged')->get();
+        $data2 = BasicDetail::with('getCareer:career_details.reg_id,highest_qualification,occupation,income','getLifeStyle:lifestyle_details.reg_id,diet_habit,drink_habit,smoking_habit,challenged')->where('reg_id', '!=' , Auth::user()->user_reg_id)->get();
     
         $count = count($data2);
        
@@ -307,9 +307,9 @@ class DesiredController extends Controller
                     }
                   
                 
-                $basicData = BasicDetail::with('getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','height','religion','caste','mother_tongue','city')->where('reg_id', $data2[$i]->reg_id)->first();
+                $basicData = BasicDetail::with('getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','height','religion','caste','mother_tongue','city','maritial_status')->where('reg_id', $data2[$i]->reg_id)->where('reg_id', '!=' , Auth::user()->user_reg_id)->first();
                 
-                $careerData = CareerDetail::with('getIncome:id,income','getOccupation:id,occupation','getEducation:id,education')->select('income','occupation','highest_qualification')->where('reg_id', $data2[$i]->reg_id)->first();
+                $careerData = CareerDetail::with('getIncome:id,income','getOccupation:id,occupation','getEducation:id,education')->select('income','occupation','highest_qualification')->where('reg_id', $data2[$i]->reg_id)->where('reg_id', '!=' , Auth::user()->user_reg_id)->first();
 
                 $intrestData = SendInterest::where('by_reg_id', Auth::user()->user_reg_id)->pluck('reg_id')->toArray();
                 

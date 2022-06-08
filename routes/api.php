@@ -24,11 +24,8 @@ use App\Http\Controllers\Admin\ActionController;
 use App\Http\Controllers\User\UserActionController;
 use App\Http\Controllers\User\DesiredController;
 use App\Http\Controllers\User\MembershipController;
-<<<<<<< HEAD
 use App\Http\Controllers\User\BrowseController;
-=======
 use App\Http\Controllers\User\CheckoutController;
->>>>>>> 44d0ebc214213b7dadbb5e86fcb713db33a3cb67
 
 /*
 |--------------------------------------------------------------------------
@@ -54,7 +51,7 @@ Route::get('/getLoginUserDetails', [RegisterController::class, 'getLoginUserDeta
 //Admin Route
 
 Route::get('/getFamilyTypeList',[FamilyTypeController::class,'getFamilyTypeList']);
-
+Route::get('/desiredDropdown',[DropdownController::class, 'desiredDropdown']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/logout',[AuthenticationController::class,'logout']);
@@ -106,7 +103,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/careerDropdown',[DropdownController::class, 'careerDropdown']);
     Route::get('/familyDropdown',[DropdownController::class, 'familyDropdown']);
     Route::get('/likesDropdown',[DropdownController::class, 'likesDropdown']);
-    Route::get('/desiredDropdown',[DropdownController::class, 'desiredDropdown']);
     
     Route::get('/countryDropdown',[DropdownController::class, 'countryDropdown']);
     Route::get('/stateDropdown/{c_id}',[DropdownController::class, 'stateDropdown']);
