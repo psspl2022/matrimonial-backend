@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use Carbon\Carbon;
 
 class BasicDetail extends Model implements Auditable
 {
@@ -15,11 +16,7 @@ class BasicDetail extends Model implements Auditable
     
     protected $table = 'basic_details';
     public $timestamps = false;
-
-    public function getCareer(){
-        return $this->hasOne(CareerDetail::class,'reg_id','reg_id');
-    }
-
+    
     public function getLifeStyle(){
         return $this->hasOne(LifeStyle::class,'reg_id','reg_id');
     }
@@ -47,5 +44,38 @@ class BasicDetail extends Model implements Auditable
     public function getMarital(){
         return $this->hasOne(Marital::class,'id','marital_status');
     }
+
+    public function getInterestReceived(){
+        return $this->hasOne(SendInterest::class,'by_reg_id','reg_id');
+    }
+
+    public function getInterestSent(){
+        return $this->hasOne(SendInterest::class,'reg_id','reg_id');
+    }
+
+    public function getShortlist(){
+        return $this->hasOne(Shortlist::class,'saved_reg_id','reg_id');
+    }
+
+    
+    public function getCareer(){
+        return $this->hasOne(CareerDetail::class,'reg_id','reg_id');
+    }
+
+
+    public function getIncome(){
+        return $this->hasOneThrough(Income::class,CareerDetail::class,'reg_id','id','reg_id','income');
+    }
+
+    public function getOccupation(){
+        return $this->hasOneThrough(Occupation::class,CareerDetail::class,'reg_id','id','reg_id','occupation');
+    }
+
+    public function getEducation(){
+        return $this->hasOneThrough(Education::class,CareerDetail::class,'reg_id','id','reg_id','highest_qualification');
+    }
+
+
+      
 
 }

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use Illuminate\Http\Request;
+use App\Models\BasicDetail;
+use App\Models\CareerDetail;
 use App\Models\SendInterest;
 use App\Models\Shortlist;
 use App\Models\ProfileVisit;
@@ -38,22 +40,31 @@ class UserActionController extends Controller
 
     }
 
-    public function sendInterestRevert($id, Request $req){
+    public function interestReceived(){        
+        $reg_id = Auth::user()->user_reg_id;
+        $data1 = SendInterest::where('reg_id', $reg_id)->where('revert','=', '0')->pluck('by_reg_id')->toArray();
+        
+        $basicData = BasicDetail::with('getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->whereIn('reg_id', $data1)->get();
+                             
+        $data = $basicData;    
+        
+        return response()->json($data,200);
+        
+    }
+    
+    public function sendInterestRevert(Request $req){
         $validator = Validator::make($req->all(),[
-            'id' => 'required',   
-            'intrest_by_id'=>'required',
+            'id'=>'required',
             'revert'=>'required'
         ]);
 
-            $data = SendInterest::where('by_reg_id', $req->intrest_by_id)->where('reg_id', $id)->where('revert', $req->revert)->first();
-            $data->by_reg_id = $id;
-            $data->reg_id = $req->id;
-            $data->revert = 0;
+            $data = SendInterest::where('by_reg_id', $req->id)->where('reg_id', Auth::user()->user_reg_id)->first();
+            $data->revert = $req->revert;
             
             if($data->save()){
-                return response()->json('msg','Reverted Succesfully');
+               return response()->json(['succmsg'=>'Reverted Succesfully']);
             }else{
-                return response()->json('msg','Error while reverting!');
+                return response()->json(['errmsg'=>'Error while reverting!']);
             }
 
         if($validator->fails()){
@@ -61,21 +72,38 @@ class UserActionController extends Controller
         }
     }
 
+    public function interestSent(){        
+        $reg_id = Auth::user()->user_reg_id;        
+        
+        $basicData = BasicDetail::whereRelation('getInterestSent','by_reg_id','=', $reg_id)->whereRelation('getInterestSent','revert','=', '0')->with('getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
+                             
+        $data = $basicData;    
+        
+        return response()->json($data,200);
+        
+    }
+
     public function shortlist(Request $req){
         $validator = Validator::make($req->all(),[
             'id' => 'required',   
         ]);
-
-            $data = new Shortlist();
-            $data->by_reg_id = Auth::user()->user_reg_id;
-            $data->saved_reg_id = $req->id;
-            // $data->added_by = Auth::user()->id;
-            
-            if($data->save()){
-                return response()->json(['succmsg'=>'Shortlisted Succesfully!'], 200);
-            }else{
-                return response()->json(['errmsg'=>'Error while shortlisting!'], 203);
+            $check = Shortlist::where('by_reg_id', Auth::user()->user_reg_id)->where('saved_reg_id', $req->id)->first();
+            if(empty($check)){
+                $data = new Shortlist();
+                $data->by_reg_id = Auth::user()->user_reg_id;
+                $data->saved_reg_id = $req->id;
+                if($data->save()){
+                    return response()->json(['succmsg'=>'Shortlisted Succesfully!'], 200);
+                }else{
+                    return response()->json(['errmsg'=>'Error while shortlisting!'], 203);
+                }
+            } else {
+                Shortlist::where('id',$check->id)->delete();
+                    return response()->json(['succmsg'=>'Remove Shortlisted!'], 200);             
             }
+           
+           
+          
 
         if($validator->fails()){
             return response()->json($validator->errors(),202);
