@@ -26,6 +26,7 @@ use App\Http\Controllers\User\DesiredController;
 use App\Http\Controllers\User\MembershipController;
 use App\Http\Controllers\User\BrowseController;
 use App\Http\Controllers\User\CheckoutController;
+use App\Http\Controllers\User\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -125,6 +126,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/storeProfileImage', [ProfileController::class, 'storeProfileImage']);
     Route::get('/getProfileImage', [ProfileController::class, 'getProfileImage']);
 
+    Route::get('/profileSidebar', [DashboardController::class, 'profileSidebar']);
     //Membership Plan
     Route::get('/getMembershipDetail/{package_id}', [MembershipController::class, 'getMembershipDetail']);
 

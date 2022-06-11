@@ -42,8 +42,6 @@ function AddMotherTongue(){
               }
             }
         )
-
-
     }
 
     return(
