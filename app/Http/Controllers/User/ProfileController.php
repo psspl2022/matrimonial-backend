@@ -227,12 +227,6 @@ class ProfileController extends Controller
     }
 
    
-    public function show(){
-
-    }
-
-
-    //
 
     public function showBasicById($id){     
         $data['basic'] = BasicDetail::where('reg_id',$id)->first();   
@@ -613,10 +607,14 @@ class ProfileController extends Controller
                 $filename = time().rand(2,3). '.'.$image->getClientOriginalExtension();
                 $image->move(public_path("Documents/Image_Documents/"), $filename);
 
-                $verify_user = new VerifyUser();
-                $verify_user->by_reg_id = Auth::user()->user_reg_id;
-                $verify_user->identity_card_doc = $filename;
-                $verify_user->save();
+                $id = Auth::user()->user_reg_id;
+                $data = VerifyUser::updateOrCreate(
+                    ['by_reg_id'=>$id],
+                    [
+                        'by_reg_id'=>$id,
+                        'identity_card_doc'=>$filename,
+                        
+                    ]);
             return response()->json(['msg'=>'Image Uploaded Succesfully']);
         }
         else {
@@ -638,8 +636,15 @@ class ProfileController extends Controller
                 $filename = time().rand(2,3). '.'.$image->getClientOriginalExtension();
                 $image->move(public_path("Documents/Image_Documents/"), $filename);
 
-                VerifyUser::where('by_reg_id', Auth::user()->user_reg_id)->update(['identity_card_doc' => $filename]);
-               
+                $id = Auth::user()->user_reg_id;
+                $data = VerifyUser::updateOrCreate(
+                    ['by_reg_id'=>$id],
+                    [
+                        'by_reg_id'=>$id,
+                        'identity_card_doc'=>$filename,
+                        
+                    ]);
+                              
             return response()->json(['msg'=>'Image Uploaded Succesfully']);
         }
         else {

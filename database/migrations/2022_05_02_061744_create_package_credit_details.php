@@ -16,6 +16,7 @@ class CreatePackageCreditDetails extends Migration
         Schema::create('package_credit_details', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('reg_id')->unsigned();
+            $table->integer('package_id')->unsigned();
             $table->integer('credit_count')->unsigned()->nullable();
             $table->integer('view_count')->unsigned()->nullable();
             $table->integer('shortlist_count')->unsigned()->nullable();

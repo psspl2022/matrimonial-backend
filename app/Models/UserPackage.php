@@ -7,12 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
-class VerifyUser extends Model implements Auditable
+class UserPackage extends Model implements Auditable
 {
     use AuditableTrait;
     use HasFactory;
 
-    protected $table = 'verify_users';
+    protected $table = 'package_credit_details';
     public $timestamps = false;
-    protected $fillable = ['by_reg_id','identity_card_doc'];
+
+    public function getPackage(){
+        return $this->hasOne(Package::class,'id','package_id');
+    }
 }
