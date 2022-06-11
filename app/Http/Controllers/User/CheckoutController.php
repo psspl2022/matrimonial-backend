@@ -56,8 +56,8 @@ class CheckoutController extends Controller
         $orderNote = $orderNumber;
         //globally declared
         $host=env('APP_URL');
-        $notifyUrl='http://127.0.0.1:8000/return-membership';
-        $returnUrl='http://127.0.0.1:8000/return-membership';
+        $notifyUrl='http://127.0.0.1:8000/api/return-membership';
+        $returnUrl='http://127.0.0.1:8000/api/return-membership';
         // $notifyUrl=redirect('/notify-membership');
         // $returnUrl=redirect('/return-membership');
         $orderDetails=array();

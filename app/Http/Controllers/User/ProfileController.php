@@ -561,7 +561,7 @@ class ProfileController extends Controller
         // $toEmail = 'ankit.bisht@prakharsoftwares.com';
         $toEmail = $user_data->email;
         $from=env('MAIL_FROM_ADDRESS'); 
-        $subject = "Gmail Verification by Namdeo Matrimonial";
+        $subject = "Email Verification by Namdeo Matrimonial";
         $data= 
         [  
             'otp'=>$random_password,
@@ -571,7 +571,7 @@ class ProfileController extends Controller
         
         $mail_send = Mail::send('mail.sendmail', $data, function ($message) use ($toEmail) {
         $message->to($toEmail)
-        ->subject('Gmail Verification by Namdeo Matrimonial');
+        ->subject('Email Verification by Namdeo Matrimonial');
         $message->from(env('MAIL_FROM_ADDRESS'),env('APP_NAME'));
         });
         if($mail_send){
@@ -622,6 +622,12 @@ class ProfileController extends Controller
         else {
             return response()->json(['error_msg'=>'Image Upload Failed!']);
         }
+    }
+
+    public function skipOtp(){
+        $user_data = Auth::user()->user_reg_id;
+        UserRegister::where("id", $user_data)->update(["stage_no" => "2"]);
+        return response()->json(['msg'=>'Skipped Successfully']);
     }
 
     public function updateProfileImage(Request $req){

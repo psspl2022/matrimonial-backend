@@ -52,6 +52,7 @@ Route::get('/getLoginUserDetails', [RegisterController::class, 'getLoginUserDeta
 
 Route::get('/getFamilyTypeList',[FamilyTypeController::class,'getFamilyTypeList']);
 Route::get('/desiredDropdown',[DropdownController::class, 'desiredDropdown']);
+Route::post('/return-membership', [CheckoutController::class, 'returnRegister']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/logout',[AuthenticationController::class,'logout']);
@@ -117,6 +118,9 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/sendOtp', [ProfileController::class, 'sendOtpToMail']);
     Route::post('/checkOtp', [ProfileController::class, 'checkOtpToMail']);
+
+    //Skip Otp Section
+    Route::get('/skipOtp', [ProfileController::class, 'skipOtp']);
 
     Route::post('/storeProfileImage', [ProfileController::class, 'storeProfileImage']);
     Route::get('/getProfileImage', [ProfileController::class, 'getProfileImage']);
