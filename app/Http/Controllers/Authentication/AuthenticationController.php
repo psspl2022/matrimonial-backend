@@ -29,7 +29,12 @@ class AuthenticationController extends Controller
        
         if($validator->fails()){
             // return response()->json($validator->errors(),202);
-            return response()->json(['errors' => $validator->errors()]);
+            // return response()->json(['errors' => $validator->errors()]);
+        }
+
+        $user = User::where('email', '=', $req->email)->first();
+        if ($user) {
+            return response()->json(["error"=>"User Already Registered, Please Login!"]);
         }
 
         $input = $req->all();

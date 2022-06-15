@@ -19,7 +19,6 @@ class RegisterController extends Controller
                  
         ]);
 
-    
 
         //Matrimony Id
         $total_rows = UserRegister::orderBy('id', 'desc')->count();
