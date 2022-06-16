@@ -49,7 +49,7 @@ class ProfileController extends Controller
         $data->reg_id = Auth::user()->user_reg_id;
         $data->name = $req->name;
         $data->dob = $req->dob;
-        $data->maritial_status = $req->maritial_status;
+        $data->marital_status = $req->maritial_status;
         $data->religion = $req->religion;
         $data->caste = $req->caste;
         // $data->sub_caste = $req->sub_caste;
