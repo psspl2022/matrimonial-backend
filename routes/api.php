@@ -127,6 +127,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/getProfileImage', [ProfileController::class, 'getProfileImage']);
 
     Route::get('/profileSidebar', [DashboardController::class, 'profileSidebar']);
+    Route::get('/profileDashboard', [DashboardController::class, 'profileDashboard']);
     //Membership Plan
     Route::get('/getMembershipDetail/{package_id}', [MembershipController::class, 'getMembershipDetail']);
 
