@@ -11,6 +11,7 @@ use App\Models\CareerDetail;
 use App\Models\SendInterest;
 use App\Models\Shortlist;
 use App\Models\ProfileVisit;
+use app\Models\UserPackage;
 
 
 class UserActionController extends Controller
@@ -87,15 +88,20 @@ class UserActionController extends Controller
         $validator = Validator::make($req->all(),[
             'id' => 'required',   
         ]);
+            $leftCount = UserPackage:: select('shortlist_count')->where('reg_id', Auth::user()->user_reg_id)->first();
             $check = Shortlist::where('by_reg_id', Auth::user()->user_reg_id)->where('saved_reg_id', $req->id)->first();
             if(empty($check)){
-                $data = new Shortlist();
-                $data->by_reg_id = Auth::user()->user_reg_id;
-                $data->saved_reg_id = $req->id;
-                if($data->save()){
-                    return response()->json(['succmsg'=>'Shortlisted Succesfully!'], 200);
-                }else{
-                    return response()->json(['errmsg'=>'Error while shortlisting!'], 203);
+                if($leftCount['shortlist_count'] != 0){
+                    $data = new Shortlist();
+                    $data->by_reg_id = Auth::user()->user_reg_id;
+                    $data->saved_reg_id = $req->id;
+                    if($data->save()){
+                        UserPackage::where('reg_id', Auth::user()->user_reg_id)->decrement('shortlist_count',1);
+                    }
+
+                }
+                else{
+                    return response()->json(['errmsg'=>'No Shortlist Count left!'], 203);
                 }
             } else {
                 Shortlist::where('id',$check->id)->delete();
