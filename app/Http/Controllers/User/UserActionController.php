@@ -11,7 +11,7 @@ use App\Models\CareerDetail;
 use App\Models\SendInterest;
 use App\Models\Shortlist;
 use App\Models\ProfileVisit;
-use app\Models\UserPackage;
+use App\Models\UserPackage;
 
 
 class UserActionController extends Controller
