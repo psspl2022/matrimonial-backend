@@ -11,7 +11,7 @@ use App\Models\CareerDetail;
 use App\Models\SendInterest;
 use App\Models\Shortlist;
 use App\Models\ProfileVisit;
-use app\Models\UserPackage;
+use App\Models\UserPackage;
 
 
 class UserActionController extends Controller
@@ -97,8 +97,8 @@ class UserActionController extends Controller
                     $data->saved_reg_id = $req->id;
                     if($data->save()){
                         UserPackage::where('reg_id', Auth::user()->user_reg_id)->decrement('shortlist_count',1);
+                        return response()->json(['succmsg'=>'Shortlisted!'], 200);
                     }
-
                 }
                 else{
                     return response()->json(['errmsg'=>'No Shortlist Count left!'], 203);
