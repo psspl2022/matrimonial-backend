@@ -14,12 +14,12 @@
             <tr>
                 <td align="center" style="padding: 0px 10px 0px 10px;">
                     <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
-                        <tr>
+                        {{-- <tr>
                             <td bgcolor="#ffffff" align="center" valign="top"
                                 style="padding: 20px 20px 20px 20px; border-radius: 4px 4px 0px 0px;">
                                 <img src="https://ndgc-etl.com/Demo_hrms/images/ddu_mail_header.png" style="margin: 0; max-width:540px; "></h2>
                             </td>
-                        </tr>
+                        </tr> --}}
                         
     
                         <tr>
@@ -63,7 +63,7 @@
                         <tr>
                             <td bgcolor="#ffffff" align="left"
                                 style="padding: 0px 30px 20px 30px; color: #666666; font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;">
-                                <a href="{{env('APP_URL')}}" class="dwnld-btn" style="padding: 12px 20px;
+                                <a href="{{env('APP_URL').'/login'}}" class="dwnld-btn" style="padding: 12px 20px;
                                 text-decoration: none;
                                 border: 1px solid #030050;
                                 border-radius: 5px;
@@ -81,7 +81,7 @@
                         <tr>
                             <td bgcolor="#ffffff" align="left"
                                 style="padding: 0px 30px 20px 30px; color: #666666; font-family: &apos;Lato&apos;, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;">
-                                <p style="margin: 0;">If you have any questions, just reply to this email <a href="mailto:ddugkyinfo@gmail.com" style="text-decoration:none;">ddugkyinfo@gmail.com</a> — we're always happy
+                                <p style="margin: 0;">If you have any questions, just reply to this email <a href="mailto:info@namdeomatrimony.com" style="text-decoration:none;">info@namdeomatrimony.com</a> — we're always happy
                                     to help out.</p>
                             </td>
                         </tr>
