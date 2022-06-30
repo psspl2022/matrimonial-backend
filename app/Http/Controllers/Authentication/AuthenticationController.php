@@ -130,6 +130,7 @@ class AuthenticationController extends Controller
             $responseArray['token'] = $user->createToken('MyToken')->accessToken;
             $responseArray['msg'] = "Login Successfully";
             $responseArray['user'] = $user;
+            $responseArray['gender'] = UserRegister::where('id',$user['user_reg_id'])->select('gender')->first();
             
             return response()->json($responseArray,200);
         } else{
