@@ -41,10 +41,6 @@ class BasicDetail extends Model implements Auditable
         return $this->hasOne(City::class,'id','city');
     }
 
-    public function getMarital(){
-        return $this->hasOne(Marital::class,'id','marital_status');
-    }
-
     public function getInterestReceived(){
         return $this->hasOne(SendInterest::class,'by_reg_id','reg_id');
     }

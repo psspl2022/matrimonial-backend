@@ -628,36 +628,7 @@ class ProfileController extends Controller
         return response()->json(['msg'=>'Skipped Successfully']);
     }
 
-    public function updateProfileImage(Request $req){
-        $validator = Validator::make($req->all(),
-            [
-                'image' => 'required|image|mimes:jpeg,png,jpg|max:2048'
-            ]
-        );
-        if($validator->fails()) {
-            return response()->json(["status" => "failed", "message" => "Validation error", "errors" => $validator->errors()]);
-        }
-        if($req->has('image')) {
-            $image = $req->image;
-                $filename = time().rand(2,3). '.'.$image->getClientOriginalExtension();
-                $image->move(public_path("Documents/Image_Documents/"), $filename);
-
-                $id = Auth::user()->user_reg_id;
-                $data = VerifyUser::updateOrCreate(
-                    ['by_reg_id'=>$id],
-                    [
-                        'by_reg_id'=>$id,
-                        'identity_card_doc'=>$filename,
-                        
-                    ]);
-                              
-            return response()->json(['msg'=>'Image Uploaded Succesfully']);
-        }
-        else {
-            return response()->json(['error_msg'=>'Image Upload Failed!']);
-        }
-    }
-
+  
     public function getProfileImage(){
         $img_file = VerifyUser::select('identity_card_doc')->where('by_reg_id', Auth::user()->user_reg_id)->first();
         if($img_file){

@@ -26,5 +26,13 @@ class CareerDetail extends Model implements Auditable
     public function getEducation(){
         return $this->hasOne(Education::class,'id','highest_qualification');
     }
+
+    public function getUg(){
+        return $this->hasOne(Education::class,'id','ug_qualification');
+    }
+
+    public function getPg(){
+        return $this->hasOne(Education::class,'id','pg_qualification');
+    }
     
 }

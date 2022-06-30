@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEducationCategoriesTable extends Migration
+class CreateColors extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateEducationCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('education_categories', function (Blueprint $table) {
+        Schema::create('colors', function (Blueprint $table) {
             $table->increments('id'); 
-            $table->string('education_category',50);
+            $table->string('name',50);
             $table->enum('status', ['0', '1'])->default('1')->comment('0=Inactive, 1=Active');
             $table->softDeletes();
         });
@@ -28,6 +28,6 @@ class CreateEducationCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('education_categories');
+        Schema::dropIfExists('colors');
     }
 }

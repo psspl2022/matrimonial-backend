@@ -97,8 +97,8 @@ class UserActionController extends Controller
                     $data->saved_reg_id = $req->id;
                     if($data->save()){
                         UserPackage::where('reg_id', Auth::user()->user_reg_id)->decrement('shortlist_count',1);
+                        return response()->json(['succmsg'=>'Shortlisted!'], 200);
                     }
-
                 }
                 else{
                     return response()->json(['errmsg'=>'No Shortlist Count left!'], 203);

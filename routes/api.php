@@ -27,6 +27,7 @@ use App\Http\Controllers\User\MembershipController;
 use App\Http\Controllers\User\BrowseController;
 use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\User\DashboardController;
+use App\Http\Controllers\User\DetailProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -134,7 +135,20 @@ Route::middleware('auth:api')->group(function () {
     //Payment Gateway
     Route::post('/checkoutMembership', [CheckoutController::class, 'checkoutMembership']);
 
+//Detail Profile
+    Route::get('/introduction/{id}', [DetailProfileController::class, 'introduction']);
+    Route::post('/about', [DetailProfileController::class, 'about']);
+    Route::post('/education', [DetailProfileController::class, 'education']);
+    Route::post('/family', [DetailProfilecontroller::class, 'family']);
+    Route::post('/lifestyle', [DetailProfilecontroller::class, 'lifestyle']);
+    Route::post('/likes', [DetailProfilecontroller::class, 'likes']);
+    Route::post('/desired', [DetailProfilecontroller::class, 'desired']);
 
+
+
+
+
+    
     //ADMIN ROUTES
 Route::post('/adminRegister',[AuthenticationController::class,'adminRegister']);
 
