@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\UserRegister;
+use App\Models\UserPackage;
 
 
 class RegisterController extends Controller
@@ -39,6 +40,16 @@ class RegisterController extends Controller
         $data->stage_no = 1;
         // $data->added_by = Auth::user()->id;
         $data->save();
+        $user_id = $data->id;
+
+        $user_pac = new UserPackage();
+        $user_pac->reg_id = $user_id;
+        $user_pac->package_id = 1;
+        $user_pac->credit_count = 30;
+        $user_pac->view_count = 15;
+        $user_pac->shortlist_count = 20;
+        $user_pac->save();
+
               
         if($validator->fails()){
             return response()->json($validator->errors(),202);
