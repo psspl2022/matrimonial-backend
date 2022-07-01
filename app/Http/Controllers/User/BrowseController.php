@@ -16,7 +16,7 @@ class BrowseController extends Controller
 
     $reg_id = Auth::user()->user_reg_id;        
         
-    $basicData = BasicDetail::whereRelation('getUserRegister:id,gender','getInterestSent','revert','=', "1")->whereRelation('getInterestSent','by_reg_id','=', $reg_id)->with('getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
+    $basicData = BasicDetail::whereRelation('getInterestSent','revert','=', "1")->whereRelation('getUserRegister:id,gender','getProfileImage:by_reg_id,identity_card_doc','getInterestSent','by_reg_id','=', $reg_id)->with('getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
                           
     $data = $basicData;    
     
@@ -27,7 +27,7 @@ class BrowseController extends Controller
 
     $reg_id = Auth::user()->user_reg_id;        
         
-    $basicData = BasicDetail::whereRelation('getUserRegister:id,gender','getInterestReceived','revert','=', "1")->whereRelation('getInterestReceived','reg_id','=', $reg_id)->with('getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
+    $basicData = BasicDetail::whereRelation('getInterestReceived','revert','=', "1")->whereRelation('getUserRegister:id,gender','getProfileImage:by_reg_id,identity_card_doc','getInterestReceived','reg_id','=', $reg_id)->with('getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
                           
     $data = $basicData;    
     
@@ -38,7 +38,7 @@ class BrowseController extends Controller
 
     $reg_id = Auth::user()->user_reg_id;        
         
-    $data = BasicDetail::whereRelation('getShortlist','by_reg_id','=', $reg_id)->with('getUserRegister:id,gender','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
+    $data = BasicDetail::whereRelation('getShortlist','by_reg_id','=', $reg_id)->with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
      
     return response()->json($data,200);
   }
