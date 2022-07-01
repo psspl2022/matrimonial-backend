@@ -14,6 +14,7 @@ use App\Models\CareerDetail;
 use App\Models\Age;
 use App\Models\SendInterest;
 use App\Models\Shortlist;
+use App\Models\UserRegister;
 
 class DesiredController extends Controller
 {
@@ -308,12 +309,11 @@ class DesiredController extends Controller
                     }
                   
                 
-                $basicData = BasicDetail::with('getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','height','religion','caste','mother_tongue','city','maritial_status')->where('reg_id', $data2[$i]->reg_id)->where('reg_id', '!=' , Auth::user()->user_reg_id)->first();
+                $basicData = BasicDetail::with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','height','religion','caste','mother_tongue','city','maritial_status')->where('reg_id', $data2[$i]->reg_id)->where('reg_id', '!=' , Auth::user()->user_reg_id)->first();
                 $careerData = CareerDetail::with('getIncome:id,income','getOccupation:id,occupation','getEducation:id,education')->select('income','occupation','highest_qualification')->where('reg_id', $data2[$i]->reg_id)->where('reg_id', '!=' , Auth::user()->user_reg_id)->first();
-                $profile_image = VerifyUser::where('by_reg_id', $data2[$i]->reg_id)->select('identity_card_doc')->first();
                 $intrestData = SendInterest::where('by_reg_id', Auth::user()->user_reg_id)->pluck('reg_id')->toArray();
                 $shortlistData = Shortlist::where('by_reg_id', Auth::user()->user_reg_id)->pluck('saved_reg_id')->toArray();
-                
+                          
             }
                 
                 $percentage =  round((($counter/$desired_count)*100),0);
@@ -325,7 +325,6 @@ class DesiredController extends Controller
                     $data[$i][3] = $careerData;
                     $data[$i][4] = $intrestData;  
                     $data[$i][5] = $shortlistData;
-                    $data[$i][6] = $profile_image;
                      
                 }         
              

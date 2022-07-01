@@ -42,7 +42,7 @@ class DetailProfileController extends Controller
 
         $data['interest'] = SendInterest::where('by_reg_id', Auth::user()->user_reg_id)->where('reg_id', $view_reg_id)->count();
         $data['shortlist'] = Shortlist::where('by_reg_id', Auth::user()->user_reg_id)->where('saved_reg_id', $view_reg_id)->count();
-        $data['basicData'] = BasicDetail::where('reg_id',$view_reg_id)->with('getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city','maritial_status')->first();
+        $data['basicData'] = BasicDetail::where('reg_id',$view_reg_id)->with('getUserRegister:id,gender','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city','maritial_status')->first();
         $data['img_file'] = VerifyUser::select('identity_card_doc')->where('by_reg_id', $view_reg_id)->first();
 
         return response()->json($data, 200);

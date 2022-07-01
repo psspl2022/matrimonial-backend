@@ -16,6 +16,14 @@ class BasicDetail extends Model implements Auditable
     
     protected $table = 'basic_details';
     public $timestamps = false;
+
+    public function getProfileImage(){
+        return $this->hasOne(VerifyUser::class,'by_reg_id','reg_id');
+    }
+
+    public function getUserRegister(){
+        return $this->hasOne(UserRegister::class,'id','reg_id');
+    }
     
     public function getLifeStyle(){
         return $this->hasOne(LifeStyle::class,'reg_id','reg_id');
