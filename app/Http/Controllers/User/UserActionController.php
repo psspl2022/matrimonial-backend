@@ -45,7 +45,7 @@ class UserActionController extends Controller
         $reg_id = Auth::user()->user_reg_id;
         $data1 = SendInterest::where('reg_id', $reg_id)->where('revert','=', '0')->pluck('by_reg_id')->toArray();
         
-        $basicData = BasicDetail::with('getUserRegister:id,gender','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->whereIn('reg_id', $data1)->get();
+        $basicData = BasicDetail::with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->whereIn('reg_id', $data1)->get();
                              
         $data = $basicData;    
         
@@ -76,7 +76,7 @@ class UserActionController extends Controller
     public function interestSent(){        
         $reg_id = Auth::user()->user_reg_id;        
         
-        $basicData = BasicDetail::whereRelation('getInterestSent','by_reg_id','=', $reg_id)->whereRelation('getInterestSent','revert','=', '0')->with('getUserRegister:id,gender','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
+        $basicData = BasicDetail::whereRelation('getInterestSent','by_reg_id','=', $reg_id)->whereRelation('getInterestSent','revert','=', '0')->with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
                              
         $data = $basicData;    
         
