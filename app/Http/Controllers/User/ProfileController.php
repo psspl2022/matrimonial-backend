@@ -638,5 +638,13 @@ class ProfileController extends Controller
             return response()->json(['error_msg'=>'Image not uploaded yet']);
         }
     }
+
+
+    public function getAllUserProfiles(){
+        $user_id = Auth::user()->id;
+        $data = BasicDetail::with('getCareer:career_details.reg_id,highest_qualification,occupation,income','getLifeStyle:lifestyle_details.reg_id,diet_habit,drink_habit,smoking_habit,challenged')->where('reg_id', '!=' , Auth::user()->user_reg_id)->get();
+    
+        return response()->json($data, 200);
+    }
     
 }

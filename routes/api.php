@@ -145,6 +145,10 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/desired', [DetailProfilecontroller::class, 'desired']);
 
 
+    // All User Profiles
+    Route::get('/getAllUserProfiles',[ProfileController::class,'getAllUserProfiles']);
+
+
 
 
 
