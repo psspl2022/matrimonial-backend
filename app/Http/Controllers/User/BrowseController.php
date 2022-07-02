@@ -8,6 +8,7 @@ use Validator;
 use Illuminate\Http\Request;
 use App\Models\BasicDetail;
 use App\Models\ProfileVisit;
+use App\Models\UserRegister;
 
 class BrowseController extends Controller
 {
@@ -16,7 +17,7 @@ class BrowseController extends Controller
 
     $reg_id = Auth::user()->user_reg_id;        
         
-    $basicData = BasicDetail::whereRelation('getInterestSent','revert','=', "1")->whereRelation('getUserRegister:id,gender','getProfileImage:by_reg_id,identity_card_doc','getInterestSent','by_reg_id','=', $reg_id)->with('getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
+    $basicData = BasicDetail::whereRelation('getInterestSent','revert','=', "1")->whereRelation('getInterestSent','by_reg_id','=', $reg_id)->with('getUserRegister:id,gender','getProfileImage:by_reg_id,identity_card_doc','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
                           
     $data = $basicData;    
     
@@ -27,7 +28,7 @@ class BrowseController extends Controller
 
     $reg_id = Auth::user()->user_reg_id;        
         
-    $basicData = BasicDetail::whereRelation('getInterestReceived','revert','=', "1")->whereRelation('getUserRegister:id,gender','getProfileImage:by_reg_id,identity_card_doc','getInterestReceived','reg_id','=', $reg_id)->with('getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
+    $basicData = BasicDetail::whereRelation('getInterestReceived','revert','=', "1")->whereRelation('getInterestReceived','reg_id','=', $reg_id)->with('getUserRegister:id,gender','getProfileImage:by_reg_id,identity_card_doc','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
                           
     $data = $basicData;    
     
@@ -53,6 +54,16 @@ class BrowseController extends Controller
   public function visitByProfile($id){
 
     $data = ProfileVisit::where('reg_id', $id)->get();
+
+    return response()->json('msg','Profile visited by ');
+  }
+
+
+  public function dailyRecommendation($id){
+    $reg_id = Auth::user()->user_reg_id;  
+    $gender = UserRegister::where('id', $reg_id)->select->('gender');   
+
+    $data = BasicDetail::with('getUserRegister:id,gender','getProfileImage:by_reg_id,identity_card_doc','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->random(2)->get();
 
     return response()->json('msg','Profile visited by ');
   }
