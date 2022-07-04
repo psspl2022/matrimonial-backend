@@ -80,6 +80,12 @@ class BasicDetail extends Model implements Auditable
         return $this->hasOneThrough(Education::class,CareerDetail::class,'reg_id','id','reg_id','highest_qualification');
     }
 
+    public function getAge() {
+        // $dob1 = Carbon::parse($this->dob);
+        // return $dob1->diffInYears(Carbon::now());
+        // return Carbon::now()->diffInYears($this->dob);
+    }
+
 
       
 

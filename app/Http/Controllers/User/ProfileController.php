@@ -642,7 +642,7 @@ class ProfileController extends Controller
 
     public function getAllUserProfiles(){
         $user_id = Auth::user()->id;
-        $data = BasicDetail::with('getCareer:career_details.reg_id,highest_qualification,occupation,income','getLifeStyle:lifestyle_details.reg_id,diet_habit,drink_habit,smoking_habit,challenged')->where('reg_id', '!=' , Auth::user()->user_reg_id)->get();
+        $data = BasicDetail::with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name', 'getIncome:incomes.income', 'getEducation:educations.education', 'getShortlist:id,saved_reg_id', 'getInterestReceived:id,reg_id')->select('reg_id','name','dob', 'height','religion','caste','mother_tongue','city','maritial_status')->where('reg_id', '!=' , Auth::user()->user_reg_id)->get();
     
         return response()->json($data, 200);
     }
