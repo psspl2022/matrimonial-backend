@@ -17,7 +17,7 @@ class BrowseController extends Controller
 
     $reg_id = Auth::user()->user_reg_id;        
         
-    $basicData = BasicDetail::whereRelation('getInterestSent','revert','=', "1")->whereRelation('getInterestSent','by_reg_id','=', $reg_id)->with('getUserRegister:id,gender','getProfileImage:by_reg_id,identity_card_doc','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
+    $basicData = BasicDetail::whereRelation('getInterestSent','revert','=', "1")->with('getUserRegister:id,gender','getProfileImage:by_reg_id,identity_card_doc','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
                           
     $data = $basicData;    
     
@@ -28,7 +28,7 @@ class BrowseController extends Controller
 
     $reg_id = Auth::user()->user_reg_id;        
         
-    $basicData = BasicDetail::whereRelation('getInterestReceived','revert','=', "1")->whereRelation('getInterestReceived','reg_id','=', $reg_id)->with('getUserRegister:id,gender','getProfileImage:by_reg_id,identity_card_doc','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
+    $basicData = BasicDetail::whereRelation('getInterestReceived','revert','=', "1")->with('getUserRegister:id,gender','getProfileImage:by_reg_id,identity_card_doc','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
                           
     $data = $basicData;    
     
@@ -39,7 +39,7 @@ class BrowseController extends Controller
 
     $reg_id = Auth::user()->user_reg_id;        
         
-    $data = BasicDetail::whereRelation('getShortlist','by_reg_id','=', $reg_id)->with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
+    $data = BasicDetail::with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->get();
      
     return response()->json($data,200);
   }
@@ -59,12 +59,29 @@ class BrowseController extends Controller
   }
 
 
-  public function dailyRecommendation($id){
+  public function dailyRecommendation(){
     $reg_id = Auth::user()->user_reg_id;  
-    $gender = UserRegister::where('id', $reg_id)->select->('gender');   
+    $gender = (int)(UserRegister::where('id', $reg_id)->first('gender'))->gender;   
+    
+    if($gender == 1  || $gender == 2)
+    {$data = BasicDetail::whereRelation('getUserRegister', 'gender','!=', $gender)->with('getInterestSent:reg_id,reg_id','getshortlist:saved_reg_id,saved_reg_id','getUserRegister:id,gender','getProfileImage:by_reg_id,identity_card_doc','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->inRandomOrder()->limit(2)->get();
+    } else{
+      $data = BasicDetail::with('getInterestSent:reg_id,reg_id','getshortlist:saved_reg_id,saved_reg_id','getUserRegister:id,gender','getProfileImage:by_reg_id,identity_card_doc','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->where('reg_id', '!=', $reg_id)->inRandomOrder()->limit(2)->get();
+    }
 
-    $data = BasicDetail::with('getUserRegister:id,gender','getProfileImage:by_reg_id,identity_card_doc','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->random(2)->get();
+    return response()->json($data, 200);
+  }
 
-    return response()->json('msg','Profile visited by ');
+  public function latestProfile(){
+    $reg_id = Auth::user()->user_reg_id;  
+    $gender = (int)(UserRegister::where('id', $reg_id)->first('gender'))->gender;   
+    
+    if($gender == 1  || $gender == 2)
+    {$data = BasicDetail::whereRelation('getUserRegister', 'gender','!=', $gender)->with('getInterestSent:reg_id,reg_id','getshortlist:saved_reg_id,saved_reg_id','getUserRegister:id,gender','getProfileImage:by_reg_id,identity_card_doc','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->orderByDesc('id')->limit(2)->get();
+    } else{
+      $data = BasicDetail::with('getInterestSent:reg_id,reg_id','getshortlist:saved_reg_id,saved_reg_id','getUserRegister:id,gender','getProfileImage:by_reg_id,identity_card_doc','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->where('reg_id', '!=', $reg_id)->orderByDesc('id')->limit(2)->get();
+    }
+    
+    return response()->json($data, 200);
   }
 }

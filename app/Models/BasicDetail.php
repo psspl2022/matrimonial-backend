@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class BasicDetail extends Model implements Auditable
@@ -50,15 +51,15 @@ class BasicDetail extends Model implements Auditable
     }
 
     public function getInterestReceived(){
-        return $this->hasOne(SendInterest::class,'by_reg_id','reg_id');
+        return $this->hasOne(SendInterest::class,'by_reg_id','reg_id')->where('by_reg_id',Auth::user()->user_reg_id);
     }
 
     public function getInterestSent(){
-        return $this->hasOne(SendInterest::class,'reg_id','reg_id');
+        return $this->hasOne(SendInterest::class,'reg_id','reg_id')->where('by_reg_id',Auth::user()->user_reg_id);
     }
 
     public function getShortlist(){
-        return $this->hasOne(Shortlist::class,'saved_reg_id','reg_id');
+        return $this->hasOne(Shortlist::class,'saved_reg_id','reg_id')->where('by_reg_id',Auth::user()->user_reg_id);
     }
 
     

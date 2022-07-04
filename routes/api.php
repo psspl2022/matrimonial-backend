@@ -99,9 +99,11 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/acceptMe',[BrowseController::class,'acceptMe']);
     Route::get('/acceptByMe',[BrowseController::class,'acceptByMe']);
     Route::get('/getShortlist',[BrowseController::class,'getShortlist']);
+    Route::get('/dailyRecommendation',[BrowseController::class,'dailyRecommendation']);
+    Route::get('/latestProfile',[BrowseController::class,'latestProfile']);
 
     //Dropdown API
-
+    
     Route::get('/basicDropdown',[DropdownController::class, 'basicDropdown']);
     Route::get('/careerDropdown',[DropdownController::class, 'careerDropdown']);
     Route::get('/familyDropdown',[DropdownController::class, 'familyDropdown']);
