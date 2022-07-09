@@ -46,6 +46,10 @@ class BasicDetail extends Model implements Auditable
         return $this->hasOne(MotherTongue::class,'id','mother_tongue');
     }
 
+    public function getState(){
+        return $this->hasOne(State::class,'id','state');
+    }
+
     public function getCity(){
         return $this->hasOne(City::class,'id','city');
     }

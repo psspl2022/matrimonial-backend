@@ -49,7 +49,7 @@ class ProfileController extends Controller
         $data->reg_id = Auth::user()->user_reg_id;
         $data->name = $req->name;
         $data->dob = $req->dob;
-        $data->marital_status = $req->maritial_status;
+        $data->marital_status = $req->marital_status;
         $data->religion = $req->religion;
         $data->caste = $req->caste;
         // $data->sub_caste = $req->sub_caste;
@@ -642,7 +642,7 @@ class ProfileController extends Controller
 
     public function getAllUserProfiles(){
         $user_id = Auth::user()->id;
-        $data = BasicDetail::with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name', 'getIncome:incomes.income', 'getEducation:educations.education', 'getShortlist:id,saved_reg_id', 'getInterestReceived:id,reg_id')->select('reg_id','name','dob', 'height','religion','caste','mother_tongue','city','maritial_status')->where('reg_id', '!=' , Auth::user()->user_reg_id)->get();
+        $data = BasicDetail::with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getState:id,name','getCity:id,name','getOccupation:occupations.id,occupations.occupation', 'getIncome:incomes.income', 'getEducation:educations.education', 'getShortlist:id,saved_reg_id', 'getInterestReceived:id,reg_id')->select('reg_id','name','dob', 'height','religion','caste','mother_tongue','city','state','maritial_status')->where('reg_id', '!=' , Auth::user()->user_reg_id)->get();
     
         return response()->json($data, 200);
     }

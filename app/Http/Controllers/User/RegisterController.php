@@ -35,6 +35,7 @@ class RegisterController extends Controller
         $data = new UserRegister();
         $data->matrimony_id = $matrimony_id;
         $data->profile_for = $req->for;
+        $data->gender = $req->gender;
         $data->email = $req->email;
         $data->contact = $req->contact;
         $data->stage_no = 1;

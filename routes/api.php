@@ -56,6 +56,11 @@ Route::get('/getFamilyTypeList',[FamilyTypeController::class,'getFamilyTypeList'
 Route::get('/desiredDropdown',[DropdownController::class, 'desiredDropdown']);
 Route::post('/return-membership', [CheckoutController::class, 'returnRegister']);
 
+
+//Home Browse Route
+Route::get('/browseProfileBy',[BrowseController::class,'browseProfileBy']);
+
+
 Route::middleware('auth:api')->group(function () {
     Route::get('/logout',[AuthenticationController::class,'logout']);
 

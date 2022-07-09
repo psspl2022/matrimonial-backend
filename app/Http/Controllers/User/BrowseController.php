@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 use App\Models\BasicDetail;
 use App\Models\ProfileVisit;
 use App\Models\UserRegister;
+use App\Models\Religion;
+use App\Models\Caste;
+use App\Models\MotherTongue;
+use App\Models\State;
+use App\Models\City;
+use App\Models\Occupation;
 
 class BrowseController extends Controller
 {
@@ -81,6 +87,18 @@ class BrowseController extends Controller
     } else{
       $data = BasicDetail::with('getInterestSent:reg_id,reg_id','getshortlist:saved_reg_id,saved_reg_id','getUserRegister:id,gender','getProfileImage:by_reg_id,identity_card_doc','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->where('reg_id', '!=', $reg_id)->orderByDesc('id')->limit(2)->get();
     }
+    
+    return response()->json($data, 200);
+  }
+
+  public function browseProfileBy(){  
+        $data['religion'] = Religion::select('id','religion')->get();
+        $data['caste'] = Caste::select('id','caste')->get();        
+        $data['mother_tongue'] = MotherTongue::select('id','type','mother_tongue')->get();
+        $data['state'] = State::select('id','name',)->where('country_id', 101)->get();
+        $data['city'] = City::select('id','name',)->wherE('country_id', 101)->get();        
+        $data['occupation'] = Occupation::select('id','occupation')->get();
+        
     
     return response()->json($data, 200);
   }

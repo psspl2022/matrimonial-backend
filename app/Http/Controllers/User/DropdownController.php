@@ -73,6 +73,7 @@ class DropdownController extends Controller
         $response['mother_tongue'] = MotherTongue::select('id','type','mother_tongue')->get();
         $response['religion'] = Religion::select('id','religion')->get();
         $response['sect'] = Sect::select('id','name')->get();
+        $response['residence'] = Residence::select('id','residence')->get();
 
         return response($response, 200);
     }

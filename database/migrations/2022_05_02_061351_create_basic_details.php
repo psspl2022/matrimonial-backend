@@ -18,7 +18,7 @@ class CreateBasicDetails extends Migration
             $table->integer('reg_id')->unsigned()->nullable(); 
             $table->string('name',100);
             $table->timestamp('dob')->nullable();
-            $table->enum('maritial_status', ['0','1', '2','3','4','5'])->default('0')->comment(' 0=NULL, 1=Never-Marrired, 2=Awaiting-divorce, 3=Divorced, 4=Widowed, 5=Anulled');
+            $table->enum('marital_status', ['0','1', '2','3','4','5'])->default('0')->comment(' 0=NULL, 1=Never-Marrired, 2=Awaiting-divorce, 3=Divorced, 4=Widowed, 5=Anulled');
             $table->integer('religion')->unsigned()->nullable();
             $table->integer('caste')->unsigned()->nullable();
             $table->integer('sub_caste')->unsigned()->nullable();
