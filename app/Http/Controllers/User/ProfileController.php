@@ -20,6 +20,7 @@ use App\Models\Income;
 use App\Models\VerifyUser;
 use App\Models\LikeDetails;
 use Mail;
+use Mockery\Undefined;
 
 class ProfileController extends Controller
 {
@@ -146,11 +147,11 @@ class ProfileController extends Controller
 
         $data = new CareerDetail();
         $data->reg_id = Auth::user()->user_reg_id;
-        $data->highest_qualification = $req->highest_qualification;
+        $data->highest_qualification = ($req->highest_qualification!='undefined') ? $req->highest_qualification : null;
         $data->schooling = $req->schooling;
-        $data->ug_qualification = $req->ug_qualification;
+        $data->ug_qualification = ($req->ug_qualification!='undefined') ? $req->ug_qualification : null;
         // $data->ug_clg = $req->ug_clg;
-        $data->pg_qualification = $req->pg_qualification;
+        $data->pg_qualification = ($req->pg_qualification!='undefined') ? $req->pg_qualification : null;
         // $data->pg_clg = $req->pg_clg;
         $data->employement_sector = $req->employement_sector;
         $data->occupation = $req->occupation;
@@ -615,6 +616,11 @@ class ProfileController extends Controller
                         'identity_card_doc'=>$filename,
                         
                     ]);
+                    if($data){
+                        $data1 = UserRegister::find($id);
+                        $data1->stage_no = 6;
+                        $data1->save();
+                    }
             return response()->json(['msg'=>'Image Uploaded Succesfully']);
         }
         else {
