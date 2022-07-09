@@ -58,14 +58,11 @@ class ProfileController extends Controller
         $data->horrorscope_match_required = $req->horrorscope_match_required;
         $data->height = $req->height;
         $data->manglik = $req->manglik;
+        $data->residence = ($req->residence!='undefined') ? $req->residence : null;
         $data->country = $req->country;
         $data->state = $req->state;
         $data->city = $req->city;
         $data->pincode = $req->pincode;
-        // $data->sect = $req->sect;
-        // $data->live_with_family = $req->live_with_family;
-        // $data->description = $req->description;
-        // $data->added_by = Auth::user()->id;
         if($data->save()){
 
             $data1 = UserRegister::find(Auth::user()->user_reg_id);
@@ -82,54 +79,7 @@ class ProfileController extends Controller
         }        
     }
 
-    // public function updateBasic($id, Request $req){
-    //     $validator = Validator::make($req->all(),[
-    //         'name' => 'required',
-    //         // 'dob' => 'required',
-    //         // 'maritial_status' => 'required',
-    //         // 'religion' => 'required',
-    //         // 'caste' => 'required',
-    //         // 'sub_caste' => 'required',
-    //         // 'mother_tongue' => 'required',
-    //         // 'horrorscope_match_required' => 'required',
-    //         // 'height' => 'required',
-    //         // 'manglik' => 'required',
-    //         // 'country' => 'required',
-    //         // 'state' => 'required',
-    //         // 'city' => 'required',
-    //         // 'city_live_in' => 'required',
-    //         // 'sect' => 'required',
-    //         // 'live_with_family' => 'required',
-    //         // 'desc' => 'required'
-    //     ]);
-    //     // return response()->json($req->name);
-    //     $data = BasicDetail::find($id);
-    //     // $data->user_reg_id = $user_reg_id;
-    //     $data->name = $req->name;
-    //     $data->dob = $req->dob;
-    //     $data->maritial_status = $req->maritial_status;
-    //     $data->religion = $req->religion;
-    //     $data->caste = $req->caste;
-    //     $data->sub_caste = $req->sub_caste;
-    //     $data->mother_tongue = $req->mother_tongue;
-    //     $data->horrorscope_match_required = $req->horrorscope_match_required;
-    //     $data->height = $req->height;
-    //     $data->manglik = $req->manglik;
-    //     $data->country = $req->country;
-    //     $data->state = $req->state;
-    //     $data->city = $req->city;
-    //     $data->sect = $req->sect;
-    //     $data->live_with_family = $req->live_with_family;
-    //     $data->income = $req->income;
-    //     $data->description = $req->description;
-    //     $data->added_by = Auth::user()->id;
-    //     $data->save();
-       
-    //     if($validator->fails()){
-    //         return response()->json($validator->errors(),202);
-    //     }        
-    // }
-
+  
 
     public function createCareer(Request $req){
         $validator = Validator::make($req->all(),[
