@@ -137,7 +137,7 @@ class ProfileController extends Controller
             // 'married_sister_count'=>'required',
             // 'family_address'=>'required',
             // 'native_state'=>'required',
-            // 'family_live_in'=>'required',
+            // 'native_state'=>'required',
             // 'family_income'=>'required',
             // 'gotra'=>'required',
             // 'about_family'=>'required'            
@@ -156,7 +156,7 @@ class ProfileController extends Controller
         // $data->married_sister_count = $req->married_sister_count;
         // $data->family_address = $req->family_address;
         $data->native_city = $req->native_city;
-        $data->family_live_in = $req->family_live_in;
+        $data->native_state = $req->native_state;
         // $data->family_income = $req->family_income;
         // $data->gotra = $req->gotra;
         $data->about_family = $req->about_family;
@@ -210,20 +210,20 @@ class ProfileController extends Controller
 
         $data = BasicDetail::find(1);
         $data->name = $req->name;
-        // $data->dob = $req->dob;
-        // $data->maritial_status = $req->maritial_status;
-        // $data->religion = $req->religion;
-        // $data->caste = $req->caste;
-        // $data->sub_caste = $req->sub_caste;
-        // $data->mother_tongue = $req->mother_tongue;
-        // $data->horrorscope_match_required = $req->horrorscope_match_required;
-        // $data->height = $req->height;
-        // $data->manglik = $req->manglik;
-        // $data->country = $req->country;
-        // $data->state = $req->state;
-        // $data->city = $req->city;
-        // $data->sect = $req->sect;
-        // $data->live_with_family = $req->live_with_family;
+        $data->dob = $req->dob;
+        $data->maritial_status = $req->maritial_status;
+        $data->religion = $req->religion;
+        $data->caste = $req->caste;
+        $data->sub_caste = $req->sub_caste;
+        $data->mother_tongue = $req->mother_tongue;
+        $data->horrorscope_match_required = $req->horrorscope_match_required;
+        $data->height = $req->height;
+        $data->manglik = $req->manglik;
+        $data->country = $req->country;
+        $data->state = $req->state;
+        $data->city = $req->city;
+        $data->sect = $req->sect;
+        $data->live_with_family = $req->live_with_family;
         if($data->save()){
             return response()->json( 'msg','Basic Details updated Succesfully' , 200);
         }else{
@@ -250,14 +250,15 @@ class ProfileController extends Controller
     public function EditAbout(Request $req){ 
         
         $id = Auth::user()->user_reg_id;
-        // $id = 1;
         $data = BasicDetail::where('reg_id',$id)->update(['description' => $req->yourself]);
 
         $data1 = FamilyDetail::where('reg_id',$id)->update(['about_family' => $req->family]);
 
         $data2 = CareerDetail::where('reg_id',$id)->update(['express_yourself' => $req->career]);
-        
-        return response()->json(['msg'=>'About Me Data has been updated successfully!']);  
+         
+        if($data->save() && $data1->save() && $data2->save()){
+            return response()->json(['msg'=>'About Me Data has been updated successfully!']); 
+        } 
     } 
 
     public function showCareerById(){  
@@ -326,7 +327,7 @@ class ProfileController extends Controller
             // 'married_sister_count'=>'required',
             // 'family_address'=>'required',
             // 'native_state'=>'required',
-            // 'family_live_in'=>'required',
+            // 'native_state'=>'required',
             // 'family_income'=>'required',
             // 'gotra'=>'required',
             // 'gotra_maternal'=>'required',
@@ -339,14 +340,16 @@ class ProfileController extends Controller
         'father_occupation' => $req->father_occupation, 
         'mother_occupation' => $req->mother_occupation,
         'brother_count' => $req->brother_count,
-        'sister_count' => $req->sister_count,
+        'married_brother_count' => $req->married_brother_count,
+        'sister_count' => $req->sister_count,        
+        'married_sister_count' => $req->married_sister_count,
         'gotra' => $req->gotra,
         'gotra_maternal' => $req->gotra_maternal,
         'family_status' => $req->family_status,
         'family_values' => $req->family_values,
         'family_type' => $req->family_type,
         'family_income' => $req->family_income,
-        'family_live_in' => $req->family_live_in,
+        'native_state' => $req->native_state,
         'native_city' => $req->native_city,
         'living_with_parent' => $req->living_with_parent
     ]);
@@ -461,6 +464,7 @@ class ProfileController extends Controller
             ['reg_id'=>$id],
             [
                 'reg_id'=>$id,
+                 'color'=>$req->color,
                 'hobbies'=>$req->hobbies,
                 'interest'=>$req->interest,
                 'music'=>$req->music,
@@ -598,7 +602,7 @@ class ProfileController extends Controller
 
     public function getAllUserProfiles(){
         $user_id = Auth::user()->id;
-        $data = BasicDetail::with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getState:id,name','getCity:id,name','getOccupation:occupations.id,occupations.occupation', 'getIncome:incomes.income', 'getEducation:educations.education', 'getShortlist:id,saved_reg_id', 'getInterestReceived:id,reg_id')->select('reg_id','name','dob', 'height','religion','caste','mother_tongue','city','state','maritial_status')->where('reg_id', '!=' , Auth::user()->user_reg_id)->get();
+        $data = BasicDetail::with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getState:id,name','getCity:id,name','getOccupation:occupations.id,occupations.occupation', 'getIncome:incomes.income', 'getEducation:educations.education', 'getShortlist:id,saved_reg_id', 'getInterestReceived:id,reg_id')->select('reg_id','name','dob', 'height','religion','caste','mother_tongue','city','state','marital_status')->where('reg_id', '!=' , Auth::user()->user_reg_id)->get();
     
         return response()->json($data, 200);
     }

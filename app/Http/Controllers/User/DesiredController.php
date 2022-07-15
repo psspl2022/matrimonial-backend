@@ -198,6 +198,7 @@ class DesiredController extends Controller
               
          
               for($i= 0; $i<$count; $i++){   
+                date('Y-m-d', strtotime($years . ' years ago'));
                 $dob = date('Y-m-d',strtotime($data2[$i]->dob));
                 $age = (\Carbon\Carbon::parse($dob)->age);
                 $age_id = Age::select('id')->where('age', $age)->first();
@@ -227,7 +228,7 @@ class DesiredController extends Controller
                 }
                 if(($data1->marital != NULL)){
                     $desired_count++;
-                    if(in_array($data2[$i]->maritial_status, $marital_arr )){
+                    if(in_array($data2[$i]->marital_status, $marital_arr )){
                         $counter++;         
                     }
                 }
@@ -309,7 +310,7 @@ class DesiredController extends Controller
                     }
                   
                 
-                $basicData = BasicDetail::with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','height','religion','caste','mother_tongue','city','maritial_status')->where('reg_id', $data2[$i]->reg_id)->where('reg_id', '!=' , Auth::user()->user_reg_id)->first();
+                $basicData = BasicDetail::with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','height','religion','caste','mother_tongue','city','marital_status')->where('reg_id', $data2[$i]->reg_id)->where('reg_id', '!=' , Auth::user()->user_reg_id)->first();
                 $careerData = CareerDetail::with('getIncome:id,income','getOccupation:id,occupation','getEducation:id,education')->select('income','occupation','highest_qualification')->where('reg_id', $data2[$i]->reg_id)->where('reg_id', '!=' , Auth::user()->user_reg_id)->first();
                 $intrestData = SendInterest::where('by_reg_id', Auth::user()->user_reg_id)->pluck('reg_id')->toArray();
                 $shortlistData = Shortlist::where('by_reg_id', Auth::user()->user_reg_id)->pluck('saved_reg_id')->toArray();

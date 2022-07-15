@@ -25,9 +25,14 @@ class BasicDetail extends Model implements Auditable
     public function getUserRegister(){
         return $this->hasOne(UserRegister::class,'id','reg_id');
     }
-    
+    public function getFamily(){
+        return $this->hasOne(FamilyDetail::class,'reg_id','reg_id');
+    }
     public function getLifeStyle(){
         return $this->hasOne(LifeStyle::class,'reg_id','reg_id');
+    }
+    public function getLikes(){
+        return $this->hasOne(LikeDetails::class,'reg_id','reg_id');
     }
 
     public function getHeight(){

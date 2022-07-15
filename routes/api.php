@@ -43,9 +43,10 @@ use App\Http\Controllers\User\DetailProfileController;
 Route::post('/register',[AuthenticationController::class,'register']);
 Route::post('/login',[AuthenticationController::class,'login']);
 Route::get('/login',[AuthenticationController::class,'login'])->name('login');
-
-
 Route::get('/getLoginUserDetails', [RegisterController::class, 'getLoginUserDetails']);
+Route::post('/postBrowseProfile',[BrowseController::class,'browseProfile']);
+Route::post('/searchProfile',[BrowseController::class,'searchProfile']);
+Route::get('/homeProfile',[BrowseController::class,'homeProfile']);
 
 //ADMIN REGISTER USER
 
