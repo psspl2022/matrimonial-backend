@@ -31,8 +31,13 @@ use App\Models\Residence;
 
 class DropdownController extends Controller
 {
-    public function countryDropdown(){      
-        $response['country'] = Country::select('id','name')->get();
+    public function countryDropdown($r_id){     
+        if($r_id == '1'){
+            $response['country'] = Country::where('id',1)->select('id','name')->get();
+        } else{
+            $response['country'] = Country::where('id','!=',1)->select('id','name')->get();
+        }
+       
         return response($response, 200);
     }
     
@@ -66,9 +71,13 @@ class DropdownController extends Controller
         return response($response, 200);
     }
 
+    public function casteDropdown($r_id){
+      
+        $response['sect'] = caste::select('id','name')->where('status','1')->get();
+        return response($response, 200);
+    }
+
     public function basicDropdown(){
-        $response['caste'] = Caste::select('id','caste')->get();
-        $response['country'] = Country::select('id','name')->get();
         $response['height'] = Height::select('id','height')->get();
         $response['mother_tongue'] = MotherTongue::select('id','type','mother_tongue')->get();
         $response['religion'] = Religion::select('id','religion')->get();

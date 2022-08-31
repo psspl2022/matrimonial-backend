@@ -115,9 +115,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/familyDropdown',[DropdownController::class, 'familyDropdown']);
     Route::get('/likesDropdown',[DropdownController::class, 'likesDropdown']);
     
-    Route::get('/countryDropdown',[DropdownController::class, 'countryDropdown']);
+    Route::get('/countryDropdown/{r_id}',[DropdownController::class, 'countryDropdown']);
     Route::get('/stateDropdown/{c_id}',[DropdownController::class, 'stateDropdown']);
     Route::get('/cityDropdown/{s_id}',[DropdownController::class, 'cityDropdown']);
+    Route::get('/casteDropdown/{r_id}',[DropdownController::class, 'casteDropdown']);
 
     //Masters
     Route::get('/allStateDropdown',[DropdownController::class, 'allStateDropdown']);

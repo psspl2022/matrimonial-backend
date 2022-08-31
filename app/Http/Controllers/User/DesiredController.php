@@ -315,7 +315,7 @@ class DesiredController extends Controller
                 $intrestData = SendInterest::where('by_reg_id', Auth::user()->user_reg_id)->pluck('reg_id')->toArray();
                 $shortlistData = Shortlist::where('by_reg_id', Auth::user()->user_reg_id)->pluck('saved_reg_id')->toArray();
                           
-            }
+                }
                 
                 $percentage =  round((($counter/$desired_count)*100),0);
                 if($counter>0){
