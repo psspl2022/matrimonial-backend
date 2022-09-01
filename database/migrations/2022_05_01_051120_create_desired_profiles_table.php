@@ -21,7 +21,7 @@ class CreateDesiredProfilesTable extends Migration
             $table->integer('max_age')->unsigned()->nullable();
             $table->integer('min_height')->unsigned()->nullable();
             $table->integer('max_height')->unsigned()->nullable();
-            $table->text('marital')->nullable()->comment(' 0=NULL, 1=Never-Marrired, 2=Awaiting-divorce, 3=Divorced, 4=Widowed, 5=Anulled');
+            $table->text('marital')->nullable()->comment(' 1=Never-Marrired, 2=Awaiting-divorce, 3=Divorced, 4=Widowed, 5=Anulled');
             $table->text('country')->nullable();
             $table->text('residential')->nullable();
             $table->text('religion')->nullable();

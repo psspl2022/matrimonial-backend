@@ -14,7 +14,7 @@ class LikeDetails extends Model implements Auditable
 
     protected $table = 'likes_details';
     public $timestamps = false;
-    protected $fillable = ['reg_id','hobbies','interest','music','book','fav_read','dress','tv_show','movie_type','movie','sport','cuisine','dish','vacation_destination'];
+    protected $fillable = ['reg_id', 'color','hobbies','interest','music','book','fav_read','dress','tv_show','movie_type','movie','sport','cuisine','dish','vacation_destination'];
 
     public function getColor(){
         return $this->hasOne(Color::class,'id','color');

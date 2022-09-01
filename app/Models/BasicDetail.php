@@ -60,7 +60,7 @@ class BasicDetail extends Model implements Auditable
     }
 
     public function getInterestReceived(){
-        return $this->hasOne(SendInterest::class,'by_reg_id','reg_id')->where('by_reg_id',Auth::user()->user_reg_id);
+        return $this->hasOne(SendInterest::class,'by_reg_id','reg_id')->where('reg_id',Auth::user()->user_reg_id);
     }
 
     public function getInterestSent(){

@@ -33,9 +33,9 @@ class DesiredController extends Controller
                 'max_age'=>$req->maxage,
                 'min_height'=>$req->minheight,
                 'max_height'=>$req->maxheight,
-                'marital'=>$req->marital,
-                'country'=>$req->country,
-                'residential'=> $req->residence, 
+                'marital'=>($req->marital == 'undefined'|| $req->marital== 'null') ? NULL : $req->marital,
+                'country'=>($req->country == 'undefined'|| $req->country== 'null') ? NULL : $req->country,
+                'residential'=> ($req->residence == 'undefined'|| $req->residence== 'null') ? NULL : $req->residence,
             ]
         );
 
@@ -61,10 +61,10 @@ class DesiredController extends Controller
             [
                 'reg_id'=>$reg_id,
                 'user_id'=>$user_id,
-                'religion'=>$req->religion,
-                'caste'=>$req->caste,
-                'mother_tongue'=>$req->mothertongue,
-                'manglik'=>$req->manglik,
+                'religion'=>($req->religion == 'undefined'  || $req->religion== 'null') ? NULL : $req->religion,
+                'caste'=>($req->caste == 'undefined'  || $req->caste== 'null') ? NULL : $req->caste,
+                'mother_tongue'=>($req->mothertongue == 'undefined'  || $req->mothertongue== 'null') ? NULL : $req->mothertongue,
+                'manglik'=>($req->manglik == 'undefined'|| $req->manglik== 'null') ? NULL : $req->manglik,
             ]
         );
 
@@ -90,8 +90,8 @@ class DesiredController extends Controller
             [
                 'reg_id'=>$reg_id,
                 'user_id'=>$user_id,
-                'highest_education'=>$req->education,
-                'occupation'=>$req->occupation,
+                'highest_education'=>($req->education == 'undefined'  || $req->education== 'null') ? NULL : $req->education,
+                'occupation'=>($req->occupation == 'undefined'  || $req->occupation== 'null') ? NULL : $req->occupation,
                 'min_income'=>$req->minincome,
                 'max_income'=>$req->maxincome,
             ]
@@ -119,10 +119,10 @@ class DesiredController extends Controller
             [
                 'reg_id'=>$reg_id,
                 'user_id'=>$user_id,
-                'diet'=>$req->diet,
-                'drinking'=>$req->drinking,
-                'smoking'=>$req->smoking,
-                'challenged'=>$req->challenged,
+                'diet'=>($req->diet == 'undefined'  || $req->diet== 'null') ? NULL : $req->diet,
+                'drinking'=>($req->drinking == 'undefined' ||  $req->drinking == 'null') ? NULL : $req->drinking,
+                'smoking'=>($req->smoking  == 'undefined'  || $req->smoking == 'null') ? NULL : $req->smoking,
+                'challenged'=>($req->challenged == 'undefined'  || $req->challenged == 'null') ? NULL : $req->challenged,
             ]
         );
 
@@ -173,13 +173,11 @@ class DesiredController extends Controller
     public function showDesiredProfiles(){
         $user_id = Auth::user()->id;
         $data1 = DesiredProfile::where('user_id', $user_id)->first();
-        // $data2 = BasicDetail::join('career_details', 'career_details.reg_id','=','basic_details.reg_id')->get();
+
+       if(!empty($data1)){
         $data2 = BasicDetail::with('getCareer:career_details.reg_id,highest_qualification,occupation,income','getLifeStyle:lifestyle_details.reg_id,diet_habit,drink_habit,smoking_habit,challenged')->where('reg_id', '!=' , Auth::user()->user_reg_id)->get();
-    
-        $count = count($data2);
-       
         
-    
+              $count = count($data2);       
                    
               $marital_arr = explode(",", $data1->marital);
               $country_arr = explode(",", $data1->country);
@@ -198,13 +196,13 @@ class DesiredController extends Controller
               
          
               for($i= 0; $i<$count; $i++){   
-                date('Y-m-d', strtotime($years . ' years ago'));
                 $dob = date('Y-m-d',strtotime($data2[$i]->dob));
                 $age = (\Carbon\Carbon::parse($dob)->age);
                 $age_id = Age::select('id')->where('age', $age)->first();
-                       ;      
+                            
                 $desired_count =  0;        
-                $counter = 0;   
+                $counter = 0;  
+                 
                 
                 if(($data1->min_height != NUll) && ($data1->max_height != NUll)){
                     $desired_count++;
@@ -226,6 +224,14 @@ class DesiredController extends Controller
                         $counter++;         
                     }
                 }
+
+                if(($data1->residential != NULL)){
+                    $desired_count++;
+                    if(in_array($data2[$i]->residence, $residential_arr )){
+                        $counter++;         
+                    }
+                }
+                
                 if(($data1->marital != NULL)){
                     $desired_count++;
                     if(in_array($data2[$i]->marital_status, $marital_arr )){
@@ -309,31 +315,36 @@ class DesiredController extends Controller
                         $counter++;
                     }
                   
-                
-                $basicData = BasicDetail::with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','height','religion','caste','mother_tongue','city','marital_status')->where('reg_id', $data2[$i]->reg_id)->where('reg_id', '!=' , Auth::user()->user_reg_id)->first();
-                $careerData = CareerDetail::with('getIncome:id,income','getOccupation:id,occupation','getEducation:id,education')->select('income','occupation','highest_qualification')->where('reg_id', $data2[$i]->reg_id)->where('reg_id', '!=' , Auth::user()->user_reg_id)->first();
-                $intrestData = SendInterest::where('by_reg_id', Auth::user()->user_reg_id)->pluck('reg_id')->toArray();
-                $shortlistData = Shortlist::where('by_reg_id', Auth::user()->user_reg_id)->pluck('saved_reg_id')->toArray();
-                          
                 }
+                $allData = BasicDetail::with('getInterestSent:reg_id,reg_id','getshortlist:saved_reg_id,saved_reg_id','getProfileImage:by_reg_id,identity_card_doc','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->where('reg_id', $data2[$i]->reg_id)->first();
+
+                // $careerData = CareerDetail::with('getIncome:id,income','getOccupation:id,occupation','getEducation:id,education')->has('getIncome')->has('getOccupation')->has('getEducation')->select('income','occupation','highest_qualification')->where('reg_id', $data2[$i]->reg_id)->first();
+                // $intrestData = SendInterest::where('by_reg_id', Auth::user()->user_reg_id)->pluck('reg_id')->toArray();
+                // $shortlistData = Shortlist::where('by_reg_id', Auth::user()->user_reg_id)->pluck('saved_reg_id')->toArray();
                 
+                
+                
+
                 $percentage =  round((($counter/$desired_count)*100),0);
-                if($counter>0){
-                    // $data[$i][0] = $age_id;
+                if(($counter>0 && $allData != null) ){
                     $data[$i][0] = $percentage; 
                     $data[$i][1] = $age;
-                    $data[$i][2] = $basicData;
-                    $data[$i][3] = $careerData;
-                    $data[$i][4] = $intrestData;  
-                    $data[$i][5] = $shortlistData;
-                     
-                }         
+                    $data[$i][2] = $allData;
+                    $data[$i][3] = $dob;
+                }
+            }  
              
-            }   
-
-        return response()->json($data, 200);
+            if(($counter>0 ))
+            {                     
+                return response()->json($data, 200);
+            } else{
+                return response()->json(['msg'=>'No Data Found!!'], 201);
+            }  
     
-    }  
+    }  else{
+        return response()->json(['msg'=>'Please, Fill desired details first!!'], 201);
+    }
+}
 
 }
 

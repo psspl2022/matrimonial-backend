@@ -25,7 +25,7 @@ class DashboardController extends Controller
             if($data2['dob'] != "" && $data2['dob'] != NULL ){
                 $counter++;
             }
-            if($data2['marital_status'] != "" && $data2['marital_status'] != NULL && $data2['marital_status'] != 0 ){
+            if($data2['maritial_status'] != "" && $data2['maritial_status'] != NULL && $data2['maritial_status'] != 0 ){
                 $counter++;
             }
             if($data2['religion'] != "" && $data2['religion'] != NULL && $data2['religion'] != 0 ){

@@ -7,12 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
-class LifeStyle extends Model implements Auditable
+class Language extends Model implements Auditable
 {
     use AuditableTrait;
     use HasFactory;
 
-    protected $table = 'lifestyle_details';
+    protected $table = 'languages';
     public $timestamps = false;
-    protected $fillable = ['reg_id','language_i_speak','diet_habit','drink_habit','smoking_habit','open_to_pets','own_a_house','own_a_car','blood_group','hiv_pos','thalessemia','challenged'];
 }

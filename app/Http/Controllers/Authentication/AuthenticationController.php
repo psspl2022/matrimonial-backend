@@ -131,6 +131,7 @@ class AuthenticationController extends Controller
             $responseArray['msg'] = "Login Successfully";
             $responseArray['user'] = $user;
             $responseArray['gender'] = UserRegister::where('id',$user['user_reg_id'])->select('gender')->first();
+            $responseArray['stage'] = UserRegister::where('id',$user['user_reg_id'])->select('stage_no')->first();
             
             return response()->json($responseArray,200);
         } else{

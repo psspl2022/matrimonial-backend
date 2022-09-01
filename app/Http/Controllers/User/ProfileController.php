@@ -19,6 +19,7 @@ use App\Models\Occupation;
 use App\Models\Income;
 use App\Models\VerifyUser;
 use App\Models\LikeDetails;
+use Exception;
 use Mail;
 use Mockery\Undefined;
 
@@ -28,7 +29,7 @@ class ProfileController extends Controller
         $validator = Validator::make($req->all(),[
             'name' => 'required',
             'dob' => 'required',
-            'maritial_status' => 'required',
+            'marital_status' => 'required',
             'religion' => 'required',
             'caste' => 'required',
             // 'sub_caste' => 'required',
@@ -185,11 +186,11 @@ class ProfileController extends Controller
         return response()->json($data, 200);
     }
 
-    public function editbasic(Request $req){
-        $validator = Validator::make($req->all(),[
-               'name' => 'required',
+    public function editBasic(Request $req){
+        // $validator = Validator::make($req->all(),[
+     
             // 'dob' => 'required',
-            // 'maritial_status' => 'required',
+            // 'marital_status' => 'required',
             // 'religion' => 'required',
             // 'caste' => 'required',
             // 'sub_caste' => 'required',
@@ -204,30 +205,31 @@ class ProfileController extends Controller
             // 'sect' => 'required',
             // 'live_with_family' => 'required',
             // 'desc' => 'required'
+        // ]);
+        
+        // return response()->json(['msg'=>'hello'],200); 
+// dd($req->all());
+        $id = Auth::user()->user_reg_id;
+        $data = BasicDetail::where('reg_id',$id)->update([
+            'marital_status' => $req->marital_status,
+            'religion' => $req->religion,
+            'caste' => $req->caste,
+            'mother_tongue' => $req->mother_tongue,
+            'height' => $req->height,
+            'residence' => $req->residence,
+            'country' => $req->country,
+            'state' => $req->state,
+            'city' => $req->city,
+            'sect' => $req->sect
         ]);
-        // return response()->json($req->name);
-        // $data = BasicDetail::find(Auth::user()->user_reg_id);
 
-        $data = BasicDetail::find(1);
-        $data->name = $req->name;
-        $data->dob = $req->dob;
-        $data->maritial_status = $req->maritial_status;
-        $data->religion = $req->religion;
-        $data->caste = $req->caste;
-        $data->sub_caste = $req->sub_caste;
-        $data->mother_tongue = $req->mother_tongue;
-        $data->horrorscope_match_required = $req->horrorscope_match_required;
-        $data->height = $req->height;
-        $data->manglik = $req->manglik;
-        $data->country = $req->country;
-        $data->state = $req->state;
-        $data->city = $req->city;
-        $data->sect = $req->sect;
-        $data->live_with_family = $req->live_with_family;
-        if($data->save()){
-            return response()->json( 'msg','Basic Details updated Succesfully' , 200);
+
+
+
+        if($data){
+            return response()->json( ['msg'=>'Basic Details updated Succesfully'],200);
         }else{
-            return response()->json( 'msg','Error while uploading basic details!');
+            return response()->json( ['msg'=>'Error while uploading basic details!']);
         }
        
         if($validator->fails()){
@@ -314,6 +316,7 @@ class ProfileController extends Controller
     } 
 
     public function editFamily(Request $req){     
+    
         $validator = Validator::make($req->all(),[
             // 'family_type' => 'required',
             // 'family_values'=>'required',
@@ -333,9 +336,11 @@ class ProfileController extends Controller
             // 'gotra_maternal'=>'required',
             // 'about_family'=>'required'            
         ]);
-  
+        
         $id = Auth::user()->user_reg_id;
-        $data = FamilyDetail::where('reg_id',$id)->update([
+        $data = FamilyDetail::updateOrCreate(
+            ['reg_id'=>$id],[
+        'reg_id' => $id,
         'profile_handler_name' => $req->profile_handler_name,
         'father_occupation' => $req->father_occupation, 
         'mother_occupation' => $req->mother_occupation,
@@ -385,14 +390,13 @@ class ProfileController extends Controller
 
         $data = UserRegister::where('id',$id)->update(['contact' => $req->contact,
         'alter_contact' => $req->alter_contact, 
-        'email' => $req->email,
         'alter_email' => $req->alter_email,
-        'landline' => $req->landline,
-        'time_for_call' => $req->time_for_call,
-        'contact_address' => $req->contact_address,
-        'contact_pincode' => $req->contact_pincode,
-        'parent_address' => $req->parent_address,
-        'parent_pincode' => $req->parent_pincode
+        'landline' => null,
+        // 'time_for_call' => $req->time_for_call,
+        // 'contact_address' => $req->contact_address,
+        // 'contact_pincode' => $req->contact_pincode,
+        // 'parent_address' => $req->parent_address,
+        // 'parent_pincode' => $req->parent_pincode
     ]);
       
          if($data){
@@ -424,6 +428,7 @@ class ProfileController extends Controller
             ['reg_id'=>$id],
             [
                 'reg_id'=>$id,
+                'language_i_speak'=>$req->language,
                 'diet_habit'=>$req->diet_habit,
                 'drink_habit'=>$req->drink_habit,
                 'smoking_habit'=>$req->smoking_habit,
@@ -464,7 +469,7 @@ class ProfileController extends Controller
             ['reg_id'=>$id],
             [
                 'reg_id'=>$id,
-                 'color'=>$req->color,
+                'color'=>$req->color,
                 'hobbies'=>$req->hobbies,
                 'interest'=>$req->interest,
                 'music'=>$req->music,
@@ -601,8 +606,17 @@ class ProfileController extends Controller
 
 
     public function getAllUserProfiles(){
-        $user_id = Auth::user()->id;
-        $data = BasicDetail::with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getState:id,name','getCity:id,name','getOccupation:occupations.id,occupations.occupation', 'getIncome:incomes.income', 'getEducation:educations.education', 'getShortlist:id,saved_reg_id', 'getInterestReceived:id,reg_id')->select('reg_id','name','dob', 'height','religion','caste','mother_tongue','city','state','marital_status')->where('reg_id', '!=' , Auth::user()->user_reg_id)->get();
+        $reg_id = Auth::user()->user_reg_id;  
+        $gender = (int)(UserRegister::where('id', $reg_id)->first('gender'))->gender;   
+    
+        if($gender == 1  || $gender == 2)
+        {
+            $data = BasicDetail::with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getState:id,name','getCity:id,name','getOccupation:occupations.id,occupations.occupation', 'getIncome:incomes.income', 'getEducation:educations.education', 'getShortlist:id,saved_reg_id', 'getInterestSent:reg_id,reg_id')->select('reg_id','name','dob', 'height','religion','caste','mother_tongue','city','state','marital_status')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->whereRelation('getUserRegister', 'gender','!=', $gender)->where('reg_id', '!=' , Auth::user()->user_reg_id)->get();
+        } else{
+            $data = BasicDetail::with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getState:id,name','getCity:id,name','getOccupation:occupations.id,occupations.occupation', 'getIncome:incomes.income', 'getEducation:educations.education', 'getShortlist:id,saved_reg_id', 'getInterestSent:reg_id,reg_id')->select('reg_id','name','dob', 'height','religion','caste','mother_tongue','city','state','marital_status')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->where('reg_id', '!=' , Auth::user()->user_reg_id)->get();
+        }
+
+        
     
         return response()->json($data, 200);
     }

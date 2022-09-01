@@ -142,14 +142,14 @@ class DetailProfileController extends Controller
         }
              
 
-        if(!empty($result1->marital)) 
+        if(!empty($result1->maritial)) 
         {
             $count++;
-            if(str_contains($result1->marital, $result2->maritial_status) ){
-                $data['marital'] = 1;
+            if(str_contains($result1->maritial, $result2->maritial_status) ){
+                $data['maritial'] = 1;
                 $matchCount++;
             }else{
-                $data['marital'] = 0;
+                $data['maritial'] = 0;
             }
             
         }
@@ -309,7 +309,7 @@ class DetailProfileController extends Controller
         $data['count'] = $count;
         $data['matchCount'] = $matchCount;
         $data['gender'] = UserRegister::where('id', $view_reg_id)->select('gender')->first();
-        $data['desired']['data'] = DesiredProfile::with('getMinIncome:incomes.id,income','getMaxIncome:incomes.id,income','getMinAge:ages.id,age','getMaxAge:ages.id,age','getMinHeight:heights.id,height','getMaxHeight:heights.id,height')->select('marital','manglik','diet','drinking','smoking','challenged','min_age','max_age','min_height','max_height','min_income','max_income')->where('reg_id', $view_reg_id)->first();
+        $data['desired']['data'] = DesiredProfile::with('getMinIncome:incomes.id,income','getMaxIncome:incomes.id,income','getMinAge:ages.id,age','getMaxAge:ages.id,age','getMinHeight:heights.id,height','getMaxHeight:heights.id,height')->select('maritial','manglik','diet','drinking','smoking','challenged','min_age','max_age','min_height','max_height','min_income','max_income')->where('reg_id', $view_reg_id)->first();
         $data['desired']['country'] = Country::whereIn('id', explode(',',$result1->country))->select('name')->get();
         $data['desired']['residence'] = Residence::whereIn('id', explode(',',$result1->residential))->select('residence')->get();
         $data['desired']['religion'] = Religion::whereIn('id', explode(',',$result1->religion))->select('religion')->get();

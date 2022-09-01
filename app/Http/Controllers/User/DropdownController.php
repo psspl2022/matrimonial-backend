@@ -27,15 +27,17 @@ use App\Models\Movietypes;
 use App\Models\Sports;
 use App\Models\Cuisines;
 use App\Models\Residence;
+use App\Models\Language;
+use App\Models\Color;
 
 
 class DropdownController extends Controller
 {
     public function countryDropdown($r_id){     
         if($r_id == '1'){
-            $response['country'] = Country::where('id',1)->select('id','name')->get();
-        } else{
-            $response['country'] = Country::where('id','!=',1)->select('id','name')->get();
+            $response['country'] = Country::where('id',101)->select('id','name')->get();
+        } elseif($r_id == '2'){
+            $response['country'] = Country::where('id','!=',101)->select('id','name')->get();
         }
        
         return response($response, 200);
@@ -73,7 +75,7 @@ class DropdownController extends Controller
 
     public function casteDropdown($r_id){
       
-        $response['sect'] = caste::select('id','name')->where('status','1')->get();
+        $response['caste'] = Caste::select('id','caste')->where('religion_id',$r_id)->where('status','1')->get();
         return response($response, 200);
     }
 
@@ -114,6 +116,7 @@ class DropdownController extends Controller
         $response['moviesTypes'] = Movietypes::select('id','movietype')->where('status','1')->get();
         $response['sports'] = Sports::select('id','sport_name')->where('status','1')->get();
         $response['cuisines'] = Cuisines::select('id','name')->where('status','1')->get();
+        $response['colors'] = Color::select('id','name')->where('status','1')->get();
         return response($response, 200);
     }
     
@@ -125,9 +128,14 @@ class DropdownController extends Controller
         $response['religion'] = Religion::select('id','religion')->get();
         $response['caste'] = Caste::select('id','caste')->get();
         $response['highest'] = Education::select('id','education')->get();
-        $response['occupation'] = Occupation::select('id','occupation_category','occupation')->get();
+        $response['occupation'] = Occupation::select('id','occupation')->get();
         $response['income'] = Income::select('id','income')->get();
         $response['residence'] = Residence::select('id','residence')->get();
+        return response($response, 200);
+    }
+
+    public function lifestyleDropdown(){
+        $response['language'] = Language::select('id','language')->get();
         return response($response, 200);
     }
 

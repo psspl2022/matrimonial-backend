@@ -15,6 +15,8 @@ class FamilyDetail extends Model implements Auditable
     protected $table = 'family_details';
     public $timestamps = false;
 
+    protected $fillable = ['reg_id','family_type','family_values','family_status','profile_handler_name','father_occupation','mother_occupation','brother_count','married_brother_count','sister_count','married_sister_count','native_city','native_state','living_with_parent','family_income','gotra_maternal','gotra'];
+
     public function getIncome(){
         return $this->hasOne(Income::class,'id','family_income');
     }
