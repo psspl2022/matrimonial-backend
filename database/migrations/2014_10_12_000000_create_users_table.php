@@ -14,7 +14,7 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->enum('user_type', ['0','1', '2', '3'])->default('0')->comment('0=NULL, 1=User, 2=Admin, 3=Relationsip Manager');
             $table->integer('admin_reg_id')->nullable();
             $table->integer('user_reg_id')->nullable();
