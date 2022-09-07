@@ -157,7 +157,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/likes', [DetailProfilecontroller::class, 'likes']);
     Route::post('/desired', [DetailProfilecontroller::class, 'desired']);
     // All User Profiles
-    Route::get('/getAllUserProfiles/{p}', [ProfileController::class, 'getAllUserProfiles']);
+    Route::post('/getAllUserProfiles', [ProfileController::class, 'getAllUserProfiles']);
 
 
 
