@@ -43,14 +43,36 @@ class BrowseController extends Controller
     return response()->json($data, 200);
   }
 
-  public function getShortlist()
+  public function getShortlist(Request $req)
   {
 
     $reg_id = Auth::user()->user_reg_id;
 
-    $data = BasicDetail::where('reg_id', '!=', $reg_id)->whereRelation('getshortlist', 'by_reg_id', '=', $reg_id)->with('getshortlist', 'getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->get();
-
-    return response()->json($data, 200);
+    $data = BasicDetail::where('reg_id', '!=', $reg_id)->whereRelation('getshortlist', 'by_reg_id', '=', $reg_id)->with('getshortlist', 'getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getInterestSent:reg_id,reg_id', 'getShortlist:id,saved_reg_id', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->where('reg_id', '>', $req->page)->get()->take(4);
+    $ids = BasicDetail::select('reg_id')->where('reg_id', '!=', $reg_id)->whereRelation('getshortlist', 'by_reg_id', '=', $reg_id)->get();
+    // counting number of time loop runing 
+    $i = 1;
+    // to counting number of page for set the value of current active page
+    $page = 0;
+    // to setting  current active page
+    $current = 0;
+    // key for total pagination page 
+    $key = [0];
+    foreach ($ids as $id) {
+      // whene loop reach division of 4 
+      if ($i % 4 == 0) {
+        $page++;
+        // whene rquest page and reg_id match then set current page 
+        if ($id->reg_id == $req->page) {
+          $current =  $page;
+        }
+        // whene total number off page divede by 4 then push the reg id as key 
+        array_push($key, $id->reg_id);
+      }
+      $i++;
+    }
+    $data3 = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 4), 'page' => $current];
+    return response()->json($data3, 200);
   }
 
   public function visitProfile($id)
@@ -88,6 +110,10 @@ class BrowseController extends Controller
   {
     $reg_id = Auth::user()->user_reg_id;
     $gender = (int)(UserRegister::where('id', $reg_id)->first('gender'))->gender;
+    if ($req->page == 0) {
+      $p = BasicDetail::select('reg_id')->orderByDesc('reg_id')->first();
+      $req->page = $p->reg_id + 1;
+    }
     // mother tounge
     $moth = explode(',', $req->moth);
     // Religion 
@@ -107,11 +133,11 @@ class BrowseController extends Controller
       $martital = ['0', '1', '2', '3', '4', '5'];
     }
     if ($gender == 1  || $gender == 2) {
-      $data = BasicDetail::with('getInterestSent:reg_id,reg_id', 'getshortlist:saved_reg_id,saved_reg_id', 'getUserRegister:id,gender', 'getProfileImage:by_reg_id,identity_card_doc', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->whereRelation('getUserRegister', 'gender', '!=', $gender)->where('reg_id', '!=', Auth::user()->user_reg_id)->where('reg_id', '>', $req->page)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->wherein('marital_status', $martital)->whereRelation('getIncome', 'incomes.id', '>=', $req->minincome)->whereRelation('getIncome', 'incomes.id', '<=', $req->maxincome)->whereBetween('dob', [$req->maxage, $req->minage])->whereBetween('height', [$req->minheight, $req->maxheight])->orderByDesc('id')->get()->take(4);
-      $ids =  BasicDetail::select("reg_id")->whereRelation('getUserRegister', 'gender', '!=', $gender)->where('reg_id', '!=', Auth::user()->user_reg_id)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->wherein('marital_status', $martital)->whereRelation('getIncome', 'incomes.id', '>=', $req->minincome)->whereRelation('getIncome', 'incomes.id', '<=', $req->maxincome)->whereBetween('dob', [$req->maxage, $req->minage])->whereBetween('height', [$req->minheight, $req->maxheight])->get();
+      $data = BasicDetail::with('getInterestSent:reg_id,reg_id', 'getshortlist:saved_reg_id,saved_reg_id', 'getUserRegister:id,gender', 'getShortlist:id,saved_reg_id',  'getProfileImage:by_reg_id,identity_card_doc', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->whereRelation('getUserRegister', 'gender', '!=', $gender)->where('reg_id', '!=', Auth::user()->user_reg_id)->where('reg_id', '<', $req->page)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->wherein('marital_status', $martital)->whereRelation('getIncome', 'incomes.id', '>=', $req->minincome)->whereRelation('getIncome', 'incomes.id', '<=', $req->maxincome)->whereBetween('dob', [$req->maxage, $req->minage])->whereBetween('height', [$req->minheight, $req->maxheight])->orderByDesc('reg_id')->get()->take(4);
+      $ids =  BasicDetail::select("reg_id")->whereRelation('getUserRegister', 'gender', '!=', $gender)->where('reg_id', '!=', Auth::user()->user_reg_id)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->wherein('marital_status', $martital)->whereRelation('getIncome', 'incomes.id', '>=', $req->minincome)->whereRelation('getIncome', 'incomes.id', '<=', $req->maxincome)->whereBetween('dob', [$req->maxage, $req->minage])->whereBetween('height', [$req->minheight, $req->maxheight])->orderByDesc('reg_id')->get();
     } else {
-      $data = BasicDetail::with('getInterestSent:reg_id,reg_id', 'getshortlist:saved_reg_id,saved_reg_id', 'getUserRegister:id,gender', 'getProfileImage:by_reg_id,identity_card_doc', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->where('reg_id', '!=', Auth::user()->user_reg_id)->where('reg_id', '>', $req->page)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->wherein('marital_status', $martital)->whereRelation('getIncome', 'incomes.id', '>=', $req->minincome)->whereRelation('getIncome', 'incomes.id', '<=', $req->maxincome)->whereBetween('dob', [$req->maxage, $req->minage])->whereBetween('height', [$req->minheight, $req->maxheight])->orderByDesc('id')->get()->take(4);
-      $ids =  BasicDetail::select("reg_id")->where('reg_id', '!=', Auth::user()->user_reg_id)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->wherein('marital_status', $martital)->whereRelation('getIncome', 'incomes.id', '>=', $req->minincome)->whereRelation('getIncome', 'incomes.id', '<=', $req->maxincome)->whereBetween('dob', [$req->maxage, $req->minage])->whereBetween('height', [$req->minheight, $req->maxheight])->get();
+      $data = BasicDetail::with('getInterestSent:reg_id,reg_id', 'getshortlist:saved_reg_id,saved_reg_id', 'getInterestSent:reg_id,reg_id', 'getInterestSent:reg_id,reg_id', 'getUserRegister:id,gender', 'getProfileImage:by_reg_id,identity_card_doc', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->where('reg_id', '!=', Auth::user()->user_reg_id)->where('reg_id', '<', $req->page)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->wherein('marital_status', $martital)->whereRelation('getIncome', 'incomes.id', '>=', $req->minincome)->whereRelation('getIncome', 'incomes.id', '<=', $req->maxincome)->whereBetween('dob', [$req->maxage, $req->minage])->whereBetween('height', [$req->minheight, $req->maxheight])->orderByDesc('reg_id')->get()->take(4);
+      $ids =  BasicDetail::select("reg_id")->where('reg_id', '!=', Auth::user()->user_reg_id)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->wherein('marital_status', $martital)->whereRelation('getIncome', 'incomes.id', '>=', $req->minincome)->whereRelation('getIncome', 'incomes.id', '<=', $req->maxincome)->whereBetween('dob', [$req->maxage, $req->minage])->whereBetween('height', [$req->minheight, $req->maxheight])->orderByDesc('reg_id')->get();
     }
     // counting number of time loop runing 
     $i = 1;
