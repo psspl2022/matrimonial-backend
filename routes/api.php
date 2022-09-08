@@ -108,7 +108,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/acceptByMe', [BrowseController::class, 'acceptByMe']);
     Route::get('/getShortlist', [BrowseController::class, 'getShortlist']);
     Route::get('/dailyRecommendation', [BrowseController::class, 'dailyRecommendation']);
-    Route::get('/latestProfile', [BrowseController::class, 'latestProfile']);
+    Route::post('/latestProfile', [BrowseController::class, 'latestProfile']);
 
     //Dropdown API
 
