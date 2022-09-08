@@ -208,10 +208,10 @@ class DesiredController extends Controller
                     }
                 }
 
-                if (($data1->min_age != NULL) && ($data1->max_age != NULL)) {
+                if(($data1->min_age != NULL) && ($data1->max_age != NULL) ){
                     $desired_count++;
-                    if (($data1->min_age <= $age_id['id']) && ($data1->max_age >= $age_id['id'])) {
-                        $counter++;
+                    if(($data1->min_age <= $age_id['id']) && ($data1->max_age >= $age_id['id']) ){
+                        $counter++;         
                     }
                 }
 
@@ -222,35 +222,35 @@ class DesiredController extends Controller
                     }
                 }
 
-
+                
                 if (($data1->residential != NULL)) {
                     $desired_count++;
                     if (in_array($data2[$i]->residence, $residential_arr)) {
                         $counter++;
                     }
                 }
-
+               
                 if (($data1->marital != NULL)) {
                     $desired_count++;
                     if (in_array($data2[$i]->marital_status, $marital_arr)) {
                         $counter++;
                     }
                 }
-
+                
                 if (($data1->country != NULL)) {
                     $desired_count++;
                     if (in_array($data2[$i]->country, $country_arr)) {
                         $counter++;
                     }
                 }
-
+               
                 if (($data1->religion != NULL)) {
                     $desired_count++;
                     if (in_array($data2[$i]->religion, $religion_arr)) {
                         $counter++;
                     }
                 }
-
+               
                 if (($data1->caste != NULL)) {
                     $desired_count++;
                     if (in_array($data2[$i]->caste, $caste_arr)) {
@@ -274,46 +274,46 @@ class DesiredController extends Controller
 
                 if (($data1->highest_education != NULL)) {
                     $desired_count++;
-                    if (in_array($data2[$i]->getCareer['highest_qualification'], $education_arr)) {
+                    if (in_array($data2[$i]->highest_qualification, $education_arr)) {
                         $counter++;
                     }
                 }
-
+                
                 if (($data1->occupation != NULL)) {
                     $desired_count++;
-                    if (in_array($data2[$i]->getCareer['occupation'], $occupation_arr)) {
+                    if (in_array($data2[$i]->occupation, $occupation_arr)) {
                         $counter++;
                     }
                 }
-                // return $age_id['id'];
-                if ($data2[$i]->getLifeStyle != null) {
-                    if (($data1->diet != NULL)) {
-                        $desired_count++;
-                        if (in_array($data2[$i]->getLifeStyle['diet_habit'], $diet_arr)) {
-                            $counter++;
-                        }
-                    }
-                    if (($data1->drinking != NULL)) {
-                        $desired_count++;
-                        if (in_array($data2[$i]->getLifeStyle['drink_habit'], $drinking_arr)) {
-                            $counter++;
-                        }
-                    }
+               
+                // if ($data2[$i]->getLifeStyle != null) {
+                //     if (($data1->diet != NULL)) {
+                //         $desired_count++;
+                //         if (in_array($data2[$i]->getLifeStyle['diet_habit'], $diet_arr)) {
+                //             $counter++;
+                //         }
+                //     }
+                //     if (($data1->drinking != NULL)) {
+                //         $desired_count++;
+                //         if (in_array($data2[$i]->getLifeStyle['drink_habit'], $drinking_arr)) {
+                //             $counter++;
+                //         }
+                //     }
 
-                    if (($data1->smoking != NULL)) {
-                        $desired_count++;
-                        if (in_array($data2[$i]->getLifeStyle['smoking_habit'], $smoking_arr)) {
-                            $counter++;
-                        }
-                    }
+                //     if (($data1->smoking != NULL)) {
+                //         $desired_count++;
+                //         if (in_array($data2[$i]->getLifeStyle['smoking_habit'], $smoking_arr)) {
+                //             $counter++;
+                //         }
+                //     }
 
-                    if (($data1->challenged != NULL)) {
-                        $desired_count++;
-                        if (in_array($data2[$i]->getLifeStyle['challenged'], $challenge_arr)) {
-                            $counter++;
-                        }
-                    }
-                }
+                //     if (($data1->challenged != NULL)) {
+                //         $desired_count++;
+                //         if (in_array($data2[$i]->getLifeStyle['challenged'], $challenge_arr)) {
+                //             $counter++;
+                //         }
+                //     }
+                // }
                 $allData = BasicDetail::with('getInterestSent:reg_id,reg_id', 'getshortlist:saved_reg_id,saved_reg_id', 'getProfileImage:by_reg_id,identity_card_doc', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->where('reg_id', $data2[$i]->reg_id)->first();
 
                 // $careerData = CareerDetail::with('getIncome:id,income','getOccupation:id,occupation','getEducation:id,education')->has('getIncome')->has('getOccupation')->has('getEducation')->select('income','occupation','highest_qualification')->where('reg_id', $data2[$i]->reg_id)->first();
