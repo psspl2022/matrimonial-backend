@@ -232,10 +232,10 @@ class DesiredController extends Controller
                     }
                 }
 
-                if (($data1->min_age != NULL) && ($data1->max_age != NULL)) {
+                if(($data1->min_age != NULL) && ($data1->max_age != NULL) ){
                     $desired_count++;
-                    if (($data1->min_age <= $age_id['id']) && ($data1->max_age >= $age_id['id'])) {
-                        $counter++;
+                    if(($data1->min_age <= $age_id['id']) && ($data1->max_age >= $age_id['id']) ){
+                        $counter++;         
                     }
                 }
 
@@ -246,35 +246,35 @@ class DesiredController extends Controller
                     }
                 }
 
-
+                
                 if (($data1->residential != NULL)) {
                     $desired_count++;
                     if (in_array($data2[$i]->residence, $residential_arr)) {
                         $counter++;
                     }
                 }
-
+               
                 if (($data1->marital != NULL)) {
                     $desired_count++;
                     if (in_array($data2[$i]->marital_status, $marital_arr)) {
                         $counter++;
                     }
                 }
-
+                
                 if (($data1->country != NULL)) {
                     $desired_count++;
                     if (in_array($data2[$i]->country, $country_arr)) {
                         $counter++;
                     }
                 }
-
+               
                 if (($data1->religion != NULL)) {
                     $desired_count++;
                     if (in_array($data2[$i]->religion, $religion_arr)) {
                         $counter++;
                     }
                 }
-
+               
                 if (($data1->caste != NULL)) {
                     $desired_count++;
                     if (in_array($data2[$i]->caste, $caste_arr)) {
@@ -298,14 +298,14 @@ class DesiredController extends Controller
 
                 if (($data1->highest_education != NULL)) {
                     $desired_count++;
-                    if (in_array($data2[$i]->getCareer['highest_qualification'], $education_arr)) {
+                    if (in_array($data2[$i]->highest_qualification, $education_arr)) {
                         $counter++;
                     }
                 }
-
+                
                 if (($data1->occupation != NULL)) {
                     $desired_count++;
-                    if (in_array($data2[$i]->getCareer['occupation'], $occupation_arr)) {
+                    if (in_array($data2[$i]->occupation, $occupation_arr)) {
                         $counter++;
                     }
                 }
