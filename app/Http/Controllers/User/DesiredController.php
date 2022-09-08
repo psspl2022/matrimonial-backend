@@ -166,7 +166,7 @@ class DesiredController extends Controller
         return response()->json($data, 200);
     }
 
-    public function showDesiredProfiles()
+    public function showDesiredProfiles(Request $req)
     {
         $user_id = Auth::user()->id;
         $data1 = DesiredProfile::where('user_id', $user_id)->first();
@@ -189,7 +189,7 @@ class DesiredController extends Controller
             $drinking_arr = explode(",", $data1->drinking);
             $smoking_arr = explode(",", $data1->smoking);
             $challenge_arr = explode(",", $data1->challenged);
-
+            $per = [];
 
 
             for ($i = 0; $i < $count; $i++) {
@@ -314,7 +314,7 @@ class DesiredController extends Controller
                         }
                     }
                 }
-                $allData = BasicDetail::with('getInterestSent:reg_id,reg_id', 'getshortlist:saved_reg_id,saved_reg_id', 'getProfileImage:by_reg_id,identity_card_doc', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->where('reg_id', $data2[$i]->reg_id)->first();
+
 
                 // $careerData = CareerDetail::with('getIncome:id,income','getOccupation:id,occupation','getEducation:id,education')->has('getIncome')->has('getOccupation')->has('getEducation')->select('income','occupation','highest_qualification')->where('reg_id', $data2[$i]->reg_id)->first();
                 // $intrestData = SendInterest::where('by_reg_id', Auth::user()->user_reg_id)->pluck('reg_id')->toArray();
@@ -324,14 +324,50 @@ class DesiredController extends Controller
 
 
                 $percentage =  round((($counter / $desired_count) * 100), 0);
-                if (($counter > 0 && $allData != null)) {
-                    $data[$i][0] = $percentage;
-                    $data[$i][1] = $age;
-                    $data[$i][2] = $allData;
-                    $data[$i][3] = $dob;
+                if (($counter > 0)) {
+                    $data[$i] = $data2[$i]->reg_id;
+                    $per[$i]['reg_id'] = $data2[$i]->reg_id;
+                    $per[$i]['percentage'] = $percentage;
+                    // $data[$i][3] = $dob;
                 }
             }
-
+            // return $per;
+            $allData = BasicDetail::with('getInterestSent:reg_id,reg_id', 'getshortlist:saved_reg_id,saved_reg_id', 'getProfileImage:by_reg_id,identity_card_doc', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->wherein('reg_id', $data)->where('reg_id', '>', $req->page)->get()->take(4);
+            foreach ($allData as $item) {
+                foreach ($per as $per2) {
+                    if ($per2['reg_id'] == $item->reg_id) {
+                        $item['percentage'] = $per2['percentage'];
+                        // array_push($data3, $item);
+                    }
+                }
+            }
+            $ids = BasicDetail::select('reg_id')->wherein('reg_id', $data)->get();
+            // counting number of time loop runing 
+            $i = 1;
+            // to counting number of page for set the value of current active page
+            $page = 0;
+            // to setting  current active page
+            $current = 0;
+            // key for total pagination page 
+            $key = [0];
+            foreach ($ids as $id) {
+                // whene loop reach division of 4 
+                if ($i % 4 == 0) {
+                    $page++;
+                    // whene rquest page and reg_id match then set current page 
+                    if ($id->reg_id == $req->page) {
+                        $current =  $page;
+                    }
+                    // whene total number off page divede by 4 then push the reg id as key 
+                    array_push($key, $id->reg_id);
+                }
+                $i++;
+            }
+            $data['data'] = $allData;
+            $data["key"] =  $key;
+            $data['total'] = ceil(count($ids) / 4);
+            $data['page'] = $current;
+            // $data = ['data' => $allData];
             if (($counter > 0)) {
                 return response()->json($data, 200);
             } else {

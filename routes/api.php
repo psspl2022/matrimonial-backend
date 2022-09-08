@@ -93,7 +93,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/desiredLifestyle', [DesiredController::class, 'createLifestyle']);
     Route::post('/desiredAbout', [DesiredController::class, 'createAbout']);
     Route::get('/showDesiredDetails', [DesiredController::class, 'showDesiredDetail']);
-    Route::get('/showDesiredProfiles', [DesiredController::class, 'showDesiredProfiles']);
+    Route::post('/showDesiredProfiles', [DesiredController::class, 'showDesiredProfiles']);
 
 
     //Action Routes
