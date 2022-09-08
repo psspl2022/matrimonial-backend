@@ -166,13 +166,37 @@ class DesiredController extends Controller
         return response()->json($data, 200);
     }
 
-    public function showDesiredProfiles()
+    public function showDesiredProfiles(Request $req)
     {
         $user_id = Auth::user()->id;
         $data1 = DesiredProfile::where('user_id', $user_id)->first();
-
+        $gender = (int)(UserRegister::where('id', $user_id)->first('gender'))->gender;
+        // mother tounge
+        $moth = explode(',', $req->moth);
+        // Religion 
+        $relgion = explode(',', $req->religion);
+        // marital status 
+        $martital = explode(',', $req->martital);
+        // if mother tongue value nul set thius value
+        if ($req->moth == 'null') {
+            $moth = BasicDetail::get('mother_tongue');
+        }
+        // if religion value nul set thius value
+        if ($req->religion == 'null') {
+            $relgion = BasicDetail::get('religion');
+        }
+        // if marital statu value nul set thius value
+        if ($req->martital == 'null') {
+            $martital = ['0', '1', '2', '3', '4', '5'];
+        }
         if (!empty($data1)) {
-            $data2 = BasicDetail::with('getCareer:career_details.reg_id,highest_qualification,occupation,income', 'getLifeStyle:lifestyle_details.reg_id,diet_habit,drink_habit,smoking_habit,challenged')->where('reg_id', '!=', Auth::user()->user_reg_id)->get();
+            if ($gender == 1  || $gender == 2) {
+                $data2 = BasicDetail::with('getCareer:career_details.reg_id,highest_qualification,occupation,income', 'getLifeStyle:lifestyle_details.reg_id,diet_habit,drink_habit,smoking_habit,challenged')->whereRelation('getUserRegister', 'gender', '!=', $gender)->where('reg_id', '!=', Auth::user()->user_reg_id)->where('reg_id', '>', $req->page)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->wherein('marital_status', $martital)->whereRelation('getIncome', 'incomes.id', '>=', $req->minincome)->whereRelation('getIncome', 'incomes.id', '<=', $req->maxincome)->whereBetween('dob', [$req->maxage, $req->minage])->whereBetween('height', [$req->minheight, $req->maxheight])->get()->take(4);
+                $ids = BasicDetail::select('reg_id')->whereRelation('getUserRegister', 'gender', '!=', $gender)->where('reg_id', '!=', Auth::user()->user_reg_id)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->wherein('marital_status', $martital)->whereRelation('getIncome', 'incomes.id', '>=', $req->minincome)->whereRelation('getIncome', 'incomes.id', '<=', $req->maxincome)->whereBetween('dob', [$req->maxage, $req->minage])->whereBetween('height', [$req->minheight, $req->maxheight])->get();
+            } else {
+                $data2 = BasicDetail::with('getCareer:career_details.reg_id,highest_qualification,occupation,income', 'getLifeStyle:lifestyle_details.reg_id,diet_habit,drink_habit,smoking_habit,challenged')->where('reg_id', '!=', Auth::user()->user_reg_id)->where('reg_id', '>', $req->page)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->wherein('marital_status', $martital)->whereRelation('getIncome', 'incomes.id', '>=', $req->minincome)->whereRelation('getIncome', 'incomes.id', '<=', $req->maxincome)->whereBetween('dob', [$req->maxage, $req->minage])->whereBetween('height', [$req->minheight, $req->maxheight])->get()->take(4);
+                $ids = BasicDetail::select('reg_id')->where('reg_id', '!=', Auth::user()->user_reg_id)->where('reg_id', '!=', Auth::user()->user_reg_id)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->wherein('marital_status', $martital)->whereRelation('getIncome', 'incomes.id', '>=', $req->minincome)->whereRelation('getIncome', 'incomes.id', '<=', $req->maxincome)->whereBetween('dob', [$req->maxage, $req->minage])->whereBetween('height', [$req->minheight, $req->maxheight])->get();
+            }
             // return $data2;
             $count = count($data2);
 
@@ -285,37 +309,37 @@ class DesiredController extends Controller
                         $counter++;
                     }
                 }
-               
-                // if ($data2[$i]->getLifeStyle != null) {
-                //     if (($data1->diet != NULL)) {
-                //         $desired_count++;
-                //         if (in_array($data2[$i]->getLifeStyle['diet_habit'], $diet_arr)) {
-                //             $counter++;
-                //         }
-                //     }
-                //     if (($data1->drinking != NULL)) {
-                //         $desired_count++;
-                //         if (in_array($data2[$i]->getLifeStyle['drink_habit'], $drinking_arr)) {
-                //             $counter++;
-                //         }
-                //     }
+                // return $age_id['id'];
 
-                //     if (($data1->smoking != NULL)) {
-                //         $desired_count++;
-                //         if (in_array($data2[$i]->getLifeStyle['smoking_habit'], $smoking_arr)) {
-                //             $counter++;
-                //         }
-                //     }
+                if (($data1->diet != NULL)) {
+                    $desired_count++;
+                    if ($data2[$i]->getLifeStyle != null &&  in_array($data2[$i]->getLifeStyle['diet_habit'], $diet_arr)) {
+                        $counter++;
+                    }
+                }
+                if (($data1->drinking != NULL)) {
+                    $desired_count++;
+                    if ($data2[$i]->getLifeStyle != null && in_array($data2[$i]->getLifeStyle['drink_habit'], $drinking_arr)) {
+                        $counter++;
+                    }
+                }
 
-                //     if (($data1->challenged != NULL)) {
-                //         $desired_count++;
-                //         if (in_array($data2[$i]->getLifeStyle['challenged'], $challenge_arr)) {
-                //             $counter++;
-                //         }
-                //     }
-                // }
+                if (($data1->smoking != NULL)) {
+                    $desired_count++;
+                    if ($data2[$i]->getLifeStyle != null &&  in_array($data2[$i]->getLifeStyle['smoking_habit'], $smoking_arr)) {
+                        $counter++;
+                    }
+                }
+
+                if (($data1->challenged != NULL)) {
+                    $desired_count++;
+                    if ($data2[$i]->getLifeStyle != null && in_array($data2[$i]->getLifeStyle['challenged'], $challenge_arr)) {
+                        $counter++;
+                    }
+                }
+
                 $allData = BasicDetail::with('getInterestSent:reg_id,reg_id', 'getshortlist:saved_reg_id,saved_reg_id', 'getProfileImage:by_reg_id,identity_card_doc', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->where('reg_id', $data2[$i]->reg_id)->first();
-
+                $id = BasicDetail::select('reg_id')->where('reg_id', $data2[$i]->reg_id)->first();
                 // $careerData = CareerDetail::with('getIncome:id,income','getOccupation:id,occupation','getEducation:id,education')->has('getIncome')->has('getOccupation')->has('getEducation')->select('income','occupation','highest_qualification')->where('reg_id', $data2[$i]->reg_id)->first();
                 // $intrestData = SendInterest::where('by_reg_id', Auth::user()->user_reg_id)->pluck('reg_id')->toArray();
                 // $shortlistData = Shortlist::where('by_reg_id', Auth::user()->user_reg_id)->pluck('saved_reg_id')->toArray();
@@ -325,13 +349,38 @@ class DesiredController extends Controller
 
                 $percentage =  round((($counter / $desired_count) * 100), 0);
                 if (($counter > 0 && $allData != null)) {
-                    $data[$i][0] = $percentage;
-                    $data[$i][1] = $age;
-                    $data[$i][2] = $allData;
-                    $data[$i][3] = $dob;
+                    $allData['percentage'] = $percentage;
+                    // $ids[$i] = $id;
+                    $data['age'][$i] = $age;
+                    $data['data'][$i] = $allData;
+                    // $data[$i][3] = $dob; 
                 }
             }
-
+            // counting number of time loop runing 
+            $i = 1;
+            // to counting number of page for set the value of current active page
+            $page = 0;
+            // to setting  current active page
+            $current = 0;
+            // key for total pagination page 
+            $key = [0];
+            foreach ($ids as $id) {
+                // whene loop reach division of 4 
+                if ($i % 4 == 0) {
+                    $page++;
+                    // whene rquest page and reg_id match then set current page 
+                    if ($id->reg_id == $req->page) {
+                        $current =  $page;
+                    }
+                    // whene total number off page divede by 4 then push the reg id as key 
+                    array_push($key, $id->reg_id);
+                }
+                $i++;
+            }
+            $data["key"] =  $key;
+            $data['total'] = ceil(count($ids) / 4);
+            $data['page'] = $current;
+            // $data = ['data' => $allData];
             if (($counter > 0)) {
                 return response()->json($data, 200);
             } else {
