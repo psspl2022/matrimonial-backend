@@ -104,28 +104,52 @@ class BrowseController extends Controller
   }
 
   public function browseProfile(Request $req){  
+    $whereData = [];
+    switch($req->browse) {
+      case('religion'):
+        $whereData = ['religion'=>$req->browseId];
+        break;
 
-    if($req->browse=='religion'){
-      $data = BasicDetail::where('religion',$req->browseId)->with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->get();
-    }
-    if($req->browse=='caste'){
-      $data = BasicDetail::where('caste',$req->browseId)->with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->get();
+      case('caste'):
+        $whereData = ['caste'=>$req->browseId];
+        break;
+
+        
+      case('mother'):
+        $whereData = ['mother_tongue'=>$req->browseId];
+        break;
+
+        
+      case('state'):
+        $whereData = ['state'=>$req->browseId];
+        break;
+
+        
+      case('city'):
+        $whereData = ['city'=>$req->browseId];
+        break;
+
+        
+      case('occupation'):
+        $data['data'] = BasicDetail::whereRelation('getOccupation','occupations.id','=', $req->browseId)->with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->limit(1)->offset(0)->get();
+
+        $data['count'] = BasicDetail::whereRelation('getOccupation','occupations.id','=', $req->browseId)->with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->count();
+        break;
+
+        default:
+        $data = '';
+      
     } 
-    if($req->browse=='mother'){
-      $data = BasicDetail::where('mother_tongue',$req->browseId)->with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->get();
 
-    }
-    if($req->browse=='state'){
-      $data = BasicDetail::where('state',$req->browseId)->with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->get();
-    }
-    if($req->browse=='city'){
-      $data = BasicDetail::where('city',$req->browseId)->with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->get();
-    }
-    if($req->browse=='occupation'){
-      $data = BasicDetail::whereRelation('getOccupation','occupation','=', $req->browseId)->with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->get();
-    }
+    if(count($whereData)>0){
+        $data['data']  = BasicDetail::where($whereData)->with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->limit(1)->offset(0)->get();
 
+        $data['count'] = BasicDetail::where($whereData)->with('getProfileImage:by_reg_id,identity_card_doc','getUserRegister:id,gender','getIncome:incomes.income','getOccupation:occupations.occupation','getEducation:educations.education','getHeight:id,height','getReligion:id,religion','getCaste:id,caste','getMotherTongue:id,mother_tongue','getCity:id,name')->select('reg_id','name','dob','height','religion','caste','mother_tongue','city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->count();
+    }
+    
+   
     return response()->json($data, 200);
+
   }
 
   public function searchProfile(Request $req){     
