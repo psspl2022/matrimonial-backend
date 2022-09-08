@@ -168,9 +168,9 @@ class DesiredController extends Controller
 
     public function showDesiredProfiles(Request $req)
     {
-        $user_id = Auth::user()->id;
-        $data1 = DesiredProfile::where('user_id', $user_id)->first();
-        $gender = (int)(UserRegister::where('id', $user_id)->first('gender'))->gender;
+        $reg_id = Auth::user()->user_reg_id;
+        $data1 = DesiredProfile::where('reg_id', $reg_id)->first();
+        $gender = (int)(UserRegister::where('id', $reg_id)->first('gender'))->gender;
         // mother tounge
         $moth = explode(',', $req->moth);
         // Religion 
