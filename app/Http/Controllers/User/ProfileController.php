@@ -645,11 +645,28 @@ class ProfileController extends Controller
         if ($req->martital == 'null') {
             $martital = ['0', '1', '2', '3', '4', '5'];
         }
+        $check = [['reg_id', '!=', Auth::user()->user_reg_id]];
+        // if marital statu value nul set thius value
+        if ($req->caste != 'null' && $req->caste != "undefined") {
+            $check[1] = ['caste', '==', $req->caste];
+        }
+        // // if marital statu value nul set thius value
+        // if ($req->occupation != 'null') {
+        //     $check[1] = ['occupation', '==', $req->occupation];
+        // }
+        // if marital statu value nul set thius value
+        if ($req->state != 'null' && $req->state != "undefined") {
+            $check[1]  = ['state', '==', $req->state];
+        }
+        // if marital statu value nul set thius value
+        if ($req->city != 'null' && $req->city != "undefined") {
+            $check[1]  = ['city', '==', $req->city];
+        }
         $reg_id = Auth::user()->user_reg_id;
         $gender = (int)(UserRegister::where('id', $reg_id)->first('gender'))->gender;
         //  if gender is male or female
         if ($gender == 1  || $gender == 2) {
-            $data = BasicDetail::with('getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getInterestSent:reg_id,reg_id','getShortlist:id,saved_reg_id',  'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getState:id,name', 'getCity:id,name', 'getOccupation:occupations.id,occupations.occupation', 'getIncome:incomes.id,incomes.income', 'getEducation:educations.education')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city', 'state', 'marital_status')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->whereRelation('getUserRegister', 'gender', '!=', $gender)->where('reg_id', '!=', Auth::user()->user_reg_id)->where('reg_id', '>', $req->page)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->wherein('marital_status', $martital)->whereRelation('getIncome', 'incomes.id', '>=', $req->minincome)->whereRelation('getIncome', 'incomes.id', '<=', $req->maxincome)->whereBetween('dob', [$req->maxage, $req->minage])->whereBetween('height', [$req->minheight, $req->maxheight])->get()->take(4);
+            $data = BasicDetail::with('getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getInterestSent:reg_id,reg_id', 'getShortlist:id,saved_reg_id',  'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getState:id,name', 'getCity:id,name', 'getOccupation:occupations.id,occupations.occupation', 'getIncome:incomes.id,incomes.income', 'getEducation:educations.education')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city', 'state', 'marital_status')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->whereRelation('getUserRegister', 'gender', '!=', $gender)->where($check)->where('reg_id', '>', $req->page)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->wherein('marital_status', $martital)->whereRelation('getIncome', 'incomes.id', '>=', $req->minincome)->whereRelation('getIncome', 'incomes.id', '<=', $req->maxincome)->whereBetween('dob', [$req->maxage, $req->minage])->whereBetween('height', [$req->minheight, $req->maxheight])->get()->take(4);
             // get unique id for pagination 
             $ids = BasicDetail::select("reg_id")->whereRelation('getUserRegister', 'gender', '!=', $gender)->where('reg_id', '!=', Auth::user()->user_reg_id)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->wherein('marital_status', $martital)->whereRelation('getIncome', 'incomes.id', '>=', $req->minincome)->whereRelation('getIncome', 'incomes.id', '<=', $req->maxincome)->whereBetween('dob', [$req->maxage, $req->minage])->whereBetween('height', [$req->minheight, $req->maxheight])->get();
         } else {
@@ -680,7 +697,7 @@ class ProfileController extends Controller
             }
             $i++;
         }
-        $data3 = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 4), 'page' => $current];
+        $data3 = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 4), 'page' => $current, 'test' => $check];
         return response()->json($data3, 200);
     }
 }

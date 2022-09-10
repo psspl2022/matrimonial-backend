@@ -48,7 +48,7 @@ class BrowseController extends Controller
 
     $reg_id = Auth::user()->user_reg_id;
 
-    $data = BasicDetail::where('reg_id', '!=', $reg_id)->whereRelation('getshortlist', 'by_reg_id', '=', $reg_id)->with('getshortlist', 'getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getInterestSent:reg_id,reg_id', 'getShortlist:id,saved_reg_id', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->where('reg_id', '>', $req->page)->get()->take(4);
+    $data = BasicDetail::where('reg_id', '!=', $reg_id)->whereRelation('getshortlist', 'by_reg_id', '=', $reg_id)->with('getshortlist', 'getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getInterestSent:reg_id,reg_id', 'getShortlist:id,saved_reg_id', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->where('reg_id', '>', $req->page)->get()->take(6);
     $ids = BasicDetail::select('reg_id')->where('reg_id', '!=', $reg_id)->whereRelation('getshortlist', 'by_reg_id', '=', $reg_id)->get();
     // counting number of time loop runing 
     $i = 1;
@@ -60,7 +60,7 @@ class BrowseController extends Controller
     $key = [0];
     foreach ($ids as $id) {
       // whene loop reach division of 4 
-      if ($i % 4 == 0) {
+      if ($i % 6 == 0) {
         $page++;
         // whene rquest page and reg_id match then set current page 
         if ($id->reg_id == $req->page) {
