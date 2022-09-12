@@ -238,6 +238,7 @@ class BrowseController extends Controller
     if ($req->browse == 'occupation') {
       $data = BasicDetail::whereRelation('getOccupation', 'occupation', '=', $req->browseId)->with('getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->get();
     }
+    
 
     return response()->json($data, 200);
   }
@@ -258,18 +259,18 @@ class BrowseController extends Controller
     }
 
     if ($req->min_age != 'undefined') {
-      $min_dob = date('Y-m-d', strtotime('+' . $req->min_age . 'years'));
-      $array = ['dob', '>=', $min_dob];
+      $min_dob = date('Y-m-d', strtotime('-' . $req->min_age . 'years'));
+      $array = ['dob', '<=', $min_dob];
       array_push($whereData, $array);
     }
 
     if ($req->max_age != 'undefined') {
-      $max_dob = date('Y-m-d', strtotime('+' . $req->max_age . 'years'));
-      $array = ['dob', '<=', $max_dob];
+      $max_dob = date('Y-m-d', strtotime('-' . $req->max_age . 'years'));
+      $array = ['dob', '>=', $max_dob];
       array_push($whereData, $array);
     }
 
-    if ($req->gender == 'undefined') {
+    if ($req->gender == 'undefined' && count($whereData) > 0 ) {
       $data = BasicDetail::where($whereData)->with('getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->get();
     } else {
 
