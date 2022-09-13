@@ -280,15 +280,7 @@ class BrowseController extends Controller
     if ($req->caste != 'null' && $req->caste != "undefined") {
       $check[0] = ['caste', $req->caste];
     }
-    $gender = $req->gender;
-    if ($req->gender != "null" && $req->gender != "undefined") {
-      // $check[0] = ['getUserRegister:gender', $req->gender];
-      $cond = "=";
-      $gender = $req->gender;
-    } else {
-      $cond = ">";
-      $gender = ">= 1";
-    }
+
     // // if marital statu value nul set thius value
     // if ($req->occupation != 'null') {
     //     $check = ['occupation', '==', $req->occupation];
@@ -301,8 +293,17 @@ class BrowseController extends Controller
     if ($req->city != 'null' && $req->city != "undefined") {
       $check[0]  = ['city', $req->city];
     }
+    $gender = $req->gender;
+    if ($req->gender != "null" && $req->gender != "undefined") {
+      // $check[0] = ['getUserRegister:gender', $req->gender];
+      $cond = "=";
+      $gender = $req->gender;
+    } else {
+      $cond = ">";
+      $gender = ">= 1";
+    }
     //  if gender is male or female
-    $data = BasicDetail::with('getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getState:id,name', 'getCity:id,name', 'getOccupation:occupations.id,occupations.occupation', 'getIncome:incomes.id,incomes.income', 'getEducation:educations.education')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city', 'state', 'marital_status')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->where($check)->where('reg_id', '>', $req->page)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->whereBetween('dob', [$req->maxage, $req->minage])->whereRelation('getUserRegister', 'gender', $cond, $gender)->get()->take(6);
+    $data = BasicDetail::with('getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getState:id,name', 'getCity:id,name', 'getOccupation:occupations.id,occupations.occupation', 'getIncome:incomes.id,incomes.income', 'getEducation:educations.education')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city', 'state', 'marital_status')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->whereRelation('getUserRegister', 'gender', $cond, $gender)->where($check)->where('reg_id', '>', $req->page)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->whereBetween('dob', [$req->maxage, $req->minage])->get()->take(6);
     // get unique id for pagination 
     $ids = BasicDetail::select("reg_id")->where($check)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->whereRelation('getUserRegister', 'gender', $cond, $gender)->whereBetween('dob', [$req->maxage, $req->minage])->get();
 
@@ -328,7 +329,7 @@ class BrowseController extends Controller
       }
       $i++;
     }
-    $data3 = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 6), 'page' => $current, 'test' => $gender];
+    $data3 = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 6), 'page' => $current, 'test' => $req->all(), 'test2' => $gender];
     return response()->json($data3, 200);
   }
 
