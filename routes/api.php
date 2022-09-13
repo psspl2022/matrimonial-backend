@@ -99,13 +99,13 @@ Route::middleware('auth:api')->group(function () {
     //Action Routes
 
     Route::post('/sendIntrest', [UserActionController::class, 'sendIntrest']);
-    Route::get('/interestReceived', [UserActionController::class, 'interestReceived']);
+    Route::post('/interestReceived', [UserActionController::class, 'interestReceived']);
     Route::post('/interestRevert', [UserActionController::class, 'sendInterestRevert']);
-    Route::get('/interestSent', [UserActionController::class, 'interestSent']);
+    Route::post('/interestSent', [UserActionController::class, 'interestSent']);
     Route::post('/shortlist', [UserActionController::class, 'shortlist']);
 
-    Route::get('/acceptMe', [BrowseController::class, 'acceptMe']);
-    Route::get('/acceptByMe', [BrowseController::class, 'acceptByMe']);
+    Route::post('/acceptMe', [BrowseController::class, 'acceptMe']);
+    Route::post('/acceptByMe', [BrowseController::class, 'acceptByMe']);
     Route::post('/getShortlist', [BrowseController::class, 'getShortlist']);
     Route::post('/dailyRecommendation', [BrowseController::class, 'dailyRecommendation']);
     Route::post('/latestProfile', [BrowseController::class, 'latestProfile']);

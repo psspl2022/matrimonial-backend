@@ -19,27 +19,71 @@ use App\Models\Occupation;
 class BrowseController extends Controller
 {
 
-  public function acceptByMe()
+  public function acceptByMe(Request $req)
   {
 
     $reg_id = Auth::user()->user_reg_id;
 
-    $basicData = BasicDetail::whereRelation('getInterestReceived', 'revert', '=', "1")->with('getUserRegister:id,gender', 'getProfileImage:by_reg_id,identity_card_doc', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->get();
+    $basicData = BasicDetail::whereRelation('getInterestReceived', 'revert', '=', "1")->with('getUserRegister:id,gender', 'getProfileImage:by_reg_id,identity_card_doc', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->where("reg_id", ">", $req->page)->get()->take(4);
 
+    $ids = BasicDetail::whereRelation('getInterestReceived', 'revert', '=', "1")->select('reg_id')->get();
 
     $data = $basicData;
-
+    // counting number of time loop runing 
+    $i = 1;
+    // to counting number of page for set the value of current active page
+    $page = 0;
+    // to setting  current active page
+    $current = 0;
+    // key for total pagination page 
+    $key = [0];
+    foreach ($ids as $id) {
+      // whene loop reach division of 4 
+      if ($i % 4 == 0) {
+        $page++;
+        // whene rquest page and reg_id match then set current page 
+        if ($id->reg_id == $req->page) {
+          $current =  $page;
+        }
+        // whene total number off page divede by 4 then push the reg id as key 
+        array_push($key, $id->reg_id);
+      }
+      $i++;
+    }
+    $data = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 4), 'page' => $current];
     return response()->json($data, 200);
   }
 
-  public function acceptMe()
+  public function acceptMe(Request $req)
   {
 
     $reg_id = Auth::user()->user_reg_id;
-    $basicData = BasicDetail::whereRelation('getInterestSent', 'revert', '=', "1")->with('getUserRegister:id,gender', 'getProfileImage:by_reg_id,identity_card_doc', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->get();
+    $data = BasicDetail::whereRelation('getInterestSent', 'revert', '=', "1")->with('getUserRegister:id,gender', 'getProfileImage:by_reg_id,identity_card_doc', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->where("reg_id", ">", $req->page)->get()->take(4);
 
-    $data = $basicData;
+    $ids = BasicDetail::whereRelation('getInterestSent', 'revert', '=', "1")->select('reg_id')->get();
 
+    // counting number of time loop runing 
+    $i = 1;
+    // to counting number of page for set the value of current active page
+    $page = 0;
+    // to setting  current active page
+    $current = 0;
+    // key for total pagination page 
+    $key = [0];
+    foreach ($ids as $id) {
+      // whene loop reach division of 4 
+      if ($i % 4 == 0) {
+        $page++;
+        // whene rquest page and reg_id match then set current page 
+        if ($id->reg_id == $req->page) {
+          $current =  $page;
+        }
+        // whene total number off page divede by 4 then push the reg id as key 
+        array_push($key, $id->reg_id);
+      }
+      $i++;
+    }
+    $data = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 4), 'page' => $current];
     return response()->json($data, 200);
   }
 
@@ -219,28 +263,65 @@ class BrowseController extends Controller
 
   public function browseProfile(Request $req)
   {
+    // mother tounge
+    $moth = explode(',', $req->moth);
+    // Religion 
+    $relgion = explode(',', $req->religion);
+    // if mother tongue value nul set thius value
+    if ($req->moth == 'null') {
+      $moth = BasicDetail::get('mother_tongue');
+    }
+    // if religion value nul set thius value
+    if ($req->religion == 'null') {
+      $relgion = BasicDetail::get('religion');
+    }
+    // if marital statu value nul set thius value
+    $check = [];
+    if ($req->caste != 'null' && $req->caste != "undefined") {
+      $check[0] = ['caste', $req->caste];
+    }
+    $gender = $req->page;
+    // // if marital statu value nul set thius value
+    // if ($req->occupation != 'null') {
+    //     $check = ['occupation', '==', $req->occupation];
+    // }
+    // if marital statu value nul set thius value
+    if ($req->state != 'null' && $req->state != "undefined") {
+      $check[0]   = ['state', $req->state];
+    }
+    // if marital statu value nul set thius value
+    if ($req->city != 'null' && $req->city != "undefined") {
+      $check[0]  = ['city', $req->city];
+    }
+    //  if gender is male or female
+    $data = BasicDetail::with('getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getState:id,name', 'getCity:id,name', 'getOccupation:occupations.id,occupations.occupation', 'getIncome:incomes.id,incomes.income', 'getEducation:educations.education')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city', 'state', 'marital_status')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->where($check)->where('reg_id', '>', $req->page)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->whereBetween('dob', [$req->maxage, $req->minage])->get()->take(6);
+    // get unique id for pagination 
+    $ids = BasicDetail::select("reg_id")->where($check)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->whereBetween('dob', [$req->maxage, $req->minage])->get();
 
-    if ($req->browse == 'religion') {
-      $data = BasicDetail::where('religion', $req->browseId)->with('getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->get();
-    }
-    if ($req->browse == 'caste') {
-      $data = BasicDetail::where('caste', $req->browseId)->with('getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->get();
-    }
-    if ($req->browse == 'mother') {
-      $data = BasicDetail::where('mother_tongue', $req->browseId)->with('getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->get();
-    }
-    if ($req->browse == 'state') {
-      $data = BasicDetail::where('state', $req->browseId)->with('getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->get();
-    }
-    if ($req->browse == 'city') {
-      $data = BasicDetail::where('city', $req->browseId)->with('getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->get();
-    }
-    if ($req->browse == 'occupation') {
-      $data = BasicDetail::whereRelation('getOccupation', 'occupation', '=', $req->browseId)->with('getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->get();
-    }
-    
 
-    return response()->json($data, 200);
+    // counting number of time loop runing 
+    $i = 1;
+    // to counting number of page for set the value of current active page
+    $page = 0;
+    // to setting  current active page
+    $current = 0;
+    // key for total pagination page 
+    $key = [0];
+    foreach ($ids as $id) {
+      // whene loop reach division of 4 
+      if ($i % 6 == 0) {
+        $page++;
+        // whene rquest page and reg_id match then set current page 
+        if ($id->reg_id == $req->page) {
+          $current =  $page;
+        }
+        // whene total number off page divede by 4 then push the reg id as key 
+        array_push($key, $id->reg_id);
+      }
+      $i++;
+    }
+    $data3 = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 6), 'page' => $current, 'test' => $check];
+    return response()->json($data3, 200);
   }
 
   public function searchProfile(Request $req)
@@ -270,7 +351,7 @@ class BrowseController extends Controller
       array_push($whereData, $array);
     }
 
-    if ($req->gender == 'undefined' && count($whereData) > 0 ) {
+    if ($req->gender == 'undefined' && count($whereData) > 0) {
       $data = BasicDetail::where($whereData)->with('getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->get();
     } else {
 

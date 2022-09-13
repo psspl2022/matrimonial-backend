@@ -648,7 +648,7 @@ class ProfileController extends Controller
         $check = [['reg_id', '!=', Auth::user()->user_reg_id]];
         // if marital statu value nul set thius value
         if ($req->caste != 'null' && $req->caste != "undefined") {
-            $check[0] = ['caste', '==', $req->caste];
+            $check[0] = ['caste', $req->caste];
         }
         // // if marital statu value nul set thius value
         // if ($req->occupation != 'null') {
@@ -656,11 +656,11 @@ class ProfileController extends Controller
         // }
         // if marital statu value nul set thius value
         if ($req->state != 'null' && $req->state != "undefined") {
-            $check[0]   = ['state', '==', $req->state];
+            $check[0]   = ['state', $req->state];
         }
         // if marital statu value nul set thius value
         if ($req->city != 'null' && $req->city != "undefined") {
-            $check[0]  = ['city', '==', $req->city];
+            $check[0]  = ['city', $req->city];
         }
         $reg_id = Auth::user()->user_reg_id;
         $gender = (int)(UserRegister::where('id', $reg_id)->first('gender'))->gender;
