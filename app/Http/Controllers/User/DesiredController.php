@@ -192,10 +192,8 @@ class DesiredController extends Controller
         if (!empty($data1)) {
             if ($gender == 1  || $gender == 2) {
                 $data2 = BasicDetail::with('getCareer:career_details.reg_id,highest_qualification,occupation,income', 'getLifeStyle:lifestyle_details.reg_id,diet_habit,drink_habit,smoking_habit,challenged')->whereRelation('getUserRegister', 'gender', '!=', $gender)->where('reg_id', '!=', Auth::user()->user_reg_id)->where('reg_id', '>', $req->page)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->wherein('marital_status', $martital)->whereRelation('getIncome', 'incomes.id', '>=', $req->minincome)->whereRelation('getIncome', 'incomes.id', '<=', $req->maxincome)->whereBetween('dob', [$req->maxage, $req->minage])->whereBetween('height', [$req->minheight, $req->maxheight])->get()->take(4);
-                $ids = BasicDetail::select('reg_id')->whereRelation('getUserRegister', 'gender', '!=', $gender)->where('reg_id', '!=', Auth::user()->user_reg_id)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->wherein('marital_status', $martital)->whereRelation('getIncome', 'incomes.id', '>=', $req->minincome)->whereRelation('getIncome', 'incomes.id', '<=', $req->maxincome)->whereBetween('dob', [$req->maxage, $req->minage])->whereBetween('height', [$req->minheight, $req->maxheight])->get();
             } else {
                 $data2 = BasicDetail::with('getCareer:career_details.reg_id,highest_qualification,occupation,income', 'getLifeStyle:lifestyle_details.reg_id,diet_habit,drink_habit,smoking_habit,challenged')->where('reg_id', '!=', Auth::user()->user_reg_id)->where('reg_id', '>', $req->page)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->wherein('marital_status', $martital)->whereRelation('getIncome', 'incomes.id', '>=', $req->minincome)->whereRelation('getIncome', 'incomes.id', '<=', $req->maxincome)->whereBetween('dob', [$req->maxage, $req->minage])->whereBetween('height', [$req->minheight, $req->maxheight])->get()->take(4);
-                $ids = BasicDetail::select('reg_id')->where('reg_id', '!=', Auth::user()->user_reg_id)->where('reg_id', '!=', Auth::user()->user_reg_id)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->wherein('marital_status', $martital)->whereRelation('getIncome', 'incomes.id', '>=', $req->minincome)->whereRelation('getIncome', 'incomes.id', '<=', $req->maxincome)->whereBetween('dob', [$req->maxage, $req->minage])->whereBetween('height', [$req->minheight, $req->maxheight])->get();
             }
             // return $data2;
             $count = count($data2);
@@ -214,7 +212,7 @@ class DesiredController extends Controller
             $smoking_arr = explode(",", $data1->smoking);
             $challenge_arr = explode(",", $data1->challenged);
 
-
+            $k = 0;
 
             for ($i = 0; $i < $count; $i++) {
                 $dob = date('Y-m-d', strtotime($data2[$i]->dob));
@@ -232,10 +230,10 @@ class DesiredController extends Controller
                     }
                 }
 
-                if(($data1->min_age != NULL) && ($data1->max_age != NULL) ){
+                if (($data1->min_age != NULL) && ($data1->max_age != NULL)) {
                     $desired_count++;
-                    if(($data1->min_age <= $age_id['id']) && ($data1->max_age >= $age_id['id']) ){
-                        $counter++;         
+                    if (($data1->min_age <= $age_id['id']) && ($data1->max_age >= $age_id['id'])) {
+                        $counter++;
                     }
                 }
 
@@ -246,35 +244,35 @@ class DesiredController extends Controller
                     }
                 }
 
-                
+
                 if (($data1->residential != NULL)) {
                     $desired_count++;
                     if (in_array($data2[$i]->residence, $residential_arr)) {
                         $counter++;
                     }
                 }
-               
+
                 if (($data1->marital != NULL)) {
                     $desired_count++;
                     if (in_array($data2[$i]->marital_status, $marital_arr)) {
                         $counter++;
                     }
                 }
-                
+
                 if (($data1->country != NULL)) {
                     $desired_count++;
                     if (in_array($data2[$i]->country, $country_arr)) {
                         $counter++;
                     }
                 }
-               
+
                 if (($data1->religion != NULL)) {
                     $desired_count++;
                     if (in_array($data2[$i]->religion, $religion_arr)) {
                         $counter++;
                     }
                 }
-               
+
                 if (($data1->caste != NULL)) {
                     $desired_count++;
                     if (in_array($data2[$i]->caste, $caste_arr)) {
@@ -302,7 +300,7 @@ class DesiredController extends Controller
                         $counter++;
                     }
                 }
-                
+
                 if (($data1->occupation != NULL)) {
                     $desired_count++;
                     if (in_array($data2[$i]->occupation, $occupation_arr)) {
@@ -338,7 +336,7 @@ class DesiredController extends Controller
                     }
                 }
 
-                $allData = BasicDetail::with('getInterestSent:reg_id,reg_id','getShortlist:id,saved_reg_id', 'getProfileImage:by_reg_id,identity_card_doc', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->where('reg_id', $data2[$i]->reg_id)->first();
+                $allData = BasicDetail::with('getInterestSent:reg_id,reg_id', 'getShortlist:id,saved_reg_id', 'getProfileImage:by_reg_id,identity_card_doc', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->where('reg_id', $data2[$i]->reg_id)->first();
                 $id = BasicDetail::select('reg_id')->where('reg_id', $data2[$i]->reg_id)->first();
                 // $careerData = CareerDetail::with('getIncome:id,income','getOccupation:id,occupation','getEducation:id,education')->has('getIncome')->has('getOccupation')->has('getEducation')->select('income','occupation','highest_qualification')->where('reg_id', $data2[$i]->reg_id)->first();
                 // $intrestData = SendInterest::where('by_reg_id', Auth::user()->user_reg_id)->pluck('reg_id')->toArray();
@@ -350,10 +348,11 @@ class DesiredController extends Controller
                 $percentage =  round((($counter / $desired_count) * 100), 0);
                 if (($counter > 0 && $allData != null)) {
                     $allData['percentage'] = $percentage;
-                    // $ids[$i] = $id;
-                    $data['age'][$i] = $age;
-                    $data['data'][$i] = $allData;
+                    $ids[$k] = $id;
+                    $data['age'][$k] = $age;
+                    $data['data'][$k] = $allData;
                     // $data[$i][3] = $dob; 
+                    $k++;
                 }
             }
             // counting number of time loop runing 
@@ -380,6 +379,7 @@ class DesiredController extends Controller
             $data["key"] =  $key;
             $data['total'] = ceil(count($ids) / 4);
             $data['page'] = $current;
+            $data['id'] = $ids;
             // $data = ['data' => $allData];
             if (($counter > 0)) {
                 return response()->json($data, 200);
