@@ -64,6 +64,7 @@ class AuthenticationController extends Controller
 
         $responseArray = [];
         $responseArray['token'] = $user->createToken('MyToken')->accessToken;
+        $responseArray['gender'] = UserRegister::where('id',$user['user_reg_id'])->select('gender')->first();
         $responseArray['msg'] = "Registered Succesfully";
         $responseArray['user'] = $user;
        
