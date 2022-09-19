@@ -41,7 +41,7 @@ class DetailProfileController extends Controller
     {
         $view_reg_id = $id;
 
-        $data = BasicDetail::where('reg_id', $view_reg_id)->with('getInterestSent:reg_id,reg_id', 'getshortlist:saved_reg_id,saved_reg_id', 'getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city', 'marital_status')->first();
+        $data = BasicDetail::where('reg_id', $view_reg_id)->with('getInterestSent:reg_id,reg_id,revert', 'getshortlist:saved_reg_id,saved_reg_id', 'getProfileImage:by_reg_id,identity_card_doc', 'getUserRegister:id,gender', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city', 'marital_status')->first();
 
 
         return response()->json($data, 200);
