@@ -265,7 +265,7 @@ class ProfileController extends Controller
 
         $data2 = CareerDetail::where('reg_id', $id)->update(['express_yourself' => $req->career]);
 
-        if ($data->save() && $data1->save() && $data2->save()) {
+        if ($data || $data1|| $data2) {
             return response()->json(['msg' => 'About Me Data has been updated successfully!']);
         }
     }
