@@ -24,7 +24,7 @@ class BrowseController extends Controller
 
     $reg_id = Auth::user()->user_reg_id;
 
-    $basicData = BasicDetail::whereRelation('getInterestReceived', 'revert', '=', "1")->with('getUserRegister:id,gender', 'getProfileImage:by_reg_id,identity_card_doc', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->where("reg_id", ">", $req->page)->get()->take(4);
+    $basicData = BasicDetail::whereRelation('getInterestReceived', 'revert', '=', "1")->with('getUserRegister:id,gender', 'getProfileImage:by_reg_id,identity_card_doc', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->where("reg_id", ">", $req->page)->get()->take(6);
 
     $ids = BasicDetail::whereRelation('getInterestReceived', 'revert', '=', "1")->select('reg_id')->get();
 
@@ -39,7 +39,7 @@ class BrowseController extends Controller
     $key = [0];
     foreach ($ids as $id) {
       // whene loop reach division of 4 
-      if ($i % 4 == 0) {
+      if ($i % 6 == 0) {
         $page++;
         // whene rquest page and reg_id match then set current page 
         if ($id->reg_id == $req->page) {
@@ -50,7 +50,7 @@ class BrowseController extends Controller
       }
       $i++;
     }
-    $data = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 4), 'page' => $current];
+    $data = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 6), 'page' => $current];
     return response()->json($data, 200);
   }
 
@@ -58,7 +58,7 @@ class BrowseController extends Controller
   {
 
     $reg_id = Auth::user()->user_reg_id;
-    $data = BasicDetail::whereRelation('getInterestSent', 'revert', '=', "1")->with('getUserRegister:id,gender', 'getProfileImage:by_reg_id,identity_card_doc', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->where("reg_id", ">", $req->page)->get()->take(4);
+    $data = BasicDetail::whereRelation('getInterestSent', 'revert', '=', "1")->with('getUserRegister:id,gender', 'getProfileImage:by_reg_id,identity_card_doc', 'getIncome:incomes.income', 'getOccupation:occupations.occupation', 'getEducation:educations.education', 'getHeight:id,height', 'getReligion:id,religion', 'getCaste:id,caste', 'getMotherTongue:id,mother_tongue', 'getCity:id,name')->has('getUserRegister')->has('getProfileImage')->has('getIncome')->has('getOccupation')->has('getEducation')->has('getHeight')->has('getReligion')->has('getMotherTongue')->has('getCity')->select('reg_id', 'name', 'dob', 'height', 'religion', 'caste', 'mother_tongue', 'city')->where("reg_id", ">", $req->page)->get()->take(6);
 
     $ids = BasicDetail::whereRelation('getInterestSent', 'revert', '=', "1")->select('reg_id')->get();
 
@@ -72,7 +72,7 @@ class BrowseController extends Controller
     $key = [0];
     foreach ($ids as $id) {
       // whene loop reach division of 4 
-      if ($i % 4 == 0) {
+      if ($i % 6 == 0) {
         $page++;
         // whene rquest page and reg_id match then set current page 
         if ($id->reg_id == $req->page) {
@@ -83,7 +83,7 @@ class BrowseController extends Controller
       }
       $i++;
     }
-    $data = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 4), 'page' => $current];
+    $data = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 6), 'page' => $current];
     return response()->json($data, 200);
   }
 
@@ -115,7 +115,7 @@ class BrowseController extends Controller
       }
       $i++;
     }
-    $data3 = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 4), 'page' => $current];
+    $data3 = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 6), 'page' => $current];
     return response()->json($data3, 200);
   }
 

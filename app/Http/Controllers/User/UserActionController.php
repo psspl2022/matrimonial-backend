@@ -68,7 +68,7 @@ class UserActionController extends Controller
             }
             $i++;
         }
-        $data = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 4), 'page' => $current];
+        $data = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 6), 'page' => $current];
 
         return response()->json($data, 200);
     }
@@ -121,7 +121,7 @@ class UserActionController extends Controller
             }
             $i++;
         }
-        $data = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 4), 'page' => $current];
+        $data = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 6), 'page' => $current];
 
         return response()->json($data, 200);
     }
