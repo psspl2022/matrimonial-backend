@@ -265,7 +265,7 @@ class ProfileController extends Controller
 
         $data2 = CareerDetail::where('reg_id', $id)->update(['express_yourself' => $req->career]);
 
-        if ($data || $data1|| $data2) {
+        if ($data || $data1 || $data2) {
             return response()->json(['msg' => 'About Me Data has been updated successfully!']);
         }
     }
@@ -696,6 +696,10 @@ class ProfileController extends Controller
                 array_push($key, $id->reg_id);
             }
             $i++;
+        }
+        $x = count($ids) % 4;
+        if ($x == 0) {
+            array_pop($key);
         }
         $data3 = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 4), 'page' => $current, 'test' => $check];
         return response()->json($data3, 200);

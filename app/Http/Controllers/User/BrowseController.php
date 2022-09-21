@@ -50,6 +50,10 @@ class BrowseController extends Controller
       }
       $i++;
     }
+    $x = count($ids) % 6;
+    if ($x == 0) {
+      array_pop($key);
+    }
     $data = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 6), 'page' => $current];
     return response()->json($data, 200);
   }
@@ -83,6 +87,10 @@ class BrowseController extends Controller
       }
       $i++;
     }
+    $x = count($ids) % 6;
+    if ($x == 0) {
+      array_pop($key);
+    }
     $data = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 6), 'page' => $current];
     return response()->json($data, 200);
   }
@@ -114,6 +122,10 @@ class BrowseController extends Controller
         array_push($key, $id->reg_id);
       }
       $i++;
+    }
+    $x = count($ids) % 6;
+    if ($x == 0) {
+      array_pop($key);
     }
     $data3 = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 6), 'page' => $current];
     return response()->json($data3, 200);
@@ -186,6 +198,10 @@ class BrowseController extends Controller
       }
       $i++;
     }
+    $x = count($ids) % 4;
+    if ($x == 0) {
+      array_pop($key);
+    }
     $data3 = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 4), 'page' => $current];
     return response()->json($data3, 200);
   }
@@ -243,6 +259,10 @@ class BrowseController extends Controller
         array_push($key, $id->reg_id);
       }
       $i++;
+    }
+    $x = count($ids) % 4;
+    if ($x == 0) {
+      array_pop($key);
     }
     $data = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 4), 'page' => $current];
     return response()->json($data, 200);
@@ -307,7 +327,6 @@ class BrowseController extends Controller
     // get unique id for pagination 
     $ids = BasicDetail::select("reg_id")->where($check)->wherein('mother_tongue', $moth)->wherein('religion', $relgion)->whereRelation('getUserRegister', 'gender', $cond, $gender)->whereBetween('dob', [$req->maxage, $req->minage])->get();
 
-
     // counting number of time loop runing 
     $i = 1;
     // to counting number of page for set the value of current active page
@@ -329,7 +348,11 @@ class BrowseController extends Controller
       }
       $i++;
     }
-    $data3 = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 6), 'page' => $current, 'test' => $req->all(), 'test2' => $gender];
+    $x = count($ids) % 6;
+    if ($x == 0) {
+      array_pop($key);
+    }
+    $data3 = ["data" => $data, "key" => $key, 'total' => ceil(count($ids) / 6), 'page' => $current, 'test' => $req->all(), 'test2' => $x];
     return response()->json($data3, 200);
   }
 

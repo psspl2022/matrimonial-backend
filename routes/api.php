@@ -29,15 +29,12 @@ use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\DetailProfileController;
 use App\Http\Controllers\DesireTest;
+use App\Http\Controllers\GoogleController;
 
-use App\Http\Controllers\AuthController;
+Route::post('auth/google', [GoogleController::class, 'store']);
 
 Route::post('/test', [DesireTest::class, 'showDesiredProfiles']);
 // routes/api.php
-
-
-Route::get('auth', [AuthController::class, 'redirectToAuth']);
-Route::get('auth/callback', [AuthController::class, 'handleAuthCallback']);
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -70,10 +67,10 @@ Route::post('/return-membership', [CheckoutController::class, 'returnRegister'])
 //Home Browse Route
 Route::get('/browseProfileBy', [BrowseController::class, 'browseProfileBy']);
 
-
 Route::middleware('auth:api')->group(function () {
     Route::get('/logout', [AuthenticationController::class, 'logout']);
-
+    Route::post('auth/contact', [GoogleController::class, 'contactUpdate']);
+    Route::post('/changeStage', [GoogleController::class, 'changeStage']);
     Route::get('/showAbout', [ProfileController::class, 'showAboutById']);
     Route::post('/EditAbout', [ProfileController::class, 'EditAbout']);
 
