@@ -98,7 +98,7 @@ class GoogleController extends Controller
             $user->email = $input['email'];
             $user->password = $password;
             $user->email_verified_at = $mytime;
-            $user->save();
+            $user->save(); 
 
             $filename = basename($req->imageUrl);
             $filename = "$filename.jpg";

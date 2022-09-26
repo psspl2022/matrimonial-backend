@@ -60,15 +60,15 @@ class BasicDetail extends Model implements Auditable
     }
 
     public function getInterestReceived(){
-        return $this->hasOne(SendInterest::class,'by_reg_id','reg_id')->where('reg_id',Auth::user()->user_reg_id);
+        return $this->hasOne(SendInterest::class,'by_reg_id','reg_id')->where('reg_id',4);
     }
 
     public function getInterestSent(){
-        return $this->hasOne(SendInterest::class,'reg_id','reg_id')->where('by_reg_id',Auth::user()->user_reg_id);
+        return $this->hasOne(SendInterest::class,'reg_id','reg_id')->where('by_reg_id',4);
     }
 
     public function getShortlist(){
-        return $this->hasOne(Shortlist::class,'saved_reg_id','reg_id')->where('by_reg_id',Auth::user()->user_reg_id);
+        return $this->hasOne(Shortlist::class,'saved_reg_id','reg_id')->where('by_reg_id',4);
     }
 
     
