@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -21,7 +22,7 @@ class DesireTest extends Controller
     public function showDesiredProfiles(Request $req)
     {
 
-        $reg_id = 4;
+        $reg_id = Auth::user()->user_reg_id;
         $data1 = DesiredProfile::where('reg_id', $reg_id)->first();
         $gender = (int)(UserRegister::where('id', $reg_id)->first('gender'))->gender;
         // mother tounge

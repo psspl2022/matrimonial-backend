@@ -33,7 +33,7 @@ use App\Http\Controllers\GoogleController;
 
 Route::post('auth/google', [GoogleController::class, 'store']);
 
-Route::post('/test', [DesireTest::class, 'showDesiredProfiles']);
+
 // routes/api.php
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +68,7 @@ Route::post('/return-membership', [CheckoutController::class, 'returnRegister'])
 Route::get('/browseProfileBy', [BrowseController::class, 'browseProfileBy']);
 
 Route::middleware('auth:api')->group(function () {
+    Route::post('/test', [DesireTest::class, 'showDesiredProfiles']);
     Route::get('/logout', [AuthenticationController::class, 'logout']);
     Route::post('auth/contact', [GoogleController::class, 'contactUpdate']);
     Route::post('/changeStage', [GoogleController::class, 'changeStage']);
